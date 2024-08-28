@@ -12,6 +12,10 @@ class MusicScreen extends StatefulWidget {
 class _MusicScreenState extends State<MusicScreen> {
   @override
   Widget build(BuildContext context) {
-    return Text('Music');
+    return Scaffold(
+      body: const Center(
+        child: Text('Music page'),
+      )
+    );
   }
 }

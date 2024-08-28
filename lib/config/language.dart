@@ -77,7 +77,6 @@ class Language extends Strings with ChangeNotifier {
     TAB_USER = map['TAB_USER']!;
     current = value;
     notifyListeners();
-    print("language changeddd");
 }
 
   /// Currently selected & displayed [Language].

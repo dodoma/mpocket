@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
 import 'package:mpocket/router.dart';
+
 
 class BottomNavigationBarScaffold extends StatefulWidget {
   const BottomNavigationBarScaffold({super.key, this.child});
@@ -13,7 +15,7 @@ class BottomNavigationBarScaffold extends StatefulWidget {
 }
 
 class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffold> {
-  int currentIndex = 0;
+  int currentIndex = Global.profile.msourceOK ? 0 : 1;
 
   void changeTab(int index) {
     switch (index) {
@@ -37,6 +39,7 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
+//        type: BottomNavigationBarType.shifting,
         onTap: changeTab,
         currentIndex: currentIndex,
         items: [

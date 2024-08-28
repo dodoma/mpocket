@@ -7,15 +7,20 @@ environment:
   sdk: ^3.5.0
 
 dependencies:
+  build_runner: ^2.4.12
   flutter:
     sdk: flutter
   go_router: ^14.2.6
+  json_annotation: ^4.9.0
+  json_model: ^1.0.0
   provider: ^6.1.2
+  shared_preferences: ^2.3.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  json_serializable: ^6.8.0
 
 flutter:
   uses-material-design: true
