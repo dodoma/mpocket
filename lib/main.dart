@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
+import 'package:mpocket/models/msource.dart';
 import 'package:mpocket/router.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,14 +19,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(routerConfig: router,);
-//    return MultiProvider(
-//      providers: [
-//        ChangeNotifierProvider(create: (context) => Language.instance,),
-//      ],
-//      child: MaterialApp.router(
-//        routerConfig: router,
-//      )
-//    );
+    //return MaterialApp.router(routerConfig: router,);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => Msource()),
+      ],
+      child: MaterialApp.router(
+        routerConfig: router,
+      )
+    );
   }
 }

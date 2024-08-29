@@ -11,3 +11,7 @@ class ProfileChangeNotifier extends ChangeNotifier {
     super.notifyListeners();
   }
 }
+
+class UserModel extends ProfileChangeNotifier {
+  bool? get user => _profile.msourceOK;
+}
