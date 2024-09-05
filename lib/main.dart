@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter/rendering.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
 import 'package:mpocket/models/msource.dart';
@@ -19,6 +20,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //debugPaintSizeEnabled = true;
     //return MaterialApp.router(routerConfig: router,);
     return MultiProvider(
       providers: [
