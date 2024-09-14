@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 //import 'package:flutter/rendering.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
+import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/msource.dart';
 import 'package:mpocket/router.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  libmoc.mocInit();
   await Global.init();
   await Language.initialize(language: LanguageData(code: Global.profile.local, name: '', country: ''));
 

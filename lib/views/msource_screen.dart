@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:form_controller/form_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:list_picker/list_picker.dart';
+import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/msource.dart';
 import 'package:provider/provider.dart';
 import 'package:wifi_scan/wifi_scan.dart';
@@ -50,6 +51,7 @@ class ConfigDeviceScreen extends StatefulWidget {
 class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
 
   late FormController _formctl;
+  late Future<String> sourceID = libmoc.mocDiscovery();
 
   FocusNode focusNode1 = FocusNode();
   FocusNode focusNode2 = FocusNode();
@@ -133,10 +135,14 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
+            FutureBuilder<String>(
+              future: sourceID,
+              builder: (BuildContext context, AsyncSnapshot<String> value) {
+              final displayxxx = (value.hasData) ?  value.data : 'loading';
+            return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget> [
-                Text('配置音源 xx' + widget.deviceIP, textAlign: TextAlign.left, textScaler: TextScaler.linear(1.2), style: TextStyle(fontWeight: FontWeight.w700)),
+                Text('配置音源 xx + ${displayxxx}', textAlign: TextAlign.left, textScaler: TextScaler.linear(1.2), style: TextStyle(fontWeight: FontWeight.w700)),
                 if (this.searching == true) ...[
                   SizedBox(
                     height: 5,
@@ -213,6 +219,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                           if (_formctl.validate()) {
                             print('验证通过');
                           }
+                          libmoc.wifiSet(value.data!, _formctl.value('apname'), _formctl.value('appasswd'), _formctl.value('deviceName'));
                         }
                       },
                       child: Text('确认', style: TextStyle(color: Colors.white))
@@ -220,6 +227,9 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                   ]
                 ),
               ],
+            );
+
+              },
             ),
           ],
         )
