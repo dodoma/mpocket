@@ -29,68 +29,84 @@ class _MusicScreenState extends State<MusicScreen> {
 
     return Scaffold(
       body: Center(
-        child: Container(
-          width: containerWidth,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            if (Provider.of<IMsource>(context).deviceID.isEmpty)
-              FutureBuilder<String>(
-                future: fetchData(), 
-                builder: (BuildContext context, AsyncSnapshot<String> value) {
-                  if (!value.hasData) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('正在连接音源设备', textScaler: TextScaler.linear(1.6)),
-                      const Gap(10),
-                      SizedBox(
-                        height: 5,
-                        width: containerWidth,
-                        child: LinearProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation(
-                              Color.fromRGBO(0x7a, 0x51, 0xe2, 100)),
-                      ))
-                    ],
-                  );
-                  } else {
-                  //连上的是个还没配网的音源
-                  if (value.data![0] == 'a') {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (context.mounted) {
-                        context.go('/msource');
-                      }
-                    });
-                    return Container();
-                  }
-
-                  Provider.of<IMsource>(context).deviceID = value.data!;
-
-                  // 开始展示干货
-                  return showMusicScreen(value.data!, containerWidth);
-                  }
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+          if (Provider.of<IMsource>(context).deviceID.isEmpty)
+            FutureBuilder<String>(
+              future: fetchData(), 
+              builder: (BuildContext context, AsyncSnapshot<String> value) {
+                if (!value.hasData) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('正在连接音源设备', textScaler: TextScaler.linear(1.6)),
+                    const Gap(10),
+                    SizedBox(
+                      height: 5,
+                      width: containerWidth,
+                      child: LinearProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(
+                            Color.fromRGBO(0x7a, 0x51, 0xe2, 100)),
+                    ))
+                  ],
+                );
+                } else {
+                //连上的是个还没配网的音源
+                if (value.data![0] == 'a') {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (context.mounted) {
+                      context.go('/msource');
+                    }
+                  });
+                  return Container();
                 }
-              )
-            else 
-              showMusicScreen(Provider.of<IMsource>(context).deviceID, containerWidth)
-            ],
-          ),
+        
+                Provider.of<IMsource>(context).deviceID = value.data!;
+        
+                // 开始展示干货
+                return showMusicScreen(deviceID: value.data!, maxWidth: containerWidth);
+                }
+              }
+            )
+          else 
+            showMusicScreen(deviceID: Provider.of<IMsource>(context).deviceID, maxWidth: containerWidth)
+          ],
         ),
       )
     );
   }
 }
 
-Widget showMusicScreen(String deviceID, double maxWidth) {
+class showMusicScreen extends StatefulWidget {
+  final String deviceID;
+  final double maxWidth;
+
+  const showMusicScreen({super.key, required this.deviceID, required this.maxWidth});
+
+  @override
+  State<showMusicScreen> createState() => _showMusicScreenState();
+}
+
+class _showMusicScreenState extends State<showMusicScreen> {
+  
+  @override
+  Widget build(BuildContext context) {
   return Container(
-    margin: EdgeInsets.only(top:50, bottom: 30),
+    // 页面一大框
+    width: widget.maxWidth,
+    margin: EdgeInsets.only(top:50, bottom: 80),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
           Container(
-            //color: const Color.fromARGB(255, 212, 215, 218),
-            width: maxWidth,
+            // 第一坨
             padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.grey[100],
+              border: Border.all(color: Colors.grey[400]!),
+              borderRadius: BorderRadius.circular(10)
+            ),
             child: Row(
               children: [
                 Column(
@@ -98,8 +114,11 @@ Widget showMusicScreen(String deviceID, double maxWidth) {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.ac_unit, size: 12,),
-                        Text('默认媒体库'),
+                        CircleAvatar(
+                          radius: 5,
+                          backgroundColor: const Color.fromARGB(255, 87, 241, 32),
+                        ),
+                        const Gap(3),                        Text('默认媒体库'),
                         Icon(Icons.arrow_drop_down)
                       ],
                     ),
@@ -120,4 +139,5 @@ Widget showMusicScreen(String deviceID, double maxWidth) {
       ],
     ),
   );
+  }
 }

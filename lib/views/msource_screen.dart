@@ -15,6 +15,27 @@ import 'package:wifi_scan/wifi_scan.dart';
 
 typedef NativeWifisetCallback = Void Function(Int);
 
+class MsourceScreen extends StatefulWidget {
+  const MsourceScreen({
+    super.key,
+  });
+
+  @override
+  State<MsourceScreen> createState() => _MsourceScreenState();
+}
+
+class _MsourceScreenState extends State<MsourceScreen> {
+
+  @override
+  Widget build(BuildContext context) {
+    final IMsource source = Provider.of<IMsource>(context);
+    if (source.deviceID.isEmpty) {
+      return ConfigDeviceScreen();
+    } else {
+      return showDeviceScreen(deviceID: source.deviceID);
+    }
+  }
+}
 
 class ConfigDeviceScreen extends StatefulWidget {
   const ConfigDeviceScreen ({super.key});
@@ -293,47 +314,6 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
           ),
         )
     );
-  }
-}
-
-Widget showDeviceScreenOLD(String deviceID, BuildContext context) {
-  double containerWidth = MediaQuery.of(context).size.width * 0.9;
-
-  return Scaffold(
-    body: Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            width: containerWidth,
-            margin: EdgeInsets.only(top: 50, bottom: 30),
-            child: Text('xxxxxx')
-          ),
-        ],
-      )
-    )
-  );
-}
-
-class MsourceScreen extends StatefulWidget {
-  const MsourceScreen({
-    super.key,
-  });
-
-  @override
-  State<MsourceScreen> createState() => _MsourceScreenState();
-}
-
-class _MsourceScreenState extends State<MsourceScreen> {
-
-  @override
-  Widget build(BuildContext context) {
-    final IMsource source = Provider.of<IMsource>(context);
-    if (source.deviceID.isEmpty) {
-      return ConfigDeviceScreen();
-    } else {
-      return showDeviceScreen(deviceID: source.deviceID);
-    }
   }
 }
 
