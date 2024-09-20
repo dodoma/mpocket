@@ -111,8 +111,12 @@ class LibmocBindings {
   late final _mnetStartPtr = _lookup<ffi.NativeFunction<ffi.Int Function()>>('mnetStart');
   late final _mnetStart = _mnetStartPtr.asFunction<int Function()>();
 
-  int wifiSet(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8> ap, ffi.Pointer<Utf8>pass, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>callback) {return _wifiSet(ID, ap, pass, name, callback);}
-  late final _wifiSetPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>('mnetWifiSet');
-  late final _wifiSet = _wifiSetPtr.asFunction<int Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>();
+  int wifiSet(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8> ap, ffi.Pointer<Utf8>pass, ffi.Pointer<Utf8>name, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>callback) {return _wifiSet(ID, ap, pass, name, callback);}
+  late final _wifiSetPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, 
+               ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)
+    >>('mnetWifiSet');
+  late final _wifiSet = _wifiSetPtr.asFunction<int Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)>();
 
 }

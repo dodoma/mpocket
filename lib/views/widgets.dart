@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
-import 'package:mpocket/router.dart';
 
 
 class BottomNavigationBarScaffold extends StatefulWidget {
@@ -15,33 +13,49 @@ class BottomNavigationBarScaffold extends StatefulWidget {
 }
 
 class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffold> {
-  int currentIndex = Global.profile.msourceOK ? 0 : 1;
 
   void changeTab(int index) {
-    switch (index) {
-      case 0:
-        context.goNamed(AppRoute.music.name);
-        break;
-      case 1:
-        context.goNamed(AppRoute.msource.name);
-        break;
-      case 2:
-        context.goNamed(AppRoute.user.name);
-        break;
+    //setState((){
+      //currentIndex = index;
+      switch (index) {
+        case 0:
+          context.go('/music');
+          break;
+        case 1:
+          context.go('/msource');
+          break;
+        case 2:
+          context.go('/user');
+          break;
+      }
+    //});
+  }
+
+  int _getSelectedIndex(BuildContext context) {
+    final String location = GoRouterState.of(context).uri.toString();
+
+    switch (location) {
+      case '/music':
+        return 0;
+      case '/msource':
+        return 1;
+      case '/user':
+        return 2;
+      default:
+        return 0; // 默认是首页
     }
-    setState((){
-      currentIndex = index;
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final int selectedIndex = _getSelectedIndex(context);
+
     return Scaffold(
       body: widget.child,
       bottomNavigationBar: BottomNavigationBar(
 //        type: BottomNavigationBarType.shifting,
         onTap: changeTab,
-        currentIndex: currentIndex,
+        currentIndex: selectedIndex,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.music_note), label: Language.instance.TAB_MUSIC),
           BottomNavigationBarItem(icon: Icon(Icons.storage), label: Language.instance.TAB_MSOURCE),

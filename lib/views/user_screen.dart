@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mpocket/models/msource.dart';
-import 'package:provider/provider.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({
@@ -21,7 +19,7 @@ class _UserScreenState extends State<UserScreen> {
             //profile.msourceOK = false;
             //profile.local = 'en_US';
             //Global.saveProfile();
-            Provider.of<Msource>(context, listen: false).configable = "";
+            //Provider.of<Msource>(context, listen: false).configable = "";
           },
           child: const Text('changde'),
       );

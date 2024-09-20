@@ -1,0 +1,14 @@
+{
+    "deviceID": "",
+    "deviceName": "",
+    "capacity": "",
+    "useage": "",
+    "percent": 0.43,
+    "usbON": true,
+    "autoPlay": false,
+    "shareLocation": "",
+    "libraries": [
+        {"name": "", "space": "", "countSong": 93, "countCached": 12, "dft": true},
+        {"name": "", "space": "", "countSong": 123, "countCached": 22, "dft": true}
+    ]
+}

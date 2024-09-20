@@ -1,9 +1,35 @@
-import 'package:flutter/material.dart';
-//import 'package:mpocket/ffi/libmoc.dart' as libmoc;
+import 'package:json_annotation/json_annotation.dart';
 
-class Msource extends ChangeNotifier {
-  String configable = "192.168.43.1";
-  //late Future<String> sourceID = libmoc.mocDiscovery();
+part 'msource.g.dart';
 
-  String defaultDevice = "";
+@JsonSerializable()
+class MsourceLibrary {
+  MsourceLibrary();
+
+  late String name;
+  late String space;
+  late int countSong;
+  late int countCached;
+  late bool dft;
+
+  factory MsourceLibrary.fromJson(Map<String, dynamic> json) => _$MsourceLibraryFromJson(json);
+  Map<String, dynamic> toJson() => _$MsourceLibraryToJson(this);  
+}
+
+@JsonSerializable()
+class Msource {
+  Msource();
+
+  late String deviceID;
+  late String deviceName;
+  late String capacity;
+  late String useage;
+  late double percent;
+  late bool usbON;
+  late bool autoPlay;
+  late String shareLocation;
+  late List<MsourceLibrary> libraries;
+  
+  factory Msource.fromJson(Map<String,dynamic> json) => _$MsourceFromJson(json);
+  Map<String, dynamic> toJson() => _$MsourceToJson(this);
 }

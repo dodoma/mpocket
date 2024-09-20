@@ -16,13 +16,13 @@ int sum(int a, int b) => _bindings.sum(a, b);
 String fileTest(String dir) => _bindings.mfile_test(dir.toNativeUtf8().cast<Int8>()).cast<Utf8>().toDartString();
 
 int mocInit() => _bindings.mnetStart();
-int wifiSet(String ID, String ap, String pass, String name) {
+int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFunction<Void Function(Int)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
   final Pointer<Utf8> c_ap = ap.toNativeUtf8();
   final Pointer<Utf8> c_pass = pass.toNativeUtf8();
   final Pointer<Utf8> c_name = name.toNativeUtf8();
 
-  int ret = _bindings.wifiSet(c_id, c_ap, c_pass, c_name, nullptr);
+  int ret = _bindings.wifiSet(c_id, c_ap, c_pass, c_name, callback);
 
   calloc.free(c_id);
   calloc.free(c_ap);
