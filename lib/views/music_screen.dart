@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
+import 'package:mpocket/models/omusic.dart';
 import 'package:provider/provider.dart';
 
 class MusicScreen extends StatefulWidget {
@@ -89,9 +92,40 @@ class showMusicScreen extends StatefulWidget {
 }
 
 class _showMusicScreenState extends State<showMusicScreen> {
-  
+  bool _isLoading = true;
+  late Omusic meo;
+
+  String dummys = '''{
+    "deviceID": "bd939vASIF",
+    "countArtist": 80,
+    "countAlbum": 21,
+    "countSong": 219,
+    "localPlay": true,
+    "artists": [
+        {"name": "Black Pink", "avt": "xxxx"},
+        {"name": "Santana", "avt": "yyy"}
+    ]
+}''';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData(); // 调用异步方法
+  }
+
+  Future<void> _fetchData() async {
+    await Future.delayed(Duration(seconds: 2));  
+    setState(() {
+      meo = Omusic.fromJson(jsonDecode(dummys));
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+  if (_isLoading) {
+      return CircularProgressIndicator();
+  } else {
   return Container(
     // 页面一大框
     width: widget.maxWidth,
@@ -132,12 +166,15 @@ class _showMusicScreenState extends State<showMusicScreen> {
               ],
             ),
           ),
-          Spacer(),
-          Text('无媒体文件', textScaler: TextScaler.linear(1.8),),
-          const Gap(20),
-          Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库 \n 3. 添加本地曲目路径，同步至音源', style: TextStyle(fontWeight: FontWeight.w700)),
+          if (meo.countSong <= 0) ...[
+            Spacer(),
+            Text('无媒体文件', textScaler: TextScaler.linear(1.8),),
+            const Gap(20),
+            Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库 \n 3. 添加本地曲目路径，同步至音源', style: TextStyle(fontWeight: FontWeight.w700)),
+          ]
       ],
     ),
   );
+  }
   }
 }
