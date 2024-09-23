@@ -340,11 +340,11 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
     "autoPlay": false,
     "shareLocation": "//192.134.23.2/music/",
     "libraries": [
-        {"name": "默认媒体库", "space": "239MB", "countSong": 129, "countCached": 22, "dft": true},
-        {"name": "媒体库2", "space": "239MB", "countSong": 129, "countCached": 22, "dft": false},
-        {"name": "媒体库3", "space": "239MB", "countSong": 129, "countCached": 22, "dft": false},
-        {"name": "媒体库4", "space": "239MB", "countSong": 129, "countCached": 22, "dft": false},
-        {"name": "工作以后", "space": "239MB", "countSong": 129, "countCached": 22, "dft": false}
+        {"name": "默认媒体库", "space": "239MB", "countTrack": 129, "countCached": 22, "dft": true},
+        {"name": "媒体库2", "space": "239MB", "countTrack": 129, "countCached": 22, "dft": false},
+        {"name": "媒体库3", "space": "239MB", "countTrack": 129, "countCached": 22, "dft": false},
+        {"name": "媒体库4", "space": "239MB", "countTrack": 129, "countCached": 22, "dft": false},
+        {"name": "工作以后", "space": "239MB", "countTrack": 129, "countCached": 22, "dft": false}
     ]
 }''';
 
@@ -409,7 +409,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                     await _showTipDialog();
                   } else {
                     setState(() {
-                      meo.libraries.add(MsourceLibrary.fromJson({'name': newItemName, 'space': '0MB', 'countSong': 0, 'countCached': 0, 'dft': false}));
+                      meo.libraries.add(MsourceLibrary.fromJson({'name': newItemName, 'space': '0MB', 'countTrack': 0, 'countCached': 0, 'dft': false}));
                     });
                     Navigator.of(context).pop(); // 关闭对话框
                   }
@@ -535,7 +535,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                         children: [
                                           Icon(Icons.folder),
                                           const Gap(10),
-                                          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(meo.libraries[index].name), Text('${meo.libraries[index].space} ${meo.libraries[index].countSong} 首歌曲 已缓存 ${meo.libraries[index].countCached} 首', textScaler: TextScaler.linear(0.8),)],),
+                                          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(meo.libraries[index].name), Text('${meo.libraries[index].space} ${meo.libraries[index].countTrack} 首歌曲 已缓存 ${meo.libraries[index].countCached} 首', textScaler: TextScaler.linear(0.8),)],),
                                           Spacer(),
                                           if (meo.libraries[index].dft) Icon(Icons.check),
                                           Icon(Icons.more_vert)

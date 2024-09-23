@@ -30,5 +30,9 @@ final router = GoRouter(
               path: '/user',
               builder: (context, state) => const UserScreen(),
             ),
+            GoRoute(
+              path: '/music_album',
+              builder: (context, state) => const MusicScreen(),
+            ),
           ])
     ]);

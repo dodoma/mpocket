@@ -2,7 +2,7 @@
     "deviceID": "",
     "countArtist": 80,
     "countAlbum": 21,
-    "countSong": 219,
+    "countTrack": 219,
     "localPlay": true,
     "artists": [
         {"name": "Black Pink", "avt": ""},

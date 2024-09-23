@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic.dart';
+import 'package:mpocket/views/music_artist_screen.dart';
 import 'package:provider/provider.dart';
 
 class MusicScreen extends StatefulWidget {
@@ -29,6 +30,7 @@ class _MusicScreenState extends State<MusicScreen> {
   @override
   Widget build(BuildContext context) {
     double containerWidth = MediaQuery.of(context).size.width * 0.9;
+    double containerHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       body: Center(
@@ -68,12 +70,18 @@ class _MusicScreenState extends State<MusicScreen> {
                 Provider.of<IMsource>(context).deviceID = value.data!;
         
                 // 开始展示干货
-                return showMusicScreen(deviceID: value.data!, maxWidth: containerWidth);
+                return showMusicScreen(deviceID: value.data!, 
+                  maxWidth: containerWidth,
+                  maxHeight: containerHeight,
+                );
                 }
               }
             )
           else 
-            showMusicScreen(deviceID: Provider.of<IMsource>(context).deviceID, maxWidth: containerWidth)
+            showMusicScreen(deviceID: Provider.of<IMsource>(context).deviceID, 
+              maxWidth: containerWidth,
+              maxHeight: containerHeight
+            )
           ],
         ),
       )
@@ -84,8 +92,10 @@ class _MusicScreenState extends State<MusicScreen> {
 class showMusicScreen extends StatefulWidget {
   final String deviceID;
   final double maxWidth;
+  final double maxHeight;
 
-  const showMusicScreen({super.key, required this.deviceID, required this.maxWidth});
+  const showMusicScreen({super.key, required this.deviceID, 
+    required this.maxWidth, required this.maxHeight});
 
   @override
   State<showMusicScreen> createState() => _showMusicScreenState();
@@ -94,16 +104,31 @@ class showMusicScreen extends StatefulWidget {
 class _showMusicScreenState extends State<showMusicScreen> {
   bool _isLoading = true;
   late Omusic meo;
+  List<String> filteredItems = ['aa', 'bb', 'cc'];
+  final LayerLink _layerLink = LayerLink();
+  OverlayEntry? _overlayEntry;
 
   String dummys = '''{
     "deviceID": "bd939vASIF",
     "countArtist": 80,
     "countAlbum": 21,
-    "countSong": 219,
+    "countTrack": 219,
     "localPlay": true,
     "artists": [
-        {"name": "Black Pink", "avt": "xxxx"},
-        {"name": "Santana", "avt": "yyy"}
+        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
+        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
+        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
+        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
+        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
+        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
+        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
+        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
+        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
+        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
+        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
+        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
+        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
+        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"}
     ]
 }''';
 
@@ -111,6 +136,59 @@ class _showMusicScreenState extends State<showMusicScreen> {
   void initState() {
     super.initState();
     _fetchData(); // 调用异步方法
+    print('xxxxxxxxxxx ${widget.maxHeight}');
+  }
+
+  @override
+  void dispose() {
+    _overlayEntry?.remove();
+    super.dispose();
+  }
+
+  void showOverlay(BuildContext context) {
+    if (_overlayEntry != null) _overlayEntry!.remove();
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        return Positioned(
+          width: widget.maxWidth,
+          height: widget.maxHeight - 150,
+          child: CompositedTransformFollower(
+            link: _layerLink,
+            showWhenUnlinked: false,
+            offset: Offset(0, 60),
+            child: Material(
+              elevation: 4.0,
+              child: DraggableScrollableSheet(
+                initialChildSize: 1.0,  
+                //minChildSize: 0.2,
+                //maxChildSize: 1.0,
+                builder: (context, scrollController) {
+                  return ListView.builder(
+                    //shrinkWrap: true,  
+                    //physics: ClampingScrollPhysics(),
+                    controller: scrollController,
+                    itemCount: filteredItems.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(filteredItems[index]),
+                        onTap: (){
+                          print('select item ${filteredItems[index]}');
+                          _overlayEntry?.remove();
+                          _overlayEntry = null;
+                        },
+                      );
+                    }
+                  );
+                }
+              )
+            ),
+          )
+        );
+      }
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   Future<void> _fetchData() async {
@@ -121,6 +199,19 @@ class _showMusicScreenState extends State<showMusicScreen> {
     });
   }
 
+  void searchMusic(value) {
+    filteredItems.add(value);
+    filteredItems.add('Santana');
+    filteredItems.add('Black Pink');
+    
+    if (filteredItems.isNotEmpty) {
+      showOverlay(context);
+    } else {
+      _overlayEntry?.remove();
+      _overlayEntry = null;  
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
   if (_isLoading) {
@@ -129,12 +220,28 @@ class _showMusicScreenState extends State<showMusicScreen> {
   return Container(
     // 页面一大框
     width: widget.maxWidth,
-    margin: EdgeInsets.only(top:50, bottom: 80),
+    margin: EdgeInsets.only(top:30, bottom: 30),
     child: Column(
-      mainAxisSize: MainAxisSize.min,
+      //mainAxisSize: MainAxisSize.min,
       children: [
+          //搜索
+          CompositedTransformTarget(
+            link: _layerLink,  
+            child: TextField( 
+              onChanged: (value) {searchMusic(value);},
+              decoration: InputDecoration(
+                labelText: '搜索媒体库',
+                hintText: '搜索 曲名 · 专辑 · 艺术家',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8)
+                )
+              ),
+            ),
+          ),
+          const Gap(20),
           Container(
-            // 第一坨
+            // 第二坨
             padding: EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: Colors.grey[100],
@@ -166,15 +273,85 @@ class _showMusicScreenState extends State<showMusicScreen> {
               ],
             ),
           ),
-          if (meo.countSong <= 0) ...[
+          if (meo.countTrack <= 0) ...[
             Spacer(),
             Text('无媒体文件', textScaler: TextScaler.linear(1.8),),
             const Gap(20),
             Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库 \n 3. 添加本地曲目路径，同步至音源', style: TextStyle(fontWeight: FontWeight.w700)),
+          ] else ...[
+            const Gap(20),
+            Expanded(
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constrains) {
+                  return Container(
+                    // 艺术家列表
+                    padding: EdgeInsets.all(10),
+                    height: constrains.maxHeight,
+                    decoration: BoxDecoration(
+                      //color: const Color.fromARGB(255, 21, 140, 236),
+                      color: Colors.grey[100],
+                      border: Border.all(color: Colors.grey[400]!),
+                      borderRadius: BorderRadius.circular(10), // 可选：圆角边框
+                    ),
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        crossAxisSpacing: 5,
+                        mainAxisSpacing: 10,
+                      ),
+                      itemCount: meo.artists.length,
+                      itemBuilder: (context, index) {
+                        return ArtistTile(
+                          name: meo.artists[index].name,
+                          head: meo.artists[index].avt,
+                        );
+                      }
+                    )
+                  );
+                }
+              )
+            )
           ]
       ],
     ),
   );
   }
+  }
+}
+
+class ArtistTile extends StatelessWidget {
+  final String name;
+  final String head;
+  const ArtistTile({super.key, required this.name, required this.head});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      child: Column(
+        children: [
+          CircleAvatar(
+            backgroundImage: NetworkImage(head),
+            radius: 40,
+          ),
+          const Gap(5),
+          Container(
+            width: 100,
+            alignment: Alignment.center,
+            child: Text(
+              overflow: TextOverflow.ellipsis, // 溢出时显示省略号
+              maxLines: 1, // 限制文本行数为1
+              name
+            )
+          ),
+        ],
+      ),
+      onTap: () {
+        print('clicked ${name}');
+        //context.push('/user');
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => MusicArtistScreen(artist: name)
+        ));
+      },
+    );
   }
 }

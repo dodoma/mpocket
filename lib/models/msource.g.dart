@@ -10,7 +10,7 @@ MsourceLibrary _$MsourceLibraryFromJson(Map<String, dynamic> json) =>
     MsourceLibrary()
       ..name = json['name'] as String
       ..space = json['space'] as String
-      ..countSong = (json['countSong'] as num).toInt()
+      ..countTrack = (json['countTrack'] as num).toInt()
       ..countCached = (json['countCached'] as num).toInt()
       ..dft = json['dft'] as bool;
 
@@ -18,7 +18,7 @@ Map<String, dynamic> _$MsourceLibraryToJson(MsourceLibrary instance) =>
     <String, dynamic>{
       'name': instance.name,
       'space': instance.space,
-      'countSong': instance.countSong,
+      'countTrack': instance.countTrack,
       'countCached': instance.countCached,
       'dft': instance.dft,
     };

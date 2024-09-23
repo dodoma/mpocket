@@ -8,7 +8,7 @@ class MsourceLibrary {
 
   late String name;
   late String space;
-  late int countSong;
+  late int countTrack;
   late int countCached;
   late bool dft;
 
