@@ -1,7 +1,8 @@
 {
-    "album": "一切都是因为谎言",
+    "name": "一切都是因为谎言",
     "artist": "Santana",
     "PD": "2017-12-21",
+    "cover": "assets/image/caiQ.jfif",
     "countTrack": 11,
     "tracks": [
         {"name": "Premonition", "duration": "03:52"},
@@ -15,5 +16,5 @@
         {"name": "Light Years Away", "duration": "03:30"},
         {"name": "Solitude", "duration": "03:52"},
         {"name": "Littleworth Lane", "duration": "03:52"}
-]    
+    ]    
 }

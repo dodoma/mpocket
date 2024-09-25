@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'omusic_albumn.dart';
+part of 'omusic_album.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -16,19 +16,21 @@ Map<String, dynamic> _$Omusic_trackToJson(Omusic_track instance) =>
       'duration': instance.duration,
     };
 
-OmusicAlbumn _$OmusicAlbumnFromJson(Map<String, dynamic> json) => OmusicAlbumn()
-  ..albumn = json['albumn'] as String
+OmusicAlbum _$OmusicAlbumFromJson(Map<String, dynamic> json) => OmusicAlbum()
+  ..name = json['name'] as String
   ..artist = json['artist'] as String
+  ..cover = json['cover'] as String
   ..PD = json['PD'] as String
   ..countTrack = json['countTrack'] as num
   ..tracks = (json['tracks'] as List<dynamic>)
       .map((e) => Omusic_track.fromJson(e as Map<String, dynamic>))
       .toList();
 
-Map<String, dynamic> _$OmusicAlbumnToJson(OmusicAlbumn instance) =>
+Map<String, dynamic> _$OmusicAlbumToJson(OmusicAlbum instance) =>
     <String, dynamic>{
-      'albumn': instance.albumn,
+      'name': instance.name,
       'artist': instance.artist,
+      'cover': instance.cover,
       'PD': instance.PD,
       'countTrack': instance.countTrack,
       'tracks': instance.tracks,

@@ -2,10 +2,10 @@
     "artist": "Santana",
     "countAlbum": 3,
     "countTrack": 46,
-    "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image",
+    "avt": "assets/image/erhu.jfif",
     "albums": [
-        {"name": "哈哈大笑", "cover": "http://m.mbox.net.cn/d/lm/album/cover?artist=Deep%20Forest&album=Comparsa&_reqtype=image", "countTrack": 12, "PD": "2022-12-21", "cached": false},
-        {"name": "一切都是因为谎言", "countTrack": 12, "PD": "2012-12-21", "cached": false, "cover": "http://m.mbox.net.cn/d/lm/album/cover?artist=Linkin%20Park&album=Meteora%20(LP%20Version)&_reqtype=image"},
-        {"name": "OPEN MUSIC", "countTrack": 12, "PD": "2017-12-21", "cached": true, "cover": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E5%91%A8%E6%9D%B0%E4%BC%A6&album=%E8%8C%83%E7%89%B9%E8%A5%BF&_reqtype=image"}
+        {"name": "哈哈大笑", "cover": "assets/image/caiQ.jfif", "countTrack": 12, "PD": "2022-12-21", "cached": false},
+        {"name": "一切都是因为谎言", "countTrack": 12, "PD": "2012-12-21", "cached": false, "cover": "assets/image/linkP.jfif"},
+        {"name": "OPEN MUSIC", "countTrack": 12, "PD": "2017-12-21", "cached": true, "cover": "assets/image/deepF.jfif"}
     ]
 }

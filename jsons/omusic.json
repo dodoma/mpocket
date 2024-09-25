@@ -1,11 +1,16 @@
 {
-    "deviceID": "",
+    "deviceID": "bd939vASIF",
     "countArtist": 80,
     "countAlbum": 21,
     "countTrack": 219,
     "localPlay": true,
     "artists": [
-        {"name": "Black Pink", "avt": ""},
-        {"name": "Santana", "avt": ""}
+        {"name": "Black Pink", "avt": "assets/image/caiQ.jfif"},
+        {"name": "Link Park", "avt": "assets/image/linkP.jfif"},
+        {"name": "乐器二胡", "avt": "assets/image/erhu.jfif"},
+        {"name": "Black Pink", "avt": "assets/image/caiQ.jfif"},
+        {"name": "Link Park", "avt": "assets/image/linkP.jfif"},
+        {"name": "乐器二胡", "avt": "assets/image/erhu.jfif"},
+        {"name": "Santana", "avt": "assets/image/deepF.jfif"}
     ]
 }

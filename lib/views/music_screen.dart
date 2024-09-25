@@ -108,29 +108,24 @@ class _showMusicScreenState extends State<showMusicScreen> {
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
 
-  String dummys = '''{
+  String dummys = '''
+{
     "deviceID": "bd939vASIF",
     "countArtist": 80,
     "countAlbum": 21,
     "countTrack": 219,
     "localPlay": true,
     "artists": [
-        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
-        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
-        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
-        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
-        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
-        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
-        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
-        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
-        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
-        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
-        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
-        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"},
-        {"name": "Black Pink", "avt": "http://m.mbox.net.cn/d/lm/album/cover?artist=%E4%BA%8C%E6%B3%89%E6%98%A0%E6%9C%88&album=%E4%BA%8C%E8%83%A1%E5%90%8D%E6%9B%B2%E5%85%B8%E8%94%B5CD2&_reqtype=image"},
-        {"name": "Santana", "avt": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Santana_Acer_Arena_%285558151833%29_%28cropped%29.jpg"}
+        {"name": "Black Pink", "avt": "assets/image/caiQ.jfif"},
+        {"name": "Link Park", "avt": "assets/image/linkP.jfif"},
+        {"name": "乐器二胡", "avt": "assets/image/erhu.jfif"},
+        {"name": "Black Pink", "avt": "assets/image/caiQ.jfif"},
+        {"name": "Link Park", "avt": "assets/image/linkP.jfif"},
+        {"name": "乐器二胡", "avt": "assets/image/erhu.jfif"},
+        {"name": "Santana", "avt": "assets/image/deepF.jfif"}
     ]
-}''';
+}
+''';
 
   @override
   void initState() {
@@ -330,7 +325,7 @@ class ArtistTile extends StatelessWidget {
       child: Column(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(head),
+            backgroundImage: AssetImage(head),
             radius: 40,
           ),
           const Gap(5),

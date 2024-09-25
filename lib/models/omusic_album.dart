@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'omusic_albumn.g.dart';
+part 'omusic_album.g.dart';
 
 @JsonSerializable()
 class Omusic_track {
@@ -14,15 +14,16 @@ class Omusic_track {
 }
 
 @JsonSerializable()
-class OmusicAlbumn {
-  OmusicAlbumn();
+class OmusicAlbum {
+  OmusicAlbum();
 
-  late String albumn;
+  late String name;
   late String artist;
+  late String cover;
   late String PD;
   late num countTrack;
   late List<Omusic_track> tracks;
 
-  factory OmusicAlbumn.fromJson(Map<String, dynamic> json) => _$OmusicAlbumnFromJson(json);
-  Map<String, dynamic> toJson() => _$OmusicAlbumnToJson(this);
+  factory OmusicAlbum.fromJson(Map<String, dynamic> json) => _$OmusicAlbumFromJson(json);
+  Map<String, dynamic> toJson() => _$OmusicAlbumToJson(this);
 }
