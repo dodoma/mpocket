@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mpocket/config/language.dart';
-
+import 'package:mpocket/models/imsource.dart';
+import 'package:provider/provider.dart';
 
 class BottomNavigationBarScaffold extends StatefulWidget {
   const BottomNavigationBarScaffold({super.key, this.child});
@@ -49,9 +51,25 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
   @override
   Widget build(BuildContext context) {
     final int selectedIndex = _getSelectedIndex(context);
+    OmusicTrack? onListenTrack = context.watch<IMsource>().onListenTrack;
+    bool showPlaying = context.watch<IMsource>().showPlaying;
 
     return Scaffold(
-      body: widget.child,
+      body: Stack(
+        children: [
+          widget.child!,
+          if (showPlaying && onListenTrack != null) Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              color: Colors.grey[400],
+              child: NowPlaying()
+            )
+          )
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
 //        type: BottomNavigationBarType.shifting,
         onTap: changeTab,
@@ -63,5 +81,58 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
         ]
       ),
     );
+  }
+}
+
+class NowPlaying extends StatefulWidget {
+  const NowPlaying({super.key});
+
+  @override
+  State<NowPlaying> createState() => _NowPlayingState();
+}
+
+class _NowPlayingState extends State<NowPlaying> {
+  @override
+  Widget build(BuildContext context) {
+    OmusicTrack? onListenTrack = context.watch<IMsource>().onListenTrack;
+
+    if (onListenTrack != null) {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        child: InkWell(
+          child: Row(
+            children: [
+              Image.asset(onListenTrack.cover, width: 60),
+              const Gap(20),
+              Expanded(
+                child: Column(
+                  children: [
+                    LinearProgressIndicator(value: 0.3, minHeight: 2,),
+                    const Gap(10),
+                    Row(children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(onListenTrack.title, textScaler: TextScaler.linear(1.2),),
+                          Text(onListenTrack.artist)
+                        ],
+                      ),
+                      Spacer(),
+                      Icon(Icons.pause),
+                      const Gap(10),
+                      Icon(Icons.skip_next)
+                    ],)
+                  ],
+                ),
+              )
+            ],
+          ),
+          onTap: () {
+            context.read<IMsource>().turnOffPlaying();
+            context.push('/now_playing');
+          },
+        ),
+      );
+    } else return const Placeholder();
   }
 }

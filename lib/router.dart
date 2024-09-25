@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/views/msource_screen.dart';
 import 'package:mpocket/views/music_screen.dart';
+import 'package:mpocket/views/now_playing.dart';
 import 'package:mpocket/views/user_screen.dart';
 import 'package:mpocket/views/widgets.dart';
 
@@ -31,8 +32,8 @@ final router = GoRouter(
               builder: (context, state) => const UserScreen(),
             ),
             GoRoute(
-              path: '/music_album',
-              builder: (context, state) => const MusicScreen(),
+              path: '/now_playing',
+              builder: (context, state) => const NowPlayingScreen(),
             ),
           ])
     ]);

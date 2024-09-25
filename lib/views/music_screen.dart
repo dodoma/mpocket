@@ -209,6 +209,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   Widget build(BuildContext context) {
+
   if (_isLoading) {
       return CircularProgressIndicator();
   } else {
@@ -264,7 +265,10 @@ class _showMusicScreenState extends State<showMusicScreen> {
                 ),
                 Spacer(),
                 Icon(Icons.phone_iphone, size: 32),
-                Icon(Icons.shuffle_on_rounded, size: 32),
+                IconButton(icon: Icon(Icons.shuffle_on_rounded, size: 32), onPressed: () {
+                  context.read<IMsource>().updateListenTrack(OmusicTrack('Solitude', 'assets/image/caiQ.jfif', 'Santana'));
+                  context.read<IMsource>().turnOnPlaying();                  
+                },),
               ],
             ),
           ),

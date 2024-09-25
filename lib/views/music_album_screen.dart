@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic_album.dart';
+import 'package:provider/provider.dart';
 
 class MusicAlbumScreen extends StatefulWidget {
   final String artist;
@@ -132,7 +134,7 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                 ),
                 Container(
                   width: containerWidth,
-                  child:                 Divider(color: Colors.grey, thickness: 2.0,),
+                  child: Divider(color: Colors.grey, thickness: 2.0,),
                 ),
                 //const Gap(5),
                 Expanded(
@@ -147,6 +149,7 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                             return AlbumTile(
                               artist: widget.artist,
                               album: widget.album,
+                              cover: meo.cover,
                               sn: index + 1,
                               title: meo.tracks[index].name,
                               duration: meo.tracks[index].duration
@@ -170,11 +173,12 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
 class AlbumTile extends StatelessWidget {
   final String artist;
   final String album;
+  final String cover;
   final num sn;
   final String title;
   final String duration;
 
-  const AlbumTile({super.key, required this.artist, required this.album, required this.sn, required this.title, required this.duration});
+  const AlbumTile({super.key, required this.artist, required this.album, required this.cover, required this.sn, required this.title, required this.duration});
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +216,10 @@ class AlbumTile extends StatelessWidget {
           )
         ],
       ),
+      onTap: () {
+        context.read<IMsource>().updateListenTrack(OmusicTrack(title, cover, artist));
+        context.read<IMsource>().turnOnPlaying();
+      },
     );
   }
 }
