@@ -1,5 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 
+import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +11,8 @@ import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic.dart';
 import 'package:mpocket/views/music_artist_screen.dart';
 import 'package:provider/provider.dart';
+
+typedef NativePlayInfoCallback = Void Function(Int, Pointer<Utf8>, Pointer<Utf8>);
 
 class MusicScreen extends StatefulWidget {
   const MusicScreen({
@@ -39,7 +44,8 @@ class _MusicScreenState extends State<MusicScreen> {
           children: [
           if (Provider.of<IMsource>(context).deviceID.isEmpty)
             FutureBuilder<String>(
-              future: fetchData(), 
+              //future: fetchData(), 
+              future: sourceID,
               builder: (BuildContext context, AsyncSnapshot<String> value) {
                 if (!value.hasData) {
                 return Column(
@@ -58,7 +64,7 @@ class _MusicScreenState extends State<MusicScreen> {
                 );
                 } else {
                 //连上的是个还没配网的音源
-                if (value.data![0] == 'a') {
+                if (value.data![0] == 'b') {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     if (context.mounted) {
                       context.go('/msource');
@@ -67,8 +73,9 @@ class _MusicScreenState extends State<MusicScreen> {
                   return Container();
                 }
         
-                Provider.of<IMsource>(context).deviceID = value.data!;
-        
+                //Provider.of<IMsource>(context).deviceID = value.data!;
+                context.read<IMsource>().changeDevice(value.data!);
+
                 // 开始展示干货
                 return showMusicScreen(deviceID: value.data!, 
                   maxWidth: containerWidth,
@@ -131,7 +138,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
   void initState() {
     super.initState();
     _fetchData(); // 调用异步方法
-    print('xxxxxxxxxxx ${widget.maxHeight}');
   }
 
   @override
@@ -188,10 +194,12 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   Future<void> _fetchData() async {
     await Future.delayed(Duration(seconds: 2));  
-    setState(() {
-      meo = Omusic.fromJson(jsonDecode(dummys));
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        meo = Omusic.fromJson(jsonDecode(dummys));
+        _isLoading = false;
+      });
+    }
   }
 
   void searchMusic(value) {
@@ -209,7 +217,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   Widget build(BuildContext context) {
-
   if (_isLoading) {
       return CircularProgressIndicator();
   } else {
@@ -266,8 +273,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                 Spacer(),
                 Icon(Icons.phone_iphone, size: 32),
                 IconButton(icon: Icon(Icons.shuffle_on_rounded, size: 32), onPressed: () {
-                  context.read<IMsource>().updateListenTrack(OmusicTrack('Solitude', 'assets/image/caiQ.jfif', 'Santana'));
-                  context.read<IMsource>().turnOnPlaying();                  
+                  libmoc.mnetPlay(Provider.of<IMsource>(context, listen: false).deviceID);
                 },),
               ],
             ),

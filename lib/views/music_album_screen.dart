@@ -217,7 +217,7 @@ class AlbumTile extends StatelessWidget {
         ],
       ),
       onTap: () {
-        context.read<IMsource>().updateListenTrack(OmusicTrack(title, cover, artist));
+        context.read<IMsource>().updateListenTrack(OmusicTrack('aabbccddee', title, cover, artist, 120, 0));
         context.read<IMsource>().turnOnPlaying();
       },
     );

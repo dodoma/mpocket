@@ -29,6 +29,7 @@ class _MsourceScreenState extends State<MsourceScreen> {
   @override
   Widget build(BuildContext context) {
     final IMsource source = Provider.of<IMsource>(context);
+
     if (source.deviceID.isEmpty) {
       return ConfigDeviceScreen();
     } else {
@@ -83,7 +84,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
     case CanStartScan.yes:
       // start full scan async-ly
       print('start scanning wifi ap...');
-      final isScanning = await WiFiScan.instance.startScan();
+      await WiFiScan.instance.startScan();
       break;
     default: 
       print('cant scan wifi ap');
@@ -425,6 +426,12 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 检查当前的上下文是否依然有效（防止页面被销毁时仍然调用 Navigator）
+      if (context.mounted) {
+        context.read<IMsource>().turnOffPlaying();
+      }
+    });
     double containerWidth = MediaQuery.of(context).size.width * 0.9;
 
     if (_isLoading) {

@@ -117,6 +117,49 @@ class LibmocBindings {
       Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, 
                ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)
     >>('mnetWifiSet');
-  late final _wifiSet = _wifiSetPtr.asFunction<int Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)>();
+  late final _wifiSet = _wifiSetPtr.asFunction<
+    int Function(
+      ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>,
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)
+  >();
 
+  int mnetPlayInfo(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
+    return _mnetPlayInfo(ID, callback);
+  }
+  late final _mnetPlayInfoPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+    >>('mnetPlayInfo');
+  late final _mnetPlayInfo = _mnetPlayInfoPtr.asFunction<
+    int Function(
+      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      >();
+
+  int mnetOnStep(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
+    return _mnetOnStep(ID, callback);
+  }
+  late final _mnetOnStepPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+    >>('mnetOnStep');
+  late final _mnetOnStep = _mnetOnStepPtr.asFunction<
+    int Function(
+      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      >();
+
+  int mnetPlay(ffi.Pointer<Utf8>ID) {return _mnetPlay(ID);}
+  late final _mnetPlayPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetPlay');
+  late final _mnetPlay = _mnetPlayPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetPause(ffi.Pointer<Utf8>ID) {return _mnetPause(ID);}
+  late final _mnetPausePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetPause');
+  late final _mnetPause = _mnetPausePtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetResume(ffi.Pointer<Utf8>ID) {return _mnetResume(ID);}
+  late final _mnetResumePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetResume');
+  late final _mnetResume = _mnetResumePtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetNext(ffi.Pointer<Utf8>ID) {return _mnetNext(ID);}
+  late final _mnetNextPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetNext');
+  late final _mnetNext = _mnetNextPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
 }

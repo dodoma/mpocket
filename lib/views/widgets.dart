@@ -1,9 +1,16 @@
+import 'dart:async';
+import 'dart:ffi';
+
+import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mpocket/config/language.dart';
+import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:provider/provider.dart';
+
+typedef NativePlayStepCallback = Void Function(Int, Pointer<Utf8>, Pointer<Utf8>);
 
 class BottomNavigationBarScaffold extends StatefulWidget {
   const BottomNavigationBarScaffold({super.key, this.child});
@@ -91,7 +98,61 @@ class NowPlaying extends StatefulWidget {
   State<NowPlaying> createState() => _NowPlayingState();
 }
 
-class _NowPlayingState extends State<NowPlaying> {
+class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateMixin {
+  //late Stream<double> progress;
+  final progress = StreamController<double>();
+  late final NativeCallable<NativePlayStepCallback> callback = NativeCallable<NativePlayStepCallback>.listener(onResponse);
+  late AnimationController avtanimate;
+  Timer? _timer;
+  bool implaying = false;
+  bool paused = false;
+
+  void onResponse(int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
+    print('on play STEP');
+
+    OmusicTrack? onListenTrack = context.read<IMsource>().onListenTrack;
+    if (onListenTrack != null) {
+      onListenTrack.pos += 2;
+      double percent = onListenTrack.pos / onListenTrack.length;
+      progress.add(percent);
+      if (percent >= 1) {
+        print('play done');
+        //callback.close();
+      }
+      //avtanimate.forward(from: 0);
+      implaying = true;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    avtanimate = AnimationController(vsync: this, duration: Duration(seconds: 10))..repeat();
+    //avtanimate.forward();
+    _startTimer();
+
+    libmoc.mnetOnStep(Provider.of<IMsource>(context, listen: false).deviceID, callback.nativeFunction);
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+      if (!implaying) {
+        print("not playing, stop.");
+        avtanimate.stop();
+        _timer?.cancel();
+      } else {
+        implaying = false;
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    avtanimate.dispose();
+    _timer?.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     OmusicTrack? onListenTrack = context.watch<IMsource>().onListenTrack;
@@ -102,25 +163,59 @@ class _NowPlayingState extends State<NowPlaying> {
         child: InkWell(
           child: Row(
             children: [
-              Image.asset(onListenTrack.cover, width: 60),
+              //Image.asset(onListenTrack.cover, width: 60),
+              AnimatedBuilder(
+                animation: avtanimate,
+                builder: (context, child) {
+                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
+                  //return RotationTransition(turns: Tween<double>(begin: 0.0, end: 0.2).animate(avtanimate), child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
+                  //return Transform.rotate(angle: avtanimate.value * 2 * pi, child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
+                },
+              ),
               const Gap(20),
               Expanded(
                 child: Column(
                   children: [
-                    LinearProgressIndicator(value: 0.3, minHeight: 2,),
+                    StreamBuilder<double>(
+                      stream: progress.stream, 
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return LinearProgressIndicator(value: snapshot.data, minHeight: 2,);
+                        }
+                        return LinearProgressIndicator(valueColor: AlwaysStoppedAnimation(Color.fromRGBO(0x7a, 0x51, 0xe2, 100)));
+                      }
+                    ),
+                    //LinearProgressIndicator(value: onListenTrack.progress, minHeight: 2,),
                     const Gap(10),
                     Row(children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(onListenTrack.title, textScaler: TextScaler.linear(1.2),),
-                          Text(onListenTrack.artist)
-                        ],
+                      Expanded(
+                        flex: 7,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(onListenTrack.title, textScaler: TextScaler.linear(1.2), overflow: TextOverflow.ellipsis,),
+                            Text(onListenTrack.artist)
+                          ],
+                        ),
                       ),
-                      Spacer(),
-                      Icon(Icons.pause),
-                      const Gap(10),
-                      Icon(Icons.skip_next)
+                      //Spacer(),
+                      paused ? 
+                        Expanded(flex: 1, child: IconButton(icon: Icon(Icons.play_arrow), onPressed: () {
+                          libmoc.mnetResume(Provider.of<IMsource>(context, listen: false).deviceID);
+                          setState(() {
+                            paused = false;
+                          });
+                        }))
+                        : Expanded(flex: 1, child: IconButton(icon: Icon(Icons.pause), onPressed: () {
+                          libmoc.mnetPause(Provider.of<IMsource>(context, listen: false).deviceID);
+                          setState(() {
+                            paused = true;
+                          });
+                        })),
+                      const Gap(8),
+                      Expanded(flex: 1, child: IconButton(icon: Icon(Icons.skip_next), onPressed: () {
+                        libmoc.mnetNext(Provider.of<IMsource>(context, listen: false).deviceID);
+                      },))
                     ],)
                   ],
                 ),

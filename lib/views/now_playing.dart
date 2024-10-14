@@ -78,7 +78,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                       Positioned(left: 10, top: 20, child: IconButton(onPressed:() {
                         context.read<IMsource>().turnOnPlaying();
                         Navigator.pop(context);
-                      }, icon: Icon(Icons.arrow_back)),),
+                      }, icon: Icon(Icons.close)),),
                     ],
                   ),
                   const Gap(10),

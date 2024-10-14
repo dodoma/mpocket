@@ -33,6 +33,24 @@ int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFuncti
 }
 //int wifiSet(String ap, String pass, String name) => _bindings.wifiSet(ap.toNativeUtf8().cast<Int8>(), pass.toNativeUtf8().cast<Int8>(), name.toNativeUtf8().cast<Int8>());
 
+int mnetPlay(String ID) => _bindings.mnetPlay(ID.toNativeUtf8());
+int mnetPause(String ID) => _bindings.mnetPause(ID.toNativeUtf8());
+int mnetResume(String ID) => _bindings.mnetResume(ID.toNativeUtf8());
+int mnetNext(String ID) => _bindings.mnetNext(ID.toNativeUtf8());
+
+int mnetPlayInfo(String ID, Pointer<NativeFunction<Void Function(Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
+  final Pointer<Utf8> c_id = ID.toNativeUtf8();
+  int ret = _bindings.mnetPlayInfo(c_id, callback);
+
+  return ret;
+}
+
+int mnetOnStep(String ID, Pointer<NativeFunction<Void Function(Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
+  final Pointer<Utf8> c_id = ID.toNativeUtf8();
+  int ret = _bindings.mnetOnStep(c_id, callback);
+
+  return ret;
+}
 
 /// A longer lived native function, which occupies the thread calling it.
 ///

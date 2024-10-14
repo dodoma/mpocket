@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class _SkeletonScreenState extends StatefulWidget {
-  const _SkeletonScreenState({super.key});
+  //const _SkeletonScreenState({super.key});
   @override
   State<_SkeletonScreenState> createState() => __SkeletonScreenStateState();
 }
