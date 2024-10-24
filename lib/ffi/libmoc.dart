@@ -15,7 +15,7 @@ import 'libmoc_bindings_generated.dart';
 int sum(int a, int b) => _bindings.sum(a, b);
 String fileTest(String dir) => _bindings.mfile_test(dir.toNativeUtf8().cast<Int8>()).cast<Utf8>().toDartString();
 
-int mocInit() => _bindings.mnetStart();
+int mocInit(String dir) => _bindings.mnetStart(dir.toNativeUtf8());
 int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFunction<Void Function(Int)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
   final Pointer<Utf8> c_ap = ap.toNativeUtf8();
@@ -37,15 +37,18 @@ int mnetPlay(String ID) => _bindings.mnetPlay(ID.toNativeUtf8());
 int mnetPause(String ID) => _bindings.mnetPause(ID.toNativeUtf8());
 int mnetResume(String ID) => _bindings.mnetResume(ID.toNativeUtf8());
 int mnetNext(String ID) => _bindings.mnetNext(ID.toNativeUtf8());
+int mnetStoreList(String ID) => _bindings.mnetStoreList(ID.toNativeUtf8());
 
-int mnetPlayInfo(String ID, Pointer<NativeFunction<Void Function(Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
+int mnetStoreSync(String ID, String Libname) => _bindings.mnetStoreSync(ID.toNativeUtf8(), Libname.toNativeUtf8());
+
+int mnetPlayInfo(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
   int ret = _bindings.mnetPlayInfo(c_id, callback);
 
   return ret;
 }
 
-int mnetOnStep(String ID, Pointer<NativeFunction<Void Function(Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
+int mnetOnStep(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
   int ret = _bindings.mnetOnStep(c_id, callback);
 

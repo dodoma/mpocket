@@ -10,7 +10,7 @@ import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:provider/provider.dart';
 
-typedef NativePlayStepCallback = Void Function(Int, Pointer<Utf8>, Pointer<Utf8>);
+typedef NativePlayStepCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>);
 
 class BottomNavigationBarScaffold extends StatefulWidget {
   const BottomNavigationBarScaffold({super.key, this.child});
@@ -107,7 +107,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
   bool implaying = false;
   bool paused = false;
 
-  void onResponse(int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
+  void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
     print('on play STEP');
 
     OmusicTrack? onListenTrack = context.read<IMsource>().onListenTrack;

@@ -107,9 +107,9 @@ class LibmocBindings {
   late final _mfile_test =
   _mfile_testPtr.asFunction<ffi.Pointer<ffi.Int8> Function(ffi.Pointer<ffi.Int8>)>();
 
-  int mnetStart() {return _mnetStart();}
-  late final _mnetStartPtr = _lookup<ffi.NativeFunction<ffi.Int Function()>>('mnetStart');
-  late final _mnetStart = _mnetStartPtr.asFunction<int Function()>();
+  int mnetStart(ffi.Pointer<Utf8> dir) {return _mnetStart(dir);}
+  late final _mnetStartPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>)>>('mnetStart');
+  late final _mnetStart = _mnetStartPtr.asFunction<int Function(ffi.Pointer<Utf8>)>();
 
   int wifiSet(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8> ap, ffi.Pointer<Utf8>pass, ffi.Pointer<Utf8>name, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>callback) {return _wifiSet(ID, ap, pass, name, callback);}
   late final _wifiSetPtr = _lookup<
@@ -123,28 +123,28 @@ class LibmocBindings {
       ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)
   >();
 
-  int mnetPlayInfo(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
+  int mnetPlayInfo(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
     return _mnetPlayInfo(ID, callback);
   }
   late final _mnetPlayInfoPtr = _lookup<
     ffi.NativeFunction<ffi.Int 
-      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
     >>('mnetPlayInfo');
   late final _mnetPlayInfo = _mnetPlayInfoPtr.asFunction<
     int Function(
-      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
       >();
 
-  int mnetOnStep(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
+  int mnetOnStep(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
     return _mnetOnStep(ID, callback);
   }
   late final _mnetOnStepPtr = _lookup<
     ffi.NativeFunction<ffi.Int 
-      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
     >>('mnetOnStep');
   late final _mnetOnStep = _mnetOnStepPtr.asFunction<
     int Function(
-      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
       >();
 
   int mnetPlay(ffi.Pointer<Utf8>ID) {return _mnetPlay(ID);}
@@ -162,4 +162,12 @@ class LibmocBindings {
   int mnetNext(ffi.Pointer<Utf8>ID) {return _mnetNext(ID);}
   late final _mnetNextPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetNext');
   late final _mnetNext = _mnetNextPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetStoreList(ffi.Pointer<Utf8>ID) {return _mnetStoreList(ID);}
+  late final _mnetStoreListPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetStoreList');
+  late final _mnetStoreList = _mnetStoreListPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetStoreSync(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname) {return _mnetStoreSync(ID, Libname);}
+  late final _mnetStoreSyncPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>>('mnetStoreSync');
+  late final _mnetStoreSync = _mnetStoreSyncPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>();
 }

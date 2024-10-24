@@ -10,6 +10,7 @@ import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic.dart';
 import 'package:mpocket/views/music_artist_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 typedef NativePlayInfoCallback = Void Function(Int, Pointer<Utf8>, Pointer<Utf8>);
@@ -30,7 +31,34 @@ class _MusicScreenState extends State<MusicScreen> {
     return 'b342d90visdv';
   }
 
+  Future<void> initStorage() async {
+    await _requestStoragePermission();
+  }
+
   late Future<String> sourceID = libmoc.mocDiscovery();
+
+  // 检查并请求存储权限
+  Future<void> _requestStoragePermission() async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      // 请求权限
+      await Permission.storage.request();
+    }
+
+    if (await Permission.storage.isGranted) {
+      // 用户授予了权限，执行相关操作
+      print("Storage permission granted");
+    } else {
+      // 用户拒绝了权限请求
+      print("Storage permission denied");
+    }
+  }
+
+  @override
+  void initState() {
+    initStorage();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -271,7 +299,9 @@ class _showMusicScreenState extends State<showMusicScreen> {
                   ],
                 ),
                 Spacer(),
-                Icon(Icons.phone_iphone, size: 32),
+                IconButton(icon: Icon(Icons.phone_iphone, size: 32), onPressed: () {
+                  libmoc.mnetStoreSync(Provider.of<IMsource>(context, listen: false).deviceID, "默认媒体库");
+                },),
                 IconButton(icon: Icon(Icons.shuffle_on_rounded, size: 32), onPressed: () {
                   libmoc.mnetPlay(Provider.of<IMsource>(context, listen: false).deviceID);
                 },),
@@ -284,7 +314,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
             const Gap(20),
             Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库 \n 3. 添加本地曲目路径，同步至音源', style: TextStyle(fontWeight: FontWeight.w700)),
           ] else ...[
-            const Gap(20),
+            const Gap(10),
             Expanded(
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constrains) {
@@ -302,7 +332,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 5,
-                        mainAxisSpacing: 10,
+                        mainAxisSpacing: 20,
                       ),
                       itemCount: meo.artists.length,
                       itemBuilder: (context, index) {
@@ -336,7 +366,7 @@ class ArtistTile extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundImage: AssetImage(head),
-            radius: 40,
+            radius: 35,
           ),
           const Gap(5),
           Container(

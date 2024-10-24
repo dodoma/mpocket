@@ -5,12 +5,14 @@ import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/router.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  libmoc.mocInit();
+  final directory = await getApplicationDocumentsDirectory();  
+  libmoc.mocInit(directory.path);
   await Global.init();
   await Language.initialize(language: LanguageData(code: Global.profile.local, name: '', country: ''));
 
