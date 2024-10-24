@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
@@ -167,7 +168,8 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
               AnimatedBuilder(
                 animation: avtanimate,
                 builder: (context, child) {
-                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
+                  //return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
+                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover)), radius: 30,));
                   //return RotationTransition(turns: Tween<double>(begin: 0.0, end: 0.2).animate(avtanimate), child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
                   //return Transform.rotate(angle: avtanimate.value * 2 * pi, child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
                 },

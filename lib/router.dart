@@ -12,7 +12,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation: Global.profile.msourceOK ? '/music' : '/music',
+    initialLocation: Global.profile.msourceID.isEmpty ? '/music' : '/music',
     routes: [
       ShellRoute(
           navigatorKey: _shellNavigatorKey,

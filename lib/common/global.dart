@@ -7,7 +7,7 @@ class Global {
   static late SharedPreferences _prefs;
   static Profile profile = Profile();
 
-  static Future init() async {
+  static Future init(appdir) async {
     _prefs = await SharedPreferences.getInstance();
     //_prefs.remove('Profile');
     var _profile = _prefs.getString('Profile');
@@ -17,9 +17,13 @@ class Global {
       print(profile.toJson());
     } else {
       print('default profile loaded');
-      profile = Profile()..msourceOK = false;
+      profile = Profile();
+      profile.appDir = appdir;
+      profile.msourceID = '';
+      profile.storeDir = '';
       profile.local = 'en_US';
       print(profile.toJson());
+      saveProfile();
     }
   }
 

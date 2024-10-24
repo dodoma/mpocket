@@ -7,12 +7,16 @@ part of 'profile.dart';
 // **************************************************************************
 
 Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile()
-  ..msourceOK = json['msourceOK'] as bool
+  ..appDir = json['appDir'] as String
+  ..msourceID = json['msourceID'] as String
+  ..storeDir = json['storeDir'] as String
   ..local = json['local'] as String
   ..lastLogin = json['lastLogin'] as String?;
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
-      'msourceOK': instance.msourceOK,
+      'appDir': instance.appDir,
+      'msourceID': instance.msourceID,
+      'storeDir': instance.storeDir,
       'local': instance.local,
       'lastLogin': instance.lastLogin,
     };

@@ -6,7 +6,9 @@ part 'profile.g.dart';
 class Profile {
   Profile();
 
-  late bool msourceOK;
+  late String appDir;
+  late String msourceID;
+  late String storeDir;
   late String local;
   String? lastLogin;
   

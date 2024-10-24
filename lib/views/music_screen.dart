@@ -6,6 +6,7 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic.dart';
@@ -103,6 +104,9 @@ class _MusicScreenState extends State<MusicScreen> {
         
                 //Provider.of<IMsource>(context).deviceID = value.data!;
                 context.read<IMsource>().changeDevice(value.data!);
+                Global.profile.msourceID = value.data!;
+                Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
+                Global.saveProfile();
 
                 // 开始展示干货
                 return showMusicScreen(deviceID: value.data!, 
@@ -300,10 +304,10 @@ class _showMusicScreenState extends State<showMusicScreen> {
                 ),
                 Spacer(),
                 IconButton(icon: Icon(Icons.phone_iphone, size: 32), onPressed: () {
-                  libmoc.mnetStoreSync(Provider.of<IMsource>(context, listen: false).deviceID, "默认媒体库");
+                  libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
                 },),
                 IconButton(icon: Icon(Icons.shuffle_on_rounded, size: 32), onPressed: () {
-                  libmoc.mnetPlay(Provider.of<IMsource>(context, listen: false).deviceID);
+                  libmoc.mnetPlay(Global.profile.msourceID);
                 },),
               ],
             ),

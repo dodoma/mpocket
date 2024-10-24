@@ -13,7 +13,7 @@ void main() async {
 
   final directory = await getApplicationDocumentsDirectory();  
   libmoc.mocInit(directory.path);
-  await Global.init();
+  await Global.init(directory.path);
   await Language.initialize(language: LanguageData(code: Global.profile.local, name: '', country: ''));
 
   runApp(const MainApp());

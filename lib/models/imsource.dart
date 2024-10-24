@@ -4,6 +4,7 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
+import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 
 typedef NativePlayInfoCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>);
@@ -18,7 +19,7 @@ class IMsource extends ChangeNotifier {
 
   void updateListenTrack(OmusicTrack track) {
     _onListenTrack = track;
-    _onListenTrack!.cover = "assets/image/caiQ.jfif";
+    _onListenTrack!.cover = Global.profile.storeDir + "assets/cover/" + track.id;
     notifyListeners();
   }
 
