@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,7 @@ class _MusicScreenState extends State<MusicScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
           if (Provider.of<IMsource>(context).deviceID.isEmpty)
+            // 首次进入app，需要先连上音源，并且同步好默认媒体库
             FutureBuilder<String>(
               //future: fetchData(), 
               future: sourceID,
@@ -102,7 +104,6 @@ class _MusicScreenState extends State<MusicScreen> {
                   return Container();
                 }
         
-                //Provider.of<IMsource>(context).deviceID = value.data!;
                 context.read<IMsource>().changeDevice(value.data!);
                 Global.profile.msourceID = value.data!;
                 Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
@@ -117,6 +118,7 @@ class _MusicScreenState extends State<MusicScreen> {
               }
             )
           else 
+            //再次进入 /music页面时，这里展示
             showMusicScreen(deviceID: Provider.of<IMsource>(context).deviceID, 
               maxWidth: containerWidth,
               maxHeight: containerHeight
@@ -225,13 +227,16 @@ class _showMusicScreenState extends State<showMusicScreen> {
   }
 
   Future<void> _fetchData() async {
-    await Future.delayed(Duration(seconds: 2));  
-    if (mounted) {
-      setState(() {
-        meo = Omusic.fromJson(jsonDecode(dummys));
-        _isLoading = false;
-      });
-    }
+    //await libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
+    await Future.delayed(Duration(seconds: 2), () {
+      String emos = libmoc.omusicHome(Global.profile.msourceID);
+      if (mounted) {
+        setState(() {
+          meo = Omusic.fromJson(jsonDecode(emos));
+          _isLoading = false;
+        });
+      }
+    });  
   }
 
   void searchMusic(value) {
@@ -369,7 +374,7 @@ class ArtistTile extends StatelessWidget {
       child: Column(
         children: [
           CircleAvatar(
-            backgroundImage: AssetImage(head),
+            backgroundImage: FileImage(File(head)),
             radius: 35,
           ),
           const Gap(5),

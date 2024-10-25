@@ -1,9 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mpocket/common/global.dart';
+import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/omusic_artist.dart';
 import 'package:mpocket/views/music_album_screen.dart';
+
 
 class MusicArtistScreen extends StatefulWidget {
 
@@ -19,9 +23,10 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
   late OmusicArtist meo;
 
   Future<void> _fetchData() async {
-    await Future.delayed(Duration(seconds: 1));  
+    //await Future.delayed(Duration(seconds: 1));  
+    String emos = libmoc.omusicArtist(Global.profile.msourceID, widget.artist);
     setState(() {
-      meo = OmusicArtist.fromJson(jsonDecode(dummys));
+      meo = OmusicArtist.fromJson(jsonDecode(emos));
       _isLoading = false;
     });
   }
@@ -71,8 +76,8 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
               children: [
                 Stack(
                   children: [
-                    Image.asset(
-                      meo.avt,
+                    Image.file(
+                      File(meo.avt),
                       width: MediaQuery.of(context).size.width,
                       height: 220,
                       fit: BoxFit.cover,
@@ -139,7 +144,7 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                           itemCount: meo.albums.length,
                           itemBuilder: (context, index) {
                             return ListTile(
-                              leading: Image.asset(meo.albums[index].cover, height: 60),
+                              leading: Image.file(File(meo.albums[index].cover), height: 60),
                               title: Text(meo.albums[index].name),
                               subtitle: Text('${meo.albums[index].PD} ${meo.albums[index].countTrack} 首'),
                               trailing: Row(

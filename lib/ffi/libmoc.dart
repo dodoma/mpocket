@@ -15,6 +15,37 @@ import 'libmoc_bindings_generated.dart';
 int sum(int a, int b) => _bindings.sum(a, b);
 String fileTest(String dir) => _bindings.mfile_test(dir.toNativeUtf8().cast<Int8>()).cast<Utf8>().toDartString();
 
+//String mnetOmusicHome(String ID) => _bindings.omusicHome(ID.toNativeUtf8()).cast<Utf8>().toDartString();
+String omusicHome(String ID) {
+  final Pointer<Utf8> result = _bindings.omusicHome(ID.toNativeUtf8());
+  String outputs = "{}";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    calloc.free(result);
+  }
+  return outputs;
+}
+
+String omusicArtist(String ID, String name) {
+  final Pointer<Utf8> result = _bindings.omusicArtist(ID.toNativeUtf8(), name.toNativeUtf8());
+  String outputs = "{}";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    calloc.free(result);
+  }
+  return outputs;
+}
+
+String omusicAlbum(String ID, String name, String title) {
+  final Pointer<Utf8> result = _bindings.omusicAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
+  String outputs = "{}";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    calloc.free(result);
+  }
+  return outputs;
+}
+
 int mocInit(String dir) => _bindings.mnetStart(dir.toNativeUtf8());
 int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFunction<Void Function(Int)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();

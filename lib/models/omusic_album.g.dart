@@ -7,17 +7,17 @@ part of 'omusic_album.dart';
 // **************************************************************************
 
 Omusic_track _$Omusic_trackFromJson(Map<String, dynamic> json) => Omusic_track()
-  ..name = json['name'] as String
+  ..title = json['title'] as String
   ..duration = json['duration'] as String;
 
 Map<String, dynamic> _$Omusic_trackToJson(Omusic_track instance) =>
     <String, dynamic>{
-      'name': instance.name,
+      'title': instance.title,
       'duration': instance.duration,
     };
 
 OmusicAlbum _$OmusicAlbumFromJson(Map<String, dynamic> json) => OmusicAlbum()
-  ..name = json['name'] as String
+  ..title = json['title'] as String
   ..artist = json['artist'] as String
   ..cover = json['cover'] as String
   ..PD = json['PD'] as String
@@ -28,7 +28,7 @@ OmusicAlbum _$OmusicAlbumFromJson(Map<String, dynamic> json) => OmusicAlbum()
 
 Map<String, dynamic> _$OmusicAlbumToJson(OmusicAlbum instance) =>
     <String, dynamic>{
-      'name': instance.name,
+      'title': instance.title,
       'artist': instance.artist,
       'cover': instance.cover,
       'PD': instance.PD,

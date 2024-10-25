@@ -6,7 +6,7 @@ part 'omusic_album.g.dart';
 class Omusic_track {
   Omusic_track();
 
-  late String name;
+  late String title;
   late String duration;
   
   factory Omusic_track.fromJson(Map<String,dynamic> json) => _$Omusic_trackFromJson(json);
@@ -17,7 +17,7 @@ class Omusic_track {
 class OmusicAlbum {
   OmusicAlbum();
 
-  late String name;
+  late String title;
   late String artist;
   late String cover;
   late String PD;

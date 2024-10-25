@@ -170,4 +170,17 @@ class LibmocBindings {
   int mnetStoreSync(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname) {return _mnetStoreSync(ID, Libname);}
   late final _mnetStoreSyncPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>>('mnetStoreSync');
   late final _mnetStoreSync = _mnetStoreSyncPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>();
+
+
+  ffi.Pointer<Utf8> omusicHome(ffi.Pointer<Utf8>ID) {return _omusicHome(ID);}
+  late final omusicHomePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('omusicHome');
+  late final _omusicHome = omusicHomePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
+
+  ffi.Pointer<Utf8> omusicArtist(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicArtist(ID, name);}
+  late final omusicArtistPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicArtist');
+  late final _omusicArtist = omusicArtistPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
+  ffi.Pointer<Utf8> omusicAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicAlbum(ID, name, title);}
+  late final omusicAlbumPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicAlbum');
+  late final _omusicAlbum = omusicAlbumPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
 }

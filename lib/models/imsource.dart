@@ -37,6 +37,7 @@ class IMsource extends ChangeNotifier {
     deviceID = id;
 
     await libmoc.mnetStoreList(deviceID);
+    await libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
 
     void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
       if (responsePtr != nullptr) {

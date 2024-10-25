@@ -30,23 +30,23 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
 
   String dummys = '''
 {
-    "name": "一切都是因为谎言",
+    "title": "一切都是因为谎言",
     "artist": "Santana",
     "PD": "2017-12-21",
     "cover": "assets/image/caiQ.jfif",
     "countTrack": 11,
     "tracks": [
-        {"name": "Premonition", "duration": "03:52"},
-        {"name": "Dream Song", "duration": "05:33"},
-        {"name": "Pyrrhic Victoria", "duration": "02:19"},
-        {"name": "Light Years Away", "duration": "03:30"},
-        {"name": "Solitude", "duration": "03:52"},
-        {"name": "Littleworth Lane", "duration": "03:52"},
-        {"name": "Dream Song", "duration": "05:33"},
-        {"name": "Pyrrhic Victoria", "duration": "02:19"},
-        {"name": "Light Years Away", "duration": "03:30"},
-        {"name": "Solitude", "duration": "03:52"},
-        {"name": "Littleworth Lane", "duration": "03:52"}
+        {"title": "Premonition", "duration": "03:52"},
+        {"title": "Dream Song", "duration": "05:33"},
+        {"title": "Pyrrhic Victoria", "duration": "02:19"},
+        {"title": "Light Years Away", "duration": "03:30"},
+        {"title": "Solitude", "duration": "03:52"},
+        {"title": "Littleworth Lane", "duration": "03:52"},
+        {"title": "Dream Song", "duration": "05:33"},
+        {"title": "Pyrrhic Victoria", "duration": "02:19"},
+        {"title": "Light Years Away", "duration": "03:30"},
+        {"title": "Solitude", "duration": "03:52"},
+        {"title": "Littleworth Lane", "duration": "03:52"}
     ]    
 }''';
 
@@ -151,7 +151,7 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                               album: widget.album,
                               cover: meo.cover,
                               sn: index + 1,
-                              title: meo.tracks[index].name,
+                              title: meo.tracks[index].title,
                               duration: meo.tracks[index].duration
                             );  
                           },
