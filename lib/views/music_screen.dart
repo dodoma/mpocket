@@ -72,56 +72,60 @@ class _MusicScreenState extends State<MusicScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          if (Provider.of<IMsource>(context).deviceID.isEmpty)
-            // 首次进入app，需要先连上音源，并且同步好默认媒体库
             FutureBuilder<String>(
               //future: fetchData(), 
               future: sourceID,
               builder: (BuildContext context, AsyncSnapshot<String> value) {
                 if (!value.hasData) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('正在连接音源设备', textScaler: TextScaler.linear(1.6)),
-                    const Gap(10),
-                    SizedBox(
-                      height: 5,
-                      width: containerWidth,
-                      child: LinearProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(
-                            Color.fromRGBO(0x7a, 0x51, 0xe2, 100)),
-                    ))
-                  ],
-                );
+                  if (Provider.of<IMsource>(context).setting == true) {
+                    // 音源正在配置中
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text('正在连接音源设备', textScaler: TextScaler.linear(1.6)),
+                        const Gap(10),
+                        SizedBox(
+                          height: 5,
+                          width: containerWidth,
+                          child: LinearProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation(
+                                Color.fromRGBO(0x7a, 0x51, 0xe2, 100)),
+                        ))
+                      ],
+                    );
+                  } else {
+                    //按理说，此时应该有 Global 的 deviceID (除非路由器没正常干活)
+                    return showMusicScreen(deviceID: Global.profile.msourceID, 
+                      maxWidth: containerWidth,
+                      maxHeight: containerHeight
+                    );
+                  }
                 } else {
-                //连上的是个还没配网的音源
-                if (value.data![0] == 'b') {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    if (context.mounted) {
-                      context.go('/msource');
-                    }
-                  });
-                  return Container();
-                }
-        
-                context.read<IMsource>().changeDevice(value.data!);
-                Global.profile.msourceID = value.data!;
-                Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
-                Global.saveProfile();
+                    context.read<IMsource>().settingOff();
 
-                // 开始展示干货
-                return showMusicScreen(deviceID: value.data!, 
-                  maxWidth: containerWidth,
-                  maxHeight: containerHeight,
-                );
-                }
+                    //连上的是个还没配网的音源
+                    if (value.data![0] == 'b') {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        if (context.mounted) {
+                          context.go('/msource');
+                        }
+                      });
+                      return Container();
+                    }
+            
+                    context.read<IMsource>().deviceOnline(value.data!);
+                    Global.profile.msourceID = value.data!;
+                    Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
+                    Global.saveProfile();
+                    //context.read<IMsource>().bindPlayInfo();
+
+                    // 开始展示干货
+                    return showMusicScreen(deviceID: value.data!, 
+                      maxWidth: containerWidth,
+                      maxHeight: containerHeight,
+                    );
+                  }
               }
-            )
-          else 
-            //再次进入 /music页面时，这里展示
-            showMusicScreen(deviceID: Provider.of<IMsource>(context).deviceID, 
-              maxWidth: containerWidth,
-              maxHeight: containerHeight
             )
           ],
         ),
@@ -167,6 +171,21 @@ class _showMusicScreenState extends State<showMusicScreen> {
     ]
 }
 ''';
+
+  Future<void> _fetchData() async {
+    if (mounted) {
+      libmoc.omusicStoreSelect(Global.profile.msourceID, "默认媒体库");
+      String emos = libmoc.omusicHome(Global.profile.msourceID);
+      setState(() {
+        meo = Omusic.fromJson(jsonDecode(emos));
+        _isLoading = false;
+      });
+
+      Future.delayed(Duration(seconds: 2), () {
+          context.read<IMsource>().bindPlayInfo();  
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -226,19 +245,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
     Overlay.of(context).insert(_overlayEntry!);
   }
 
-  Future<void> _fetchData() async {
-    //await libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
-    await Future.delayed(Duration(seconds: 2), () {
-      String emos = libmoc.omusicHome(Global.profile.msourceID);
-      if (mounted) {
-        setState(() {
-          meo = Omusic.fromJson(jsonDecode(emos));
-          _isLoading = false;
-        });
-      }
-    });  
-  }
-
   void searchMusic(value) {
     filteredItems.add(value);
     filteredItems.add('Santana');
@@ -295,23 +301,29 @@ class _showMusicScreenState extends State<showMusicScreen> {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 5,
-                          backgroundColor: const Color.fromARGB(255, 87, 241, 32),
-                        ),
+                        if (Global.profile.msourceID == Provider.of<IMsource>(context).deviceID)
+                          CircleAvatar(
+                            radius: 5,
+                            backgroundColor: const Color.fromARGB(255, 87, 241, 32),
+                          )
+                        else
+                          CircleAvatar(
+                            radius: 5,
+                            backgroundColor: Colors.grey,
+                          ),
                         const Gap(3),                        Text('默认媒体库'),
                         Icon(Icons.arrow_drop_down)
                       ],
                     ),
                     const Gap(2),
-                    Text('0首歌曲, 0首歌曲, 0首歌曲, 112130首歌曲', textScaler: TextScaler.linear(0.6))
+                    Text('${meo.countAlbum} 位艺术家  ${meo.countAlbum} 张专辑  ${meo.countTrack} 首歌曲', textScaler: TextScaler.linear(0.6))
                   ],
                 ),
                 Spacer(),
                 IconButton(icon: Icon(Icons.phone_iphone, size: 32), onPressed: () {
                   libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
                 },),
-                IconButton(icon: Icon(Icons.shuffle_on_rounded, size: 32), onPressed: () {
+                IconButton(icon: Icon(Icons.shuffle, size: 32), onPressed: () {
                   libmoc.mnetPlay(Global.profile.msourceID);
                 },),
               ],

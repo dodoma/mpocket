@@ -263,7 +263,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                     // finished with it, otherwise this isolate will stay alive
                                     // indefinitely.
                                     callback.close();
-                                    //context.goNamed(AppRoute.music.name);
+                                    context.read<IMsource>().settingOn();
                                     context.go('/music');
                                   }
 

@@ -15,6 +15,8 @@ import 'libmoc_bindings_generated.dart';
 int sum(int a, int b) => _bindings.sum(a, b);
 String fileTest(String dir) => _bindings.mfile_test(dir.toNativeUtf8().cast<Int8>()).cast<Utf8>().toDartString();
 
+void omusicStoreSelect(String ID, String Libname) =>_bindings.omusicStoreSelect(ID.toNativeUtf8(), Libname.toNativeUtf8());
+
 //String mnetOmusicHome(String ID) => _bindings.omusicHome(ID.toNativeUtf8()).cast<Utf8>().toDartString();
 String omusicHome(String ID) {
   final Pointer<Utf8> result = _bindings.omusicHome(ID.toNativeUtf8());

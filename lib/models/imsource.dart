@@ -11,11 +11,21 @@ typedef NativePlayInfoCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>
 
 class IMsource extends ChangeNotifier {
   String deviceID = "";
+  bool _setting = false;
   bool _showPlaying = false;
   OmusicTrack? _onListenTrack = null;
 
   OmusicTrack? get onListenTrack => _onListenTrack;
   bool get showPlaying => _showPlaying;
+  bool get setting => _setting;
+
+  void settingOn() {
+    _setting = true;
+  }
+
+  void settingOff() {
+    _setting = false;  
+  }  
 
   void updateListenTrack(OmusicTrack track) {
     _onListenTrack = track;
@@ -33,12 +43,15 @@ class IMsource extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeDevice (String id) async {
+  void deviceOnline (String id) async {
     deviceID = id;
-
+    
     await libmoc.mnetStoreList(deviceID);
-    await libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
+    await libmoc.mnetStoreSync(deviceID, "默认媒体库");
+  }
 
+  void bindPlayInfo() {
+    late final NativeCallable<NativePlayInfoCallback> callback;
     void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
       if (responsePtr != nullptr) {
         String response = responsePtr.cast<Utf8>().toDartString();
@@ -50,10 +63,10 @@ class IMsource extends ChangeNotifier {
             turnOnPlaying();
           }
         }
-        //callback.close()
+        //callback.close();
       }
     }
-    late final NativeCallable<NativePlayInfoCallback> callback = NativeCallable<NativePlayInfoCallback>.listener(onResponse);
+    callback = NativeCallable<NativePlayInfoCallback>.listener(onResponse);
     libmoc.mnetPlayInfo(deviceID, callback.nativeFunction);
   }
 }

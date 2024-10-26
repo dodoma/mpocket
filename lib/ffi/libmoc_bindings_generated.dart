@@ -172,6 +172,11 @@ class LibmocBindings {
   late final _mnetStoreSync = _mnetStoreSyncPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>();
 
 
+
+  void omusicStoreSelect(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname) {return _omusicStoreSelect(ID, Libname);}
+  late final omusicStoreSelectPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>>('omusicStoreSelect');
+  late final _omusicStoreSelect = omusicStoreSelectPtr.asFunction<void Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>();
+
   ffi.Pointer<Utf8> omusicHome(ffi.Pointer<Utf8>ID) {return _omusicHome(ID);}
   late final omusicHomePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('omusicHome');
   late final _omusicHome = omusicHomePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
