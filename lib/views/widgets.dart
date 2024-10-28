@@ -104,8 +104,6 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
   final progress = StreamController<double>();
   late final NativeCallable<NativePlayStepCallback> callback = NativeCallable<NativePlayStepCallback>.listener(onResponse);
   late AnimationController avtanimate;
-  Timer? _timer;
-  bool implaying = false;
   bool paused = false;
 
   void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
@@ -120,8 +118,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
         print('play done');
         //callback.close();
       }
-      //avtanimate.forward(from: 0);
-      implaying = true;
+      //avtanimate.forward();
     }
   }
 
@@ -129,28 +126,13 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     avtanimate = AnimationController(vsync: this, duration: Duration(seconds: 10))..repeat();
-    //avtanimate.forward();
-    _startTimer();
 
     libmoc.mnetOnStep(Provider.of<IMsource>(context, listen: false).deviceID, callback.nativeFunction);
-  }
-
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
-      if (!implaying) {
-        print("not playing, stop.");
-        avtanimate.stop();
-        _timer?.cancel();
-      } else {
-        implaying = false;
-      }
-    });
   }
 
   @override
   void dispose() {
     avtanimate.dispose();
-    _timer?.cancel();
     super.dispose();
   }
 
@@ -168,10 +150,9 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
               AnimatedBuilder(
                 animation: avtanimate,
                 builder: (context, child) {
-                  //return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
                   return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover)), radius: 30,));
                   //return RotationTransition(turns: Tween<double>(begin: 0.0, end: 0.2).animate(avtanimate), child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
-                  //return Transform.rotate(angle: avtanimate.value * 2 * pi, child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
+                  //return Transform.rotate(angle: avtanimate.value * 2 * pi, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover)), radius: 30,));
                 },
               ),
               const Gap(20),
@@ -204,12 +185,14 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
                       paused ? 
                         Expanded(flex: 1, child: IconButton(icon: Icon(Icons.play_arrow), onPressed: () {
                           libmoc.mnetResume(Provider.of<IMsource>(context, listen: false).deviceID);
+                          avtanimate.repeat();
                           setState(() {
                             paused = false;
                           });
                         }))
                         : Expanded(flex: 1, child: IconButton(icon: Icon(Icons.pause), onPressed: () {
                           libmoc.mnetPause(Provider.of<IMsource>(context, listen: false).deviceID);
+                          avtanimate.stop();
                           setState(() {
                             paused = true;
                           });

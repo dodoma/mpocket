@@ -51,6 +51,7 @@ class IMsource extends ChangeNotifier {
   }
 
   void bindPlayInfo() {
+    print("bind PLAYINFO");
     late final NativeCallable<NativePlayInfoCallback> callback;
     void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
       if (responsePtr != nullptr) {
