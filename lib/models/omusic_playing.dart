@@ -17,6 +17,7 @@ class OmusicPlaying {
   late String bps;
   late String rate;
   late double volume;
+  late bool shuffle;
 
   factory OmusicPlaying.fromJson(Map<String, dynamic> json) => _$OmusicPlayingFromJson(json);
   Map<String, dynamic> toJson() => _$OmusicPlayingToJson(this);

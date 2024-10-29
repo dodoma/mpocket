@@ -67,6 +67,7 @@ int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFuncti
 //int wifiSet(String ap, String pass, String name) => _bindings.wifiSet(ap.toNativeUtf8().cast<Int8>(), pass.toNativeUtf8().cast<Int8>(), name.toNativeUtf8().cast<Int8>());
 
 int mnetSetShuffle(String ID, int shuffle) => _bindings.mnetSetShuffle(ID.toNativeUtf8(), shuffle);
+int mnetSetVolume(String ID, double volume) => _bindings.mnetSetVolume(ID.toNativeUtf8(), volume);
 
 int mnetPlay(String ID) => _bindings.mnetPlay(ID.toNativeUtf8());
 int mnetPlayID(String ID, String trackid) => _bindings.mnetPlayID(ID.toNativeUtf8(), trackid.toNativeUtf8());
@@ -75,6 +76,8 @@ int mnetPlayAlbum(String ID, String name, String title) => _bindings.mnetPlayAlb
 int mnetPause(String ID) => _bindings.mnetPause(ID.toNativeUtf8());
 int mnetResume(String ID) => _bindings.mnetResume(ID.toNativeUtf8());
 int mnetNext(String ID) => _bindings.mnetNext(ID.toNativeUtf8());
+int mnetPrevious(String ID) => _bindings.mnetPrevious(ID.toNativeUtf8());
+int mnetDragTO(String ID, double percent) => _bindings.mnetDragTO(ID.toNativeUtf8(), percent);
 int mnetStoreList(String ID) => _bindings.mnetStoreList(ID.toNativeUtf8());
 
 int mnetStoreSync(String ID, String Libname) => _bindings.mnetStoreSync(ID.toNativeUtf8(), Libname.toNativeUtf8());

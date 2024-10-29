@@ -17,6 +17,7 @@ OmusicPlaying _$OmusicPlayingFromJson(Map<String, dynamic> json) =>
       ..rate = json['rate'] as String
       ..length = json['length'] as num
       ..pos = json['pos'] as num
+      ..shuffle = json['shuffle'] as bool
       ..volume = json['volume'] as double;
 
 Map<String, dynamic> _$OmusicPlayingToJson(OmusicPlaying instance) =>
@@ -30,5 +31,6 @@ Map<String, dynamic> _$OmusicPlayingToJson(OmusicPlaying instance) =>
       'rate': instance.rate,
       'length': instance.length,
       'pos': instance.pos,
+      'shuffle': instance.shuffle,
       'volume': instance.volume,
     };

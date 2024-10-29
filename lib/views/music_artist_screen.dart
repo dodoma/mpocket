@@ -84,12 +84,12 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                     ),
                     Positioned(
                       left: 10,  
-                      top: 20,
+                      top: 40,
                       child: IconButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: Icon(Icons.arrow_back, size: 32)
+                        icon: Icon(Icons.arrow_back, size: 32, color: Colors.white,)
                       )
                     ),
                     Positioned(

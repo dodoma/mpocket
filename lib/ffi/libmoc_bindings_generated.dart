@@ -163,6 +163,10 @@ class LibmocBindings {
   late final _mnetSetShufflePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Int8 shuffle)>>('mnetSetShuffle');
   late final _mnetSetShuffle = _mnetSetShufflePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, int shuffle)>();
 
+  int mnetSetVolume(ffi.Pointer<Utf8>ID, double volume) {return _mnetSetVolume(ID, volume);}
+  late final _mnetSetVolumePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Double volume)>>('mnetSetVolume');
+  late final _mnetSetVolume = _mnetSetVolumePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, double volume)>();
+
   int mnetPlay(ffi.Pointer<Utf8>ID) {return _mnetPlay(ID);}
   late final _mnetPlayPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetPlay');
   late final _mnetPlay = _mnetPlayPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
@@ -191,6 +195,14 @@ class LibmocBindings {
   int mnetNext(ffi.Pointer<Utf8>ID) {return _mnetNext(ID);}
   late final _mnetNextPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetNext');
   late final _mnetNext = _mnetNextPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetPrevious(ffi.Pointer<Utf8>ID) {return _mnetPrevious(ID);}
+  late final _mnetPreviousPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetPrevious');
+  late final _mnetPrevious = _mnetPreviousPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetDragTO(ffi.Pointer<Utf8>ID, double percent) {return _mnetDragTO(ID, percent);}
+  late final _mnetDragTOPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Double percent)>>('mnetDragTO');
+  late final _mnetDragTO = _mnetDragTOPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, double percent)>();
 
   int mnetStoreList(ffi.Pointer<Utf8>ID) {return _mnetStoreList(ID);}
   late final _mnetStoreListPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetStoreList');

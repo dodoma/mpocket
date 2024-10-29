@@ -62,15 +62,16 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
     final int selectedIndex = _getSelectedIndex(context);
     bool showPlaying = context.watch<IMsource>().showPlaying;
     OmusicPlaying? onListenTrack = context.watch<IMsource>().onListenTrack;
+    final String location = GoRouterState.of(context).uri.toString();
 
     return Scaffold(
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top:45, bottom: 10),
+            margin: EdgeInsets.only(top:0, bottom: 0),
             child: widget.child!
           ),
-          if (showPlaying && onListenTrack != null) Positioned(
+          if (location != "/now_playing" && showPlaying && onListenTrack != null) Positioned(
             left: 0,
             right: 0,
             bottom: 0,
