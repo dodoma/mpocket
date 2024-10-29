@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mpocket/models/imsource.dart';
+import 'package:mpocket/common/global.dart';
+import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/omusic_album.dart';
-import 'package:provider/provider.dart';
 
 class MusicAlbumScreen extends StatefulWidget {
   final String artist;
@@ -21,9 +22,11 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
   late OmusicAlbum meo;
 
   Future<void> _fetchData() async {
-    await Future.delayed(Duration(seconds: 1));  
+    //await Future.delayed(Duration(seconds: 1));  
+    String emos = libmoc.omusicAlbum(Global.profile.msourceID, widget.artist, widget.album);
+    print(emos);
     setState(() {
-      meo = OmusicAlbum.fromJson(jsonDecode(dummys));
+      meo = OmusicAlbum.fromJson(jsonDecode(emos));
       _isLoading = false;
     });
   }
@@ -36,17 +39,17 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
     "cover": "assets/image/caiQ.jfif",
     "countTrack": 11,
     "tracks": [
-        {"title": "Premonition", "duration": "03:52"},
-        {"title": "Dream Song", "duration": "05:33"},
-        {"title": "Pyrrhic Victoria", "duration": "02:19"},
-        {"title": "Light Years Away", "duration": "03:30"},
-        {"title": "Solitude", "duration": "03:52"},
-        {"title": "Littleworth Lane", "duration": "03:52"},
-        {"title": "Dream Song", "duration": "05:33"},
-        {"title": "Pyrrhic Victoria", "duration": "02:19"},
-        {"title": "Light Years Away", "duration": "03:30"},
-        {"title": "Solitude", "duration": "03:52"},
-        {"title": "Littleworth Lane", "duration": "03:52"}
+        {"id": "8193c2922f", "title": "Premonition", "duration": "03:52"},
+        {"id": "8193c2922f", "title": "Dream Song", "duration": "05:33"},
+        {"id": "8193c2922f", "title": "Pyrrhic Victoria", "duration": "02:19"},
+        {"id": "8193c2922f", "title": "Light Years Away", "duration": "03:30"},
+        {"id": "8193c2922f", "title": "Solitude", "duration": "03:52"},
+        {"id": "8193c2922f", "title": "Littleworth Lane", "duration": "03:52"},
+        {"id": "8193c2922f", "title": "Dream Song", "duration": "05:33"},
+        {"id": "8193c2922f", "title": "Pyrrhic Victoria", "duration": "02:19"},
+        {"id": "8193c2922f", "title": "Light Years Away", "duration": "03:30"},
+        {"id": "8193c2922f", "title": "Solitude", "duration": "03:52"},
+        {"id": "8193c2922f", "title": "Littleworth Lane", "duration": "03:52"}
     ]    
 }''';
 
@@ -77,8 +80,8 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
               children: [
                 Stack(
                   children: [
-                    Image.asset(
-                      meo.cover,
+                    Image.file(
+                      File(meo.cover),
                       width: MediaQuery.of(context).size.width,
                       height: 220,
                       fit: BoxFit.cover,
@@ -96,17 +99,35 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                     Positioned(
                       right: 10,  
                       bottom: 10,
-                      child: IconButton(
-                        onPressed: () {
-                          print('play whole');
-                        },
-                        icon: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.7), // 灰色背景，带透明度
-                            shape: BoxShape.circle, // 圆形背景
-                          ),                            
-                          child: Icon(Icons.play_arrow, size: 32, color: Colors.white,)
-                        )
+                      child: Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              libmoc.mnetSetShuffle(Global.profile.msourceID, 0);
+                              libmoc.mnetPlayAlbum(Global.profile.msourceID, widget.artist, widget.album);
+                            },
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.7), // 灰色背景，带透明度
+                                shape: BoxShape.circle, // 圆形背景
+                              ),                            
+                              child: Icon(Icons.play_arrow, size: 32, color: Colors.white,)
+                            )
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              libmoc.mnetSetShuffle(Global.profile.msourceID, 1);
+                              libmoc.mnetPlayAlbum(Global.profile.msourceID, widget.artist, widget.album);
+                            },
+                            icon: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.7), // 灰色背景，带透明度
+                                shape: BoxShape.circle, // 圆形背景
+                              ),                            
+                              child: Icon(Icons.shuffle, size: 32, color: Colors.white,)
+                            )
+                          ),
+                        ],
                       )
                     )
                   ]                    
@@ -119,7 +140,7 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${widget.album}', textScaler: TextScaler.linear(1.6),),
+                          SizedBox(child: Text('${widget.album}', textScaler: TextScaler.linear(1.6), overflow: TextOverflow.ellipsis, maxLines: 1,), width: containerWidth * 0.9),
                           Row(
                             children: [
                               Text('${widget.artist}'),
@@ -151,6 +172,7 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                               album: widget.album,
                               cover: meo.cover,
                               sn: index + 1,
+                              id: meo.tracks[index].id,
                               title: meo.tracks[index].title,
                               duration: meo.tracks[index].duration
                             );  
@@ -175,10 +197,11 @@ class AlbumTile extends StatelessWidget {
   final String album;
   final String cover;
   final num sn;
+  final String id;
   final String title;
   final String duration;
 
-  const AlbumTile({super.key, required this.artist, required this.album, required this.cover, required this.sn, required this.title, required this.duration});
+  const AlbumTile({super.key, required this.artist, required this.album, required this.cover, required this.sn, required this.id, required this.title, required this.duration});
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +223,7 @@ class AlbumTile extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(title, textScaler: TextScaler.linear(1.2),),
+                        Container(child: Text(title, textScaler: TextScaler.linear(1.2), overflow: TextOverflow.ellipsis, maxLines: 1,), width: 160),
                         Text(duration)
                       ],
                     ),
@@ -217,8 +240,9 @@ class AlbumTile extends StatelessWidget {
         ],
       ),
       onTap: () {
-        context.read<IMsource>().updateListenTrack(OmusicTrack('aabbccddee', title, cover, artist, 120, 0));
-        context.read<IMsource>().turnOnPlaying();
+        //context.read<IMsource>().updateListenTrack(OmusicTrack('aabbccddee', title, cover, artist, 120, 0));
+        //context.read<IMsource>().turnOnPlaying();
+        libmoc.mnetPlayID(Global.profile.msourceID, id);
       },
     );
   }

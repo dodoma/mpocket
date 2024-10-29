@@ -101,7 +101,7 @@ class _MusicScreenState extends State<MusicScreen> {
                     );
                   }
                 } else {
-                    context.read<IMsource>().settingOff();
+                    context.read<IMsource>().setting = false;
 
                     //连上的是个还没配网的音源
                     if (value.data![0] == 'b') {
@@ -117,7 +117,6 @@ class _MusicScreenState extends State<MusicScreen> {
                     Global.profile.msourceID = value.data!;
                     Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
                     Global.saveProfile();
-                    //context.read<IMsource>().bindPlayInfo();
 
                     // 开始展示干货
                     return showMusicScreen(deviceID: value.data!, 
@@ -179,10 +178,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
       setState(() {
         meo = Omusic.fromJson(jsonDecode(emos));
         _isLoading = false;
-      });
-
-      Future.delayed(Duration(seconds: 2), () {
-          context.read<IMsource>().bindPlayInfo();  
       });
     }
   }
@@ -266,7 +261,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
   return Container(
     // 页面一大框
     width: widget.maxWidth,
-    margin: EdgeInsets.only(top:30, bottom: 30),
+    margin: EdgeInsets.only(top:10, bottom: 10),
     child: Column(
       //mainAxisSize: MainAxisSize.min,
       children: [
@@ -324,6 +319,8 @@ class _showMusicScreenState extends State<showMusicScreen> {
                   libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
                 },),
                 IconButton(icon: Icon(Icons.shuffle, size: 32), onPressed: () {
+                  //sleep(Duration(seconds: 2));
+                  //context.read<IMsource>().bindPlayInfo();
                   libmoc.mnetPlay(Global.profile.msourceID);
                 },),
               ],
@@ -341,7 +338,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                 builder: (BuildContext context, BoxConstraints constrains) {
                   return Container(
                     // 艺术家列表
-                    padding: EdgeInsets.all(10),
+                    //padding: EdgeInsets.all(10),
                     height: constrains.maxHeight,
                     decoration: BoxDecoration(
                       //color: const Color.fromARGB(255, 21, 140, 236),
@@ -353,7 +350,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 5,
-                        mainAxisSpacing: 20,
+                        mainAxisSpacing: 10,
                       ),
                       itemCount: meo.artists.length,
                       itemBuilder: (context, index) {

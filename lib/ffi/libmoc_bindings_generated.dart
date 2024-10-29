@@ -123,6 +123,18 @@ class LibmocBindings {
       ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)
   >();
 
+  int mnetPlayDetail(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
+    return _mnetPlayDetail(ID, callback);
+  }
+  late final _mnetPlayDetailPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+    >>('mnetPlayDetail');
+  late final _mnetPlayDetail = _mnetPlayDetailPtr.asFunction<
+    int Function(
+      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      >();
+
   int mnetPlayInfo(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
     return _mnetPlayInfo(ID, callback);
   }
@@ -147,9 +159,26 @@ class LibmocBindings {
       ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
       >();
 
+  int mnetSetShuffle(ffi.Pointer<Utf8>ID, int shuffle) {return _mnetSetShuffle(ID, shuffle);}
+  late final _mnetSetShufflePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Int8 shuffle)>>('mnetSetShuffle');
+  late final _mnetSetShuffle = _mnetSetShufflePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, int shuffle)>();
+
   int mnetPlay(ffi.Pointer<Utf8>ID) {return _mnetPlay(ID);}
   late final _mnetPlayPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetPlay');
   late final _mnetPlay = _mnetPlayPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
+  int mnetPlayID(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid) {return _mnetPlayID(ID, trackid);}
+  late final _mnetPlayIDPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid)>>('mnetPlayID');
+  late final _mnetPlayID = _mnetPlayIDPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid)>();
+
+  int mnetPlayArtist(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>artist) {return _mnetPlayArtist(ID, artist);}
+  late final _mnetPlayArtistPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>artist)>>('mnetPlayArtist');
+  late final _mnetPlayArtist = _mnetPlayArtistPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>artist)>();
+
+  int mnetPlayAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8> title) {return _mnetPlayAlbum(ID, name, title);}
+  late final _mnetPlayAlbumPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('mnetPlayAlbum');
+  late final _mnetPlayAlbum = _mnetPlayAlbumPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
+
 
   int mnetPause(ffi.Pointer<Utf8>ID) {return _mnetPause(ID);}
   late final _mnetPausePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetPause');

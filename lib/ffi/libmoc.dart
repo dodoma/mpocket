@@ -66,7 +66,12 @@ int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFuncti
 }
 //int wifiSet(String ap, String pass, String name) => _bindings.wifiSet(ap.toNativeUtf8().cast<Int8>(), pass.toNativeUtf8().cast<Int8>(), name.toNativeUtf8().cast<Int8>());
 
+int mnetSetShuffle(String ID, int shuffle) => _bindings.mnetSetShuffle(ID.toNativeUtf8(), shuffle);
+
 int mnetPlay(String ID) => _bindings.mnetPlay(ID.toNativeUtf8());
+int mnetPlayID(String ID, String trackid) => _bindings.mnetPlayID(ID.toNativeUtf8(), trackid.toNativeUtf8());
+int mnetPlayArtist(String ID, String artist) => _bindings.mnetPlayArtist(ID.toNativeUtf8(), artist.toNativeUtf8());
+int mnetPlayAlbum(String ID, String name, String title) => _bindings.mnetPlayAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
 int mnetPause(String ID) => _bindings.mnetPause(ID.toNativeUtf8());
 int mnetResume(String ID) => _bindings.mnetResume(ID.toNativeUtf8());
 int mnetNext(String ID) => _bindings.mnetNext(ID.toNativeUtf8());
@@ -77,6 +82,13 @@ int mnetStoreSync(String ID, String Libname) => _bindings.mnetStoreSync(ID.toNat
 int mnetPlayInfo(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
   int ret = _bindings.mnetPlayInfo(c_id, callback);
+
+  return ret;
+}
+
+int mnetPlayDetail(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
+  final Pointer<Utf8> c_id = ID.toNativeUtf8();
+  int ret = _bindings.mnetPlayDetail(c_id, callback);
 
   return ret;
 }

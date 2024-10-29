@@ -6,40 +6,32 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
+import 'package:mpocket/models/omusic_playing.dart';
+
+
 
 typedef NativePlayInfoCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>);
 
 class IMsource extends ChangeNotifier {
   String deviceID = "";
-  bool _setting = false;
-  bool _showPlaying = false;
-  OmusicTrack? _onListenTrack = null;
+  bool setting = false;
+  bool showPlaying = false;
+  bool binded = false;
+  OmusicPlaying? onListenTrack = null;
 
-  OmusicTrack? get onListenTrack => _onListenTrack;
-  bool get showPlaying => _showPlaying;
-  bool get setting => _setting;
-
-  void settingOn() {
-    _setting = true;
-  }
-
-  void settingOff() {
-    _setting = false;  
-  }  
-
-  void updateListenTrack(OmusicTrack track) {
-    _onListenTrack = track;
-    _onListenTrack!.cover = Global.profile.storeDir + "assets/cover/" + track.id;
+  void updateListenTrack(OmusicPlaying track) {
+    onListenTrack = track;
+    onListenTrack!.cover = Global.profile.storeDir + "assets/cover/" + track.id;
     notifyListeners();
   }
 
   void turnOffPlaying() {
-    _showPlaying = false;
+    showPlaying = false;
     notifyListeners();
   }
 
   void turnOnPlaying() {
-    _showPlaying = true;
+    showPlaying = true;
     notifyListeners();
   }
 
@@ -48,6 +40,11 @@ class IMsource extends ChangeNotifier {
     
     await libmoc.mnetStoreList(deviceID);
     await libmoc.mnetStoreSync(deviceID, "默认媒体库");
+
+    if (!binded) {
+      binded = true;
+      bindPlayInfo();
+    }
   }
 
   void bindPlayInfo() {
@@ -58,28 +55,13 @@ class IMsource extends ChangeNotifier {
         String response = responsePtr.cast<Utf8>().toDartString();
         print('on play INFO response ${response}');
         if (response != "null") {
-          Map<String, dynamic> jso = jsonDecode(response);
-          if (jso['id'] != null) {
-            updateListenTrack(OmusicTrack(jso['id'], jso['title'], jso['artist'], jso['album'], jso['length'], jso['pos']));
-            turnOnPlaying();
-          }
+          updateListenTrack(OmusicPlaying.fromJson(jsonDecode(response)));  
+          turnOnPlaying();
         }
-        //callback.close();
       }
+      //callback.close();
     }
     callback = NativeCallable<NativePlayInfoCallback>.listener(onResponse);
     libmoc.mnetPlayInfo(deviceID, callback.nativeFunction);
   }
-}
-
-class OmusicTrack {
-  OmusicTrack(this.id, this.title, this.artist, this.album, this.length, this.pos);
-
-  late String id;
-  late String title;
-  late String cover;
-  late String artist;
-  late String album;
-  late int length;
-  late int pos;
 }

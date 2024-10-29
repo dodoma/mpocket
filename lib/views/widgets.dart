@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
+import 'package:mpocket/models/omusic_playing.dart';
 import 'package:provider/provider.dart';
 
 typedef NativePlayStepCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>);
@@ -59,13 +60,16 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
   @override
   Widget build(BuildContext context) {
     final int selectedIndex = _getSelectedIndex(context);
-    OmusicTrack? onListenTrack = context.watch<IMsource>().onListenTrack;
     bool showPlaying = context.watch<IMsource>().showPlaying;
+    OmusicPlaying? onListenTrack = context.watch<IMsource>().onListenTrack;
 
     return Scaffold(
       body: Stack(
         children: [
-          widget.child!,
+          Container(
+            margin: EdgeInsets.only(top:45, bottom: 10),
+            child: widget.child!
+          ),
           if (showPlaying && onListenTrack != null) Positioned(
             left: 0,
             right: 0,
@@ -100,7 +104,6 @@ class NowPlaying extends StatefulWidget {
 }
 
 class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateMixin {
-  //late Stream<double> progress;
   final progress = StreamController<double>();
   late final NativeCallable<NativePlayStepCallback> callback = NativeCallable<NativePlayStepCallback>.listener(onResponse);
   late AnimationController avtanimate;
@@ -108,17 +111,11 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
 
   void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
     print('on play STEP');
-
-    OmusicTrack? onListenTrack = context.read<IMsource>().onListenTrack;
+    OmusicPlaying? onListenTrack = context.read<IMsource>().onListenTrack;
     if (onListenTrack != null) {
       onListenTrack.pos += 2;
       double percent = onListenTrack.pos / onListenTrack.length;
       progress.add(percent);
-      if (percent >= 1) {
-        print('play done');
-        //callback.close();
-      }
-      //avtanimate.forward();
     }
   }
 
@@ -126,19 +123,19 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
   void initState() {
     super.initState();
     avtanimate = AnimationController(vsync: this, duration: Duration(seconds: 10))..repeat();
-
     libmoc.mnetOnStep(Provider.of<IMsource>(context, listen: false).deviceID, callback.nativeFunction);
   }
 
   @override
   void dispose() {
+    callback.close();
     avtanimate.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    OmusicTrack? onListenTrack = context.watch<IMsource>().onListenTrack;
+    OmusicPlaying? onListenTrack = context.read<IMsource>().onListenTrack;
 
     if (onListenTrack != null) {
       return Container(
@@ -150,7 +147,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
               AnimatedBuilder(
                 animation: avtanimate,
                 builder: (context, child) {
-                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover)), radius: 30,));
+                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover!)), radius: 30,));
                   //return RotationTransition(turns: Tween<double>(begin: 0.0, end: 0.2).animate(avtanimate), child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
                   //return Transform.rotate(angle: avtanimate.value * 2 * pi, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover)), radius: 30,));
                 },

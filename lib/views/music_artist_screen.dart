@@ -97,6 +97,7 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                       bottom: 10,
                       child: IconButton(
                         onPressed: () {
+                          libmoc.mnetPlayArtist(Global.profile.msourceID, meo.artist);
                           print('play shuffle');
                         },
                         icon: Container(
@@ -145,13 +146,19 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                           itemBuilder: (context, index) {
                             return ListTile(
                               leading: Image.file(File(meo.albums[index].cover), height: 60),
-                              title: Text(meo.albums[index].name),
+                              title: SizedBox(child:
+                                Text(meo.albums[index].name, overflow: TextOverflow.ellipsis, maxLines: 1,),
+                              ),
                               subtitle: Text('${meo.albums[index].PD} ${meo.albums[index].countTrack} 首'),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   if (meo.albums[index].cached) Text('已缓存'),
-                                  IconButton(onPressed: () {print('xxxx');}, icon: Icon(size: 20, Icons.play_arrow)),
+                                  IconButton(
+                                    onPressed: () {
+                                      libmoc.mnetPlayAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
+                                    },
+                                    icon: Icon(size: 20, Icons.play_arrow)),
                                   IconButton(onPressed: () {print('yyyy');}, icon: Icon(size: 20, Icons.more_vert)),
                                 ],
                               ),

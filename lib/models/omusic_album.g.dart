@@ -7,11 +7,13 @@ part of 'omusic_album.dart';
 // **************************************************************************
 
 Omusic_track _$Omusic_trackFromJson(Map<String, dynamic> json) => Omusic_track()
+  ..id = json['id'] as String
   ..title = json['title'] as String
   ..duration = json['duration'] as String;
 
 Map<String, dynamic> _$Omusic_trackToJson(Omusic_track instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'title': instance.title,
       'duration': instance.duration,
     };

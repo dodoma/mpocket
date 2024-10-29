@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -17,35 +17,9 @@ class NowPlayingScreen extends StatefulWidget {
 
 class _NowPlayingScreenState extends State<NowPlayingScreen> {
 
-  bool _isLoading = true;
-  late OmusicPlaying meo;
-
-  Future<void> _fetchData() async {
-    setState(() {
-      meo = OmusicPlaying.fromJson(jsonDecode(dummys));
-      _isLoading = false;
-    });
-  }
-
-  String dummys = '''
-{
-    "title": "Proemonition",
-    "cover": "assets/image/erhu.jfif",
-    "artist": "Santana",
-    "album": "一切都是因为谎言",
-    "file_type": "MP3",
-    "bps": "32kb/s",
-    "rate": "44.1khz",
-    "duration": "3:53",
-    "now_at": "1:32",
-    "volume": 0.76,
-    "progress": 0.34
-}''';
-
   @override
   void initState() {
     super.initState();
-    _fetchData();
   }
 
   @override
@@ -56,8 +30,9 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
   @override
   Widget build(BuildContext context) {
     double containerWidth = MediaQuery.of(context).size.width;
+    OmusicPlaying? meo = context.read<IMsource>().onListenTrack;
 
-    if (_isLoading) return Scaffold(body: Center(child: CircularProgressIndicator()));
+    if (meo == null) return Scaffold(body: Center(child: CircularProgressIndicator()));
     else {
       return Scaffold(
         body: Center(
@@ -69,8 +44,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                 children: [
                   Stack(
                     children: [
-                      Image.asset(
-                        meo.cover,
+                      Image.file(
+                        File(meo.cover!),
                         width: MediaQuery.of(context).size.width,
                         height: 300, 
                         fit: BoxFit.cover,
@@ -91,7 +66,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                         Row(
                           children: [
                             GestureDetector(
-                              child: Text(meo.artist, style: TextStyle(color: Colors.green),),
+                              child: Text(meo.artist, style: TextStyle(color: Colors.green)),
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (context) => MusicArtistScreen(artist: meo.artist)
@@ -100,7 +75,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                             ),
                             Text('   ·   '),
                             GestureDetector(
-                              child: Text(meo.album, style: TextStyle(color: Colors.green),),
+                              child: SizedBox(child: Text(meo.album, style: TextStyle(color: Colors.green), overflow: TextOverflow.ellipsis, maxLines: 1,), width: 160,),
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(
                                   builder: (context) => MusicAlbumScreen(artist: meo.artist, album: meo.album,)
@@ -121,22 +96,22 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                       children: [
                         //LinearProgressIndicator(value: 0.3, minHeight: 5,),
                         Slider(
-                          value: meo.progress,
+                          value: meo.volume,
                           min: 0.0,
                           max: 1.0,
                           divisions: 10,
                           onChanged: (value) {
                             setState(() {
-                              meo.progress = value;
+                              meo.volume = value;
                             });
                           }
                         ),
                         const Gap(5),
                         Row(
                           children: [
-                            Text(meo.now_at),
+                            Text('xxxx'),
                             Spacer(),
-                            Text(meo.duration)
+                            Text('xxxx')
                           ],
                         ),
                         const Gap(30),

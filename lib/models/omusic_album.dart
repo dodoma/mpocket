@@ -6,6 +6,7 @@ part 'omusic_album.g.dart';
 class Omusic_track {
   Omusic_track();
 
+  late String id;
   late String title;
   late String duration;
   
