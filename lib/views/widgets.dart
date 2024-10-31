@@ -6,6 +6,7 @@ import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
@@ -60,9 +61,6 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
   @override
   Widget build(BuildContext context) {
     final int selectedIndex = _getSelectedIndex(context);
-    bool showPlaying = context.watch<IMsource>().showPlaying;
-    OmusicPlaying? onListenTrack = context.watch<IMsource>().onListenTrack;
-    final String location = GoRouterState.of(context).uri.toString();
 
     return Scaffold(
       body: Stack(
@@ -71,7 +69,7 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
             margin: EdgeInsets.only(top:0, bottom: 0),
             child: widget.child!
           ),
-          if (location != "/now_playing" && showPlaying && onListenTrack != null) Positioned(
+          Positioned(
             left: 0,
             right: 0,
             bottom: 0,
@@ -111,7 +109,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
   bool paused = false;
 
   void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
-    print('on play STEP');
+    print('on play STEP s');
     OmusicPlaying? onListenTrack = context.read<IMsource>().onListenTrack;
     if (onListenTrack != null) {
       onListenTrack.pos += 2;
@@ -122,13 +120,17 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
 
   @override
   void initState() {
+    print("xxxxxx init s");
     super.initState();
     avtanimate = AnimationController(vsync: this, duration: Duration(seconds: 10))..repeat();
-    libmoc.mnetOnStep(Provider.of<IMsource>(context, listen: false).deviceID, callback.nativeFunction);
+    //libmoc.mnetOnStep(Provider.of<IMsource>(context, listen: false).deviceID, callback.nativeFunction);
+    libmoc.mnetOnStep(Global.profile.msourceID, callback.nativeFunction);
   }
 
   @override
   void dispose() {
+    print("xxxxxx DISPOSE s");
+    progress.close();
     callback.close();
     avtanimate.dispose();
     super.dispose();
@@ -136,9 +138,14 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    OmusicPlaying? onListenTrack = context.read<IMsource>().onListenTrack;
+    bool showPlaying = context.watch<IMsource>().showPlaying;
+    OmusicPlaying? onListenTrack = context.watch<IMsource>().onListenTrack;
+    final String location = GoRouterState.of(context).uri.toString();
 
-    if (onListenTrack != null) {
+    print("xxxxxx REBUILD ${location} ${showPlaying}");
+
+    if (location != "/now_playing" && showPlaying && onListenTrack != null) {
+      print("xxxxxx REBUILD");
       return Container(
         width: MediaQuery.of(context).size.width,
         child: InkWell(
@@ -182,14 +189,14 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
                       //Spacer(),
                       paused ? 
                         Expanded(flex: 1, child: IconButton(icon: Icon(Icons.play_arrow), onPressed: () {
-                          libmoc.mnetResume(Provider.of<IMsource>(context, listen: false).deviceID);
+                          libmoc.mnetResume(Global.profile.msourceID);
                           avtanimate.repeat();
                           setState(() {
                             paused = false;
                           });
                         }))
                         : Expanded(flex: 1, child: IconButton(icon: Icon(Icons.pause), onPressed: () {
-                          libmoc.mnetPause(Provider.of<IMsource>(context, listen: false).deviceID);
+                          libmoc.mnetPause(Global.profile.msourceID);
                           avtanimate.stop();
                           setState(() {
                             paused = true;
@@ -197,7 +204,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
                         })),
                       const Gap(8),
                       Expanded(flex: 1, child: IconButton(icon: Icon(Icons.skip_next), onPressed: () {
-                        libmoc.mnetNext(Provider.of<IMsource>(context, listen: false).deviceID);
+                        libmoc.mnetNext(Global.profile.msourceID);
                       },))
                     ],)
                   ],
@@ -211,6 +218,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
           },
         ),
       );
-    } else return const Placeholder();
+    } else return SizedBox.shrink();
+    //} else Navigator.pop(context);
   }
 }

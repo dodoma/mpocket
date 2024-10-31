@@ -89,19 +89,16 @@ int mnetPlayInfo(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, 
   return ret;
 }
 
-int mnetPlayDetail(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
-  final Pointer<Utf8> c_id = ID.toNativeUtf8();
-  int ret = _bindings.mnetPlayDetail(c_id, callback);
-
-  return ret;
-}
-
 int mnetOnStep(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
   int ret = _bindings.mnetOnStep(c_id, callback);
 
   return ret;
 }
+
+int mnetOnServerConnectted(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnServerConnectted(callback);
+int mnetOnServerClosed(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnServerClosed(callback);
+int mnetOnConnectionLost(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnConnectionLost(callback);
 
 /// A longer lived native function, which occupies the thread calling it.
 ///

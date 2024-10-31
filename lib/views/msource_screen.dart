@@ -7,6 +7,7 @@ import 'package:form_controller/form_controller.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:list_picker/list_picker.dart';
+import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/msource.dart';
@@ -28,12 +29,10 @@ class _MsourceScreenState extends State<MsourceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final IMsource source = Provider.of<IMsource>(context);
-
-    if (source.deviceID.isEmpty) {
+    if (context.read<IMonline>().online == 0) {
       return ConfigDeviceScreen();
     } else {
-      return showDeviceScreen(deviceID: source.deviceID);
+      return showDeviceScreen(deviceID: Global.profile.msourceID);
     }
   }
 }

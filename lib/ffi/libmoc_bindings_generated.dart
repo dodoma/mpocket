@@ -123,18 +123,6 @@ class LibmocBindings {
       ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Int)>>)
   >();
 
-  int mnetPlayDetail(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
-    return _mnetPlayDetail(ID, callback);
-  }
-  late final _mnetPlayDetailPtr = _lookup<
-    ffi.NativeFunction<ffi.Int 
-      Function(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
-    >>('mnetPlayDetail');
-  late final _mnetPlayDetail = _mnetPlayDetailPtr.asFunction<
-    int Function(
-      ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
-      >();
-
   int mnetPlayInfo(ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
     return _mnetPlayInfo(ID, callback);
   }
@@ -158,6 +146,43 @@ class LibmocBindings {
     int Function(
       ffi.Pointer<Utf8>ID, ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int, ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
       >();
+
+  int mnetOnServerConnectted(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>callback) {
+    return _mnetOnServerConnectted(callback);
+  }
+  late final _mnetOnServerConnecttedPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+    >>('mnetOnServerConnectted');
+  late final _mnetOnServerConnectted = _mnetOnServerConnecttedPtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+      >();
+
+  int mnetOnServerClosed(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>callback) {
+    return _mnetOnServerClosed(callback);
+  }
+  late final _mnetOnServerClosedPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+    >>('mnetOnServerClosed');
+  late final _mnetOnServerClosed = _mnetOnServerClosedPtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+      >();
+
+  int mnetOnConnectionLost(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>callback) {
+    return _mnetOnConnectionLost(callback);
+  }
+  late final _mnetOnConnectionLostPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+    >>('mnetOnConnectionLost');
+  late final _mnetOnConnectionLost = _mnetOnConnectionLostPtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+      >();
+
 
   int mnetSetShuffle(ffi.Pointer<Utf8>ID, int shuffle) {return _mnetSetShuffle(ID, shuffle);}
   late final _mnetSetShufflePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Int8 shuffle)>>('mnetSetShuffle');

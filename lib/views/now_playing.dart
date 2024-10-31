@@ -29,6 +29,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
   bool paused = false;
 
   void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
+    print('on play STEP l');
     OmusicPlaying? onListenTrack = context.read<IMsource>().onListenTrack;
     if (onListenTrack != null) {
       onListenTrack.pos += 2;
@@ -40,12 +41,15 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
 
   @override
   void initState() {
+    print("xxxxxx init l");
     super.initState();
-    libmoc.mnetOnStep(Provider.of<IMsource>(context, listen: false).deviceID, callback.nativeFunction);
+    libmoc.mnetOnStep(Global.profile.msourceID, callback.nativeFunction);
   }
 
   @override
   void dispose() {
+    print("xxxxxx DISPOSE l");
+    progress.close();
     callback.close();
     super.dispose();
   }

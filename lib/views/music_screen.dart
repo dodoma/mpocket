@@ -77,7 +77,7 @@ class _MusicScreenState extends State<MusicScreen> {
               future: sourceID,
               builder: (BuildContext context, AsyncSnapshot<String> value) {
                 if (!value.hasData) {
-                  if (Provider.of<IMsource>(context).setting == true) {
+                  if (context.read<IMsource>().setting == true) {
                     // 音源正在配置中
                     return Column(
                       mainAxisSize: MainAxisSize.min,
@@ -113,8 +113,8 @@ class _MusicScreenState extends State<MusicScreen> {
                       return Container();
                     }
             
-                    context.read<IMsource>().deviceOnline(value.data!);
-                    Global.profile.msourceID = value.data!;
+                    context.read<IMonline>().onOnline(value.data!);
+                    context.read<IMonline>().bindOffline();
                     Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
                     Global.saveProfile();
 
@@ -255,8 +255,10 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<IMsource>().bindPlayInfo();
+    int online = context.watch<IMonline>().online;
   if (_isLoading) {
-      return CircularProgressIndicator();
+  return CircularProgressIndicator();
   } else {
   return Container(
     // 页面一大框
@@ -296,7 +298,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                   children: [
                     Row(
                       children: [
-                        if (Global.profile.msourceID == Provider.of<IMsource>(context).deviceID)
+                        if (online == 1)
                           CircleAvatar(
                             radius: 5,
                             backgroundColor: const Color.fromARGB(255, 87, 241, 32),
