@@ -41,14 +41,12 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
 
   @override
   void initState() {
-    print("xxxxxx init l");
     super.initState();
     libmoc.mnetOnStep(Global.profile.msourceID, callback.nativeFunction);
   }
 
   @override
   void dispose() {
-    print("xxxxxx DISPOSE l");
     progress.close();
     callback.close();
     super.dispose();
@@ -78,8 +76,8 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                         fit: BoxFit.cover,
                       ),
                       Positioned(left: 10, top: 40, child: IconButton(onPressed:() {
-                        context.read<IMsource>().turnOnPlaying();
                         Navigator.pop(context);
+                        context.read<IMbanner>().turnOnBanner();
                       }, icon: Icon(Icons.close, color: Colors.white,)),),
                     ],
                   ),

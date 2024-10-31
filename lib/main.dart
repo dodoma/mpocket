@@ -29,7 +29,8 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => IMsource()),
-        ChangeNotifierProvider(create: (context) => IMonline())
+        ChangeNotifierProvider(create: (context) => IMonline()),
+        ChangeNotifierProvider(create: (context) => IMbanner())
       ],
       child: MaterialApp.router(
         routerConfig: router,

@@ -428,7 +428,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 检查当前的上下文是否依然有效（防止页面被销毁时仍然调用 Navigator）
       if (context.mounted) {
-        context.read<IMsource>().turnOffPlaying();
+        context.read<IMbanner>().turnOffBanner();
       }
     });
     double containerWidth = MediaQuery.of(context).size.width * 0.9;

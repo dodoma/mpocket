@@ -255,6 +255,12 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // 检查当前的上下文是否依然有效（防止页面被销毁时仍然调用 Navigator）
+      if (context.mounted) {
+        context.read<IMbanner>().turnOnBanner();
+      }
+    });
     context.read<IMsource>().bindPlayInfo();
     int online = context.watch<IMonline>().online;
   if (_isLoading) {

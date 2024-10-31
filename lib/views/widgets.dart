@@ -61,6 +61,7 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
   @override
   Widget build(BuildContext context) {
     final int selectedIndex = _getSelectedIndex(context);
+    bool visible = context.watch<IMbanner>().isVisible;
 
     return Scaffold(
       body: Stack(
@@ -69,16 +70,17 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
             margin: EdgeInsets.only(top:0, bottom: 0),
             child: widget.child!
           ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              padding: EdgeInsets.all(10.0),
-              color: Colors.grey[400],
-              child: NowPlaying()
+          if (visible)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                padding: EdgeInsets.all(10.0),
+                color: Colors.grey[400],
+                child: NowPlaying()
+              )
             )
-          )
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -120,7 +122,6 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
 
   @override
   void initState() {
-    print("xxxxxx init s");
     super.initState();
     avtanimate = AnimationController(vsync: this, duration: Duration(seconds: 10))..repeat();
     //libmoc.mnetOnStep(Provider.of<IMsource>(context, listen: false).deviceID, callback.nativeFunction);
@@ -129,7 +130,6 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
 
   @override
   void dispose() {
-    print("xxxxxx DISPOSE s");
     progress.close();
     callback.close();
     avtanimate.dispose();
@@ -138,14 +138,10 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    bool showPlaying = context.watch<IMsource>().showPlaying;
     OmusicPlaying? onListenTrack = context.watch<IMsource>().onListenTrack;
     final String location = GoRouterState.of(context).uri.toString();
 
-    print("xxxxxx REBUILD ${location} ${showPlaying}");
-
-    if (location != "/now_playing" && showPlaying && onListenTrack != null) {
-      print("xxxxxx REBUILD");
+    if (location != "/now_playing" && onListenTrack != null) {
       return Container(
         width: MediaQuery.of(context).size.width,
         child: InkWell(
@@ -173,7 +169,6 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
                         return LinearProgressIndicator(valueColor: AlwaysStoppedAnimation(Color.fromRGBO(0x7a, 0x51, 0xe2, 100)));
                       }
                     ),
-                    //LinearProgressIndicator(value: onListenTrack.progress, minHeight: 2,),
                     const Gap(10),
                     Row(children: [
                       Expanded(
@@ -213,7 +208,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
             ],
           ),
           onTap: () {
-            context.read<IMsource>().turnOffPlaying();
+            context.read<IMbanner>().turnOffBanner();
             context.push('/now_playing');
           },
         ),

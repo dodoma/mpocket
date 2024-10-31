@@ -13,7 +13,6 @@ typedef NativeServerClosedCallback = Void Function(Pointer<Utf8>, Int);
 
 class IMsource extends ChangeNotifier {
   bool setting = false;
-  bool showPlaying = false;
   OmusicPlaying? onListenTrack = null;
   late NativeCallable<NativePlayInfoCallback> callback;
 
@@ -25,7 +24,6 @@ class IMsource extends ChangeNotifier {
         print('on play INFO response ${response}');
         if (response != "null") {
           updateListenTrack(OmusicPlaying.fromJson(jsonDecode(response)));  
-          turnOnPlaying();
         }
       }
       //callback.close();
@@ -39,15 +37,21 @@ class IMsource extends ChangeNotifier {
     onListenTrack!.cover = Global.profile.storeDir + "assets/cover/" + track.id;
     notifyListeners();
   }
+}
 
-  void turnOffPlaying() {
-    showPlaying = false;
-    notifyListeners();
+class IMbanner extends ChangeNotifier {
+  bool _isVisible = true;
+
+  bool get isVisible => _isVisible;
+
+  void turnOnBanner() {
+    _isVisible = true;
+    notifyListeners();  
   }
 
-  void turnOnPlaying() {
-    showPlaying = true;
-    notifyListeners();
+  void turnOffBanner() {
+    _isVisible = false;
+    notifyListeners();  
   }
 }
 
@@ -97,5 +101,4 @@ class IMonline extends ChangeNotifier {
     callback = NativeCallable<NativeServerClosedCallback>.listener(onResponse);
     libmoc.mnetOnServerConnectted(callback.nativeFunction);
   }
-
 }
