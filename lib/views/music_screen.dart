@@ -11,6 +11,7 @@ import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic.dart';
+import 'package:mpocket/models/omusicstore.dart';
 import 'package:mpocket/views/music_artist_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -148,6 +149,8 @@ class showMusicScreen extends StatefulWidget {
 class _showMusicScreenState extends State<showMusicScreen> {
   bool _isLoading = true;
   late Omusic meo;
+  late List<OmusicStore> storelist;
+  String _dftStore = '默认媒体库';
   List<String> filteredItems = ['aa', 'bb', 'cc'];
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
@@ -175,8 +178,11 @@ class _showMusicScreenState extends State<showMusicScreen> {
     if (mounted) {
       libmoc.omusicStoreSelect(Global.profile.msourceID, "默认媒体库");
       String emos = libmoc.omusicHome(Global.profile.msourceID);
+      String emot = libmoc.omusicStoreList(Global.profile.msourceID);
+      List<dynamic> jsonData = jsonDecode(emot);
       setState(() {
         meo = Omusic.fromJson(jsonDecode(emos));
+        storelist = jsonData.map((obj) => OmusicStore.fromJson(obj)).toList();
         _isLoading = false;
       });
     }
@@ -314,8 +320,28 @@ class _showMusicScreenState extends State<showMusicScreen> {
                             radius: 5,
                             backgroundColor: Colors.grey,
                           ),
-                        const Gap(3),                        Text('默认媒体库'),
-                        Icon(Icons.arrow_drop_down)
+                        const Gap(5),
+                        //Text('默认媒体库'),
+                        //Icon(Icons.arrow_drop_down)
+                        DropdownButton(
+                          items: storelist.map((OmusicStore store) {
+                            return DropdownMenuItem(child: Text(store.name), value: store.name);
+                          }).toList(),
+                          value: _dftStore,
+                          onChanged: (String? val) async {
+                            if (val is String) {
+                              libmoc.omusicStoreSelect(Global.profile.msourceID, val);
+                              libmoc.mnetStoreSwitch(Global.profile.msourceID, val);
+                              await libmoc.mnetStoreSync(Global.profile.msourceID, val);
+                              String emos = libmoc.omusicHome(Global.profile.msourceID);
+                              print("xxxxxx ${emos}");
+                              setState(() {
+                                meo = Omusic.fromJson(jsonDecode(emos));
+                                _dftStore = val;
+                              });  
+                            }
+                          }
+                        )
                       ],
                     ),
                     const Gap(2),
@@ -335,7 +361,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
             ),
           ),
           if (meo.countTrack <= 0) ...[
-            Spacer(),
+            const Gap(60),
             Text('无媒体文件', textScaler: TextScaler.linear(1.8),),
             const Gap(20),
             Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库 \n 3. 添加本地曲目路径，同步至音源', style: TextStyle(fontWeight: FontWeight.w700)),

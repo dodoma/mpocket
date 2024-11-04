@@ -17,6 +17,16 @@ String fileTest(String dir) => _bindings.mfile_test(dir.toNativeUtf8().cast<Int8
 
 void omusicStoreSelect(String ID, String Libname) =>_bindings.omusicStoreSelect(ID.toNativeUtf8(), Libname.toNativeUtf8());
 
+String omusicStoreList(String ID) {
+  final Pointer<Utf8> result = _bindings.omusicStoreList(ID.toNativeUtf8());
+  String outputs = "{}";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    calloc.free(result);
+  }
+  return outputs;
+}
+
 //String mnetOmusicHome(String ID) => _bindings.omusicHome(ID.toNativeUtf8()).cast<Utf8>().toDartString();
 String omusicHome(String ID) {
   final Pointer<Utf8> result = _bindings.omusicHome(ID.toNativeUtf8());
@@ -69,6 +79,7 @@ int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFuncti
 int mnetSetShuffle(String ID, int shuffle) => _bindings.mnetSetShuffle(ID.toNativeUtf8(), shuffle);
 int mnetSetVolume(String ID, double volume) => _bindings.mnetSetVolume(ID.toNativeUtf8(), volume);
 
+int mnetStoreSwitch(String ID, String name) => _bindings.mnetStoreSwitch(ID.toNativeUtf8(), name.toNativeUtf8());
 int mnetPlay(String ID) => _bindings.mnetPlay(ID.toNativeUtf8());
 int mnetPlayID(String ID, String trackid) => _bindings.mnetPlayID(ID.toNativeUtf8(), trackid.toNativeUtf8());
 int mnetPlayArtist(String ID, String artist) => _bindings.mnetPlayArtist(ID.toNativeUtf8(), artist.toNativeUtf8());

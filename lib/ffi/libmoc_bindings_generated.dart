@@ -192,6 +192,10 @@ class LibmocBindings {
   late final _mnetSetVolumePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Double volume)>>('mnetSetVolume');
   late final _mnetSetVolume = _mnetSetVolumePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, double volume)>();
 
+  int mnetStoreSwitch(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _mnetStoreSwitch(ID, name);}
+  late final _mnetStoreSwitchPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('mnetStoreSwitch');
+  late final _mnetStoreSwitch = _mnetStoreSwitchPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
   int mnetPlay(ffi.Pointer<Utf8>ID) {return _mnetPlay(ID);}
   late final _mnetPlayPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetPlay');
   late final _mnetPlay = _mnetPlayPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
@@ -242,6 +246,10 @@ class LibmocBindings {
   void omusicStoreSelect(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname) {return _omusicStoreSelect(ID, Libname);}
   late final omusicStoreSelectPtr = _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>>('omusicStoreSelect');
   late final _omusicStoreSelect = omusicStoreSelectPtr.asFunction<void Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>();
+
+  ffi.Pointer<Utf8> omusicStoreList(ffi.Pointer<Utf8>ID) {return _omusicStoreList(ID);}
+  late final omusicStoreListPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('omusicStoreList');
+  late final _omusicStoreList = omusicStoreListPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
 
   ffi.Pointer<Utf8> omusicHome(ffi.Pointer<Utf8>ID) {return _omusicHome(ID);}
   late final omusicHomePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('omusicHome');
