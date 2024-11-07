@@ -259,7 +259,19 @@ class LibmocBindings {
   late final omusicArtistPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicArtist');
   late final _omusicArtist = omusicArtistPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
 
+  ffi.Pointer<Utf8> omusicAlbumIDS(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicAlbumIDS(ID, name, title);}
+  late final omusicAlbumIDSPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicAlbumIDS');
+  late final _omusicAlbumIDS = omusicAlbumIDSPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
+
+  ffi.Pointer<Utf8> omusicLocation(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid) {return _omusicLocation(ID, trackid);}
+  late final omusicLocationPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid)>>('omusicLocation');
+  late final _omusicLocation = omusicLocationPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid)>();
+
   ffi.Pointer<Utf8> omusicAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicAlbum(ID, name, title);}
   late final omusicAlbumPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicAlbum');
   late final _omusicAlbum = omusicAlbumPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
+
+  int omusicSyncAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicSyncAlbum(ID, name, title);}
+  late final omusicSyncAlbumPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicSyncAlbum');
+  late final _omusicSyncAlbum = omusicSyncAlbumPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
 }

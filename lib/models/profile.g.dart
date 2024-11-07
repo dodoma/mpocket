@@ -11,6 +11,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile()
   ..msourceID = json['msourceID'] as String
   ..storeDir = json['storeDir'] as String
   ..local = json['local'] as String
+  ..phonePlay = json['phonePlay'] as bool
   ..lastLogin = json['lastLogin'] as String?;
 
 Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
@@ -18,5 +19,6 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'msourceID': instance.msourceID,
       'storeDir': instance.storeDir,
       'local': instance.local,
+      'phonePlay': instance.phonePlay,
       'lastLogin': instance.lastLogin,
     };

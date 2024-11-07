@@ -22,6 +22,7 @@ class Global {
       profile.msourceID = '';
       profile.storeDir = '';
       profile.local = 'en_US';
+      profile.phonePlay = false;
       print(profile.toJson());
       saveProfile();
     }

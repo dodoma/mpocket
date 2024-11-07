@@ -95,11 +95,13 @@ class _MusicScreenState extends State<MusicScreen> {
                       ],
                     );
                   } else {
-                    //按理说，此时应该有 Global 的 deviceID (除非路由器没正常干活)
-                    return showMusicScreen(deviceID: Global.profile.msourceID, 
-                      maxWidth: containerWidth,
-                      maxHeight: containerHeight
-                    );
+                    if (Global.profile.msourceID.isNotEmpty) {
+                      //按理说，此时应该有 Global 的 deviceID (除非路由器没正常干活)
+                      return showMusicScreen(deviceID: Global.profile.msourceID, 
+                        maxWidth: containerWidth,
+                        maxHeight: containerHeight
+                      );
+                    } else return SizedBox.shrink();
                   }
                 } else {
                     context.read<IMsource>().setting = false;
@@ -116,6 +118,7 @@ class _MusicScreenState extends State<MusicScreen> {
             
                     context.read<IMonline>().onOnline(value.data!);
                     context.read<IMonline>().bindOffline();
+                    Global.profile.msourceID = value.data!;
                     Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
                     Global.saveProfile();
 
@@ -150,6 +153,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
   bool _isLoading = true;
   late Omusic meo;
   late List<OmusicStore> storelist;
+  bool phonePlay = Global.profile.phonePlay;
   String _dftStore = '默认媒体库';
   List<String> filteredItems = ['aa', 'bb', 'cc'];
   final LayerLink _layerLink = LayerLink();
@@ -190,8 +194,9 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   void initState() {
-    super.initState();
+    context.read<IMsource>().bindPlayInfo();
     _fetchData(); // 调用异步方法
+    super.initState();
   }
 
   @override
@@ -259,6 +264,13 @@ class _showMusicScreenState extends State<showMusicScreen> {
     }
   }
 
+  void _showSnackBar(BuildContext context) {
+    String message = '音频将在音源播放';
+    if (phonePlay) message = '音频将在手机播放';
+    final snackBar = SnackBar(content: Text(message), duration: Duration(seconds: 3),);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -267,7 +279,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
         context.read<IMbanner>().turnOnBanner();
       }
     });
-    context.read<IMsource>().bindPlayInfo();
+    //context.read<IMsource>().bindPlayInfo();
     int online = context.watch<IMonline>().online;
   if (_isLoading) {
   return CircularProgressIndicator();
@@ -334,7 +346,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
                               libmoc.mnetStoreSwitch(Global.profile.msourceID, val);
                               await libmoc.mnetStoreSync(Global.profile.msourceID, val);
                               String emos = libmoc.omusicHome(Global.profile.msourceID);
-                              print("xxxxxx ${emos}");
                               setState(() {
                                 meo = Omusic.fromJson(jsonDecode(emos));
                                 _dftStore = val;
@@ -349,8 +360,21 @@ class _showMusicScreenState extends State<showMusicScreen> {
                   ],
                 ),
                 Spacer(),
-                IconButton(icon: Icon(Icons.phone_iphone, size: 32), onPressed: () {
-                  libmoc.mnetStoreSync(Global.profile.msourceID, "默认媒体库");
+                phonePlay ? IconButton(icon: Icon(Icons.phone_iphone, size: 32, color: Colors.green), onPressed: () {
+                  setState(() {
+                    phonePlay = false;
+                  });
+                  Global.profile.phonePlay = false;
+                  Global.saveProfile();
+                  _showSnackBar(context);
+                },)
+                : IconButton(icon: Icon(Icons.phone_iphone, size: 32, color: Colors.grey,), onPressed: () {
+                  setState(() {
+                    phonePlay = true;
+                  });
+                  Global.profile.phonePlay = true;
+                  Global.saveProfile();
+                  _showSnackBar(context);
                 },),
                 IconButton(icon: Icon(Icons.shuffle, size: 32), onPressed: () {
                   //sleep(Duration(seconds: 2));

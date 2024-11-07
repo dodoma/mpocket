@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
+import 'package:mpocket/models/imlocal.dart';
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/router.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,6 +30,7 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => IMsource()),
+        ChangeNotifierProvider(create: (context) => IMlocal()),
         ChangeNotifierProvider(create: (context) => IMonline()),
         ChangeNotifierProvider(create: (context) => IMbanner())
       ],

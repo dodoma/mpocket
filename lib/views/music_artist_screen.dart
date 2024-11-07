@@ -124,7 +124,9 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                         ],
                       ),
                       Spacer(),
-                      Icon(Icons.delete)
+                      IconButton(icon: Icon(Icons.sync), onPressed: () {},),
+                      IconButton(icon: Icon(Icons.delete_outline), onPressed: () {},),
+                      IconButton(icon: Icon(Icons.delete_forever), onPressed: () {},)
                     ],
                   ),
                 ),
@@ -159,7 +161,52 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                                       libmoc.mnetPlayAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
                                     },
                                     icon: Icon(size: 20, Icons.play_arrow)),
-                                  IconButton(onPressed: () {print('yyyy');}, icon: Icon(size: 20, Icons.more_vert)),
+                                  IconButton(onPressed: () {
+                                    showModalBottomSheet(
+                                      context: context, 
+                                      builder: (BuildContext context) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(20),
+                                          child: Column(
+                                            //mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Container(
+                                                width: containerWidth * 0.8,
+                                                child: Text(meo.albums[index].name, style: TextStyle(fontWeight: FontWeight.w700), overflow: TextOverflow.ellipsis, maxLines: 1,)
+                                              ),
+                                              const Gap(20),
+                                              Row(children: [
+                                                IconButton(icon: Icon(Icons.sync, size: 20,), onPressed: () {
+                                                  libmoc.omusicSyncAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
+                                                  Navigator.pop(context);
+                                                },),
+                                                const Gap(20),
+                                                Text('缓存至本地')
+                                              ],),
+                                              Divider(color: Colors.grey,),
+
+                                              const Gap(10),
+                                              Row(children: [
+                                                IconButton(icon: Icon(Icons.delete_outline, size: 20,), onPressed: () {},),
+                                                const Gap(20),
+                                                Text('清除本地缓存')
+                                              ],),
+                                              Divider(color: Colors.grey,),
+
+                                              const Gap(10),
+                                              Row(children: [
+                                                IconButton(icon: Icon(Icons.delete_forever, size: 20,), onPressed: () {},),
+                                                const Gap(20),
+                                                Text('删除本地与音源')
+                                              ],),
+                                              Divider(color: Colors.grey,),
+                                            ],
+                                          )
+                                        );
+                                      }
+                                    );
+                                  }, icon: Icon(size: 20, Icons.more_vert)),
                                 ],
                               ),
                               onTap: () {

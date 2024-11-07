@@ -77,7 +77,7 @@ class _NowPlayingScreenState extends State<NowPlayingScreen> {
                       ),
                       Positioned(left: 10, top: 40, child: IconButton(onPressed:() {
                         Navigator.pop(context);
-                        context.read<IMbanner>().turnOnBanner();
+                        //context.read<IMbanner>().turnOnBanner();
                       }, icon: Icon(Icons.close, color: Colors.white,)),),
                     ],
                   ),

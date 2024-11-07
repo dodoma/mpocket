@@ -48,9 +48,29 @@ String omusicArtist(String ID, String name) {
   return outputs;
 }
 
+String omusicLocation(String ID, String trackid) {
+  final Pointer<Utf8> result = _bindings.omusicLocation(ID.toNativeUtf8(), trackid.toNativeUtf8());
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    if(outputs == "") outputs = "ENOENT";
+  }
+  return outputs;
+}
+
 String omusicAlbum(String ID, String name, String title) {
   final Pointer<Utf8> result = _bindings.omusicAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
   String outputs = "{}";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    calloc.free(result);
+  }
+  return outputs;
+}
+
+String omusicAlbumIDS(String ID, String name, String title) {
+  final Pointer<Utf8> result = _bindings.omusicAlbumIDS(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
+  String outputs = "[]";
   if (result.address != nullptr.address) {
     outputs = result.cast<Utf8>().toDartString();
     calloc.free(result);
@@ -90,6 +110,8 @@ int mnetNext(String ID) => _bindings.mnetNext(ID.toNativeUtf8());
 int mnetPrevious(String ID) => _bindings.mnetPrevious(ID.toNativeUtf8());
 int mnetDragTO(String ID, double percent) => _bindings.mnetDragTO(ID.toNativeUtf8(), percent);
 int mnetStoreList(String ID) => _bindings.mnetStoreList(ID.toNativeUtf8());
+
+int omusicSyncAlbum(String ID, String name, String title) => _bindings.omusicSyncAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
 
 int mnetStoreSync(String ID, String Libname) => _bindings.mnetStoreSync(ID.toNativeUtf8(), Libname.toNativeUtf8());
 

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:audio_metadata_extractor/audio_metadata_extractor.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -9,6 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
+import 'package:mpocket/models/imlocal.dart';
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic_playing.dart';
 import 'package:provider/provider.dart';
@@ -78,7 +81,7 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
               child: Container(
                 padding: EdgeInsets.all(10.0),
                 color: Colors.grey[400],
-                child: NowPlaying()
+                child: Global.profile.phonePlay ? NowPlayingLocal() : NowPlaying()
               )
             )
         ],
@@ -215,5 +218,138 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
       );
     } else return SizedBox.shrink();
     //} else Navigator.pop(context);
+  }
+}
+
+class NowPlayingLocal extends StatefulWidget {
+  const NowPlayingLocal({super.key});
+
+  @override
+  State<NowPlayingLocal> createState() => _NowPlayingLocalState();
+}
+
+class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProviderStateMixin {
+  String playinURL = "";
+  bool paused = false;
+  late AudioPlayer _audioPlayer;
+  Duration _duration = Duration.zero;
+  Duration _position = Duration.zero;
+  late AnimationController avtanimate;
+  AudioMetadata? mdata = null;
+
+  @override
+  void initState() {
+    _audioPlayer = AudioPlayer();
+    _audioPlayer.onDurationChanged.listen((Duration d) {
+      setState(() {
+        _duration = d;
+      });
+    });
+    _audioPlayer.onPositionChanged.listen((Duration d) {
+      setState(() {
+        _position = d;
+      });
+    });
+
+    _audioPlayer.onPlayerComplete.listen((_) async {
+      print("play done. next");
+
+      String id = context.read<IMlocal>().idNext();
+      String url = await context.read<IMlocal>().getURLbyID(id);
+      if (url.isNotEmpty) {
+        print("Play next ${url}");
+        playinURL = url;
+        _audioPlayer.play(DeviceFileSource(url));
+      }
+      //context.read<IMlocal>().playNext(context);
+    });
+
+    avtanimate = AnimationController(vsync: this, duration: Duration(seconds: 10)) ..repeat();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose(); 
+    avtanimate.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    String? url = context.watch<IMlocal>().onListenURL;
+    String? cover = context.read<IMlocal>().onListenCover;
+    AudioMetadata? mdata = context.read<IMlocal>().onListenTrack;
+
+    final String location = GoRouterState.of(context).uri.toString();
+    double progress = _duration.inMilliseconds > 0 ? _position.inMilliseconds / _duration.inMilliseconds : 0.0;
+
+    if (location != "/local_playing" && url != null) {      
+      if (url != playinURL) {
+        print("Play ${url}");
+        playinURL = url;
+        _audioPlayer.play(DeviceFileSource(url));
+      }
+
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        child: InkWell(
+          child: Row(
+            children: [
+              AnimatedBuilder(
+                animation: avtanimate, 
+                builder: (context, child) {
+                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: FileImage(File(cover!)), radius: 30,));
+                }
+              ),
+              const Gap(20),
+              Expanded(
+                child: Column(
+                  children: [
+                    LinearProgressIndicator(value: progress),
+                    const Gap(10),
+                    Row(children: [
+                      Expanded(
+                        flex: 7,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(mdata!.trackName!, textScaler: TextScaler.linear(1.2), overflow: TextOverflow.ellipsis,),
+                            Text(mdata.firstArtists!)
+                          ],
+                        ),
+                      ),
+                      paused ?
+                        Expanded(flex: 1, child: IconButton(icon: Icon(Icons.play_arrow), onPressed: () async {
+                          await _audioPlayer.resume();  
+                          avtanimate.repeat();
+                          setState(() {
+                            paused = false;
+                          });
+                        }))
+                      : Expanded(flex: 1, child: IconButton(icon: Icon(Icons.pause), onPressed: () async {
+                          await _audioPlayer.pause();  
+                          avtanimate.stop();
+                          setState(() {
+                            paused = true;
+                          });
+                      })),
+                      const Gap(8),
+                      Expanded(flex: 1, child: IconButton(icon: Icon(Icons.skip_next), onPressed: () {
+                        context.read<IMlocal>().playNext(context);
+                      },))
+                    ],),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          onTap: () {
+            context.read<IMbanner>().turnOffBanner();
+            context.push("/local_playing");
+          },
+        ),
+      );
+    } else return SizedBox.shrink();
   }
 }

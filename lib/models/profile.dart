@@ -10,6 +10,7 @@ class Profile {
   late String msourceID;
   late String storeDir;
   late String local;
+  late bool phonePlay;
   String? lastLogin;
   
   factory Profile.fromJson(Map<String,dynamic> json) => _$ProfileFromJson(json);
