@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
+import 'package:mpocket/models/imlocal.dart';
 import 'package:mpocket/models/omusic_artist.dart';
 import 'package:mpocket/views/music_album_screen.dart';
-
+import 'package:provider/provider.dart';
 
 class MusicArtistScreen extends StatefulWidget {
 
@@ -96,8 +97,9 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                       right: 10,  
                       bottom: 10,
                       child: IconButton(
-                        onPressed: () {
-                          libmoc.mnetPlayArtist(Global.profile.msourceID, meo.artist);
+                        onPressed: () async {
+                          if (Global.profile.phonePlay) await context.read<IMlocal>().playArtist(context, meo.artist);
+                          else libmoc.mnetPlayArtist(Global.profile.msourceID, meo.artist);
                           print('play shuffle');
                         },
                         icon: Container(
@@ -157,8 +159,9 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                                 children: [
                                   if (meo.albums[index].cached) Text('已缓存'),
                                   IconButton(
-                                    onPressed: () {
-                                      libmoc.mnetPlayAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
+                                    onPressed: () async {
+                                      if (Global.profile.phonePlay) await context.read<IMlocal>().playAlbum(context, meo.artist, meo.albums[index].name);
+                                      else libmoc.mnetPlayAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
                                     },
                                     icon: Icon(size: 20, Icons.play_arrow)),
                                   IconButton(onPressed: () {

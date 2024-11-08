@@ -105,8 +105,10 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                         children: [
                           IconButton(
                             onPressed: () async {
-                              if (Global.profile.phonePlay) await context.read<IMlocal>().playAlbum(context, widget.artist, widget.album);
-                              else {
+                              if (Global.profile.phonePlay) {
+                                context.read<IMlocal>().setShuffle(false);
+                                await context.read<IMlocal>().playAlbum(context, widget.artist, widget.album);
+                              } else {
                                 libmoc.mnetSetShuffle(Global.profile.msourceID, 0);
                                 libmoc.mnetPlayAlbum(Global.profile.msourceID, widget.artist, widget.album);
                               }
@@ -115,14 +117,19 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                               decoration: BoxDecoration(
                                 color: Colors.grey.withOpacity(0.7), // 灰色背景，带透明度
                                 shape: BoxShape.circle, // 圆形背景
-                              ),                            
+                              ), 
                               child: Icon(Icons.play_arrow, size: 32, color: Colors.white,)
                             )
                           ),
                           IconButton(
-                            onPressed: () {
-                              libmoc.mnetSetShuffle(Global.profile.msourceID, 1);
-                              libmoc.mnetPlayAlbum(Global.profile.msourceID, widget.artist, widget.album);
+                            onPressed: () async {
+                              if (Global.profile.phonePlay) {
+                                context.read<IMlocal>().setShuffle(true);
+                                await context.read<IMlocal>().playAlbum(context, widget.artist, widget.album);
+                              } else {
+                                libmoc.mnetSetShuffle(Global.profile.msourceID, 1);
+                                libmoc.mnetPlayAlbum(Global.profile.msourceID, widget.artist, widget.album);
+                              }
                             },
                             icon: Container(
                               decoration: BoxDecoration(

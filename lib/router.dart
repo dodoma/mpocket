@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mpocket/common/global.dart';
+import 'package:mpocket/views/local_playing.dart';
 import 'package:mpocket/views/msource_screen.dart';
 import 'package:mpocket/views/music_screen.dart';
 import 'package:mpocket/views/now_playing.dart';
@@ -34,6 +35,10 @@ final router = GoRouter(
             GoRoute(
               path: '/now_playing',
               builder: (context, state) => const NowPlayingScreen(),
+            ),
+            GoRoute(
+              path: '/local_playing',
+              builder: (context, state) => const LocalPlayingScreen(),
             ),
           ])
     ]);

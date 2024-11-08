@@ -58,9 +58,28 @@ String omusicLocation(String ID, String trackid) {
   return outputs;
 }
 
+String omusicLibraryID(String ID) {
+  final Pointer<Utf8> result = _bindings.omusicLibraryID(ID.toNativeUtf8());
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+  }
+  return outputs;
+}
+
 String omusicAlbum(String ID, String name, String title) {
   final Pointer<Utf8> result = _bindings.omusicAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
   String outputs = "{}";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    calloc.free(result);
+  }
+  return outputs;
+}
+
+String omusicArtistIDS(String ID, String name) {
+  final Pointer<Utf8> result = _bindings.omusicArtistIDS(ID.toNativeUtf8(), name.toNativeUtf8());
+  String outputs = "[]";
   if (result.address != nullptr.address) {
     outputs = result.cast<Utf8>().toDartString();
     calloc.free(result);

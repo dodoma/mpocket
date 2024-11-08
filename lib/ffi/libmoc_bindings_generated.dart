@@ -259,6 +259,10 @@ class LibmocBindings {
   late final omusicArtistPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicArtist');
   late final _omusicArtist = omusicArtistPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
 
+  ffi.Pointer<Utf8> omusicArtistIDS(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicArtistIDS(ID, name);}
+  late final omusicArtistIDSPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicArtistIDS');
+  late final _omusicArtistIDS = omusicArtistIDSPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
   ffi.Pointer<Utf8> omusicAlbumIDS(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicAlbumIDS(ID, name, title);}
   late final omusicAlbumIDSPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicAlbumIDS');
   late final _omusicAlbumIDS = omusicAlbumIDSPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
@@ -266,6 +270,10 @@ class LibmocBindings {
   ffi.Pointer<Utf8> omusicLocation(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid) {return _omusicLocation(ID, trackid);}
   late final omusicLocationPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid)>>('omusicLocation');
   late final _omusicLocation = omusicLocationPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>trackid)>();
+
+  ffi.Pointer<Utf8> omusicLibraryID(ffi.Pointer<Utf8>ID) {return _omusicLibraryID(ID);}
+  late final omusicLibraryIDPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('omusicLibraryID');
+  late final _omusicLibraryID = omusicLibraryIDPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
 
   ffi.Pointer<Utf8> omusicAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicAlbum(ID, name, title);}
   late final omusicAlbumPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicAlbum');

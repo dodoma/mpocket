@@ -9,6 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
+import 'package:mpocket/models/imlocal.dart';
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic.dart';
 import 'package:mpocket/models/omusicstore.dart';
@@ -379,7 +380,8 @@ class _showMusicScreenState extends State<showMusicScreen> {
                 IconButton(icon: Icon(Icons.shuffle, size: 32), onPressed: () {
                   //sleep(Duration(seconds: 2));
                   //context.read<IMsource>().bindPlayInfo();
-                  libmoc.mnetPlay(Global.profile.msourceID);
+                  if (Global.profile.phonePlay) context.read<IMlocal>().playLibrary(context);
+                  else libmoc.mnetPlay(Global.profile.msourceID);
                 },),
               ],
             ),

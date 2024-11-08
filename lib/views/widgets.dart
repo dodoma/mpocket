@@ -3,7 +3,6 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:audio_metadata_extractor/audio_metadata_extractor.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -229,48 +228,17 @@ class NowPlayingLocal extends StatefulWidget {
 }
 
 class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProviderStateMixin {
-  String playinURL = "";
   bool paused = false;
-  late AudioPlayer _audioPlayer;
-  Duration _duration = Duration.zero;
-  Duration _position = Duration.zero;
   late AnimationController avtanimate;
-  AudioMetadata? mdata = null;
 
   @override
   void initState() {
-    _audioPlayer = AudioPlayer();
-    _audioPlayer.onDurationChanged.listen((Duration d) {
-      setState(() {
-        _duration = d;
-      });
-    });
-    _audioPlayer.onPositionChanged.listen((Duration d) {
-      setState(() {
-        _position = d;
-      });
-    });
-
-    _audioPlayer.onPlayerComplete.listen((_) async {
-      print("play done. next");
-
-      String id = context.read<IMlocal>().idNext();
-      String url = await context.read<IMlocal>().getURLbyID(id);
-      if (url.isNotEmpty) {
-        print("Play next ${url}");
-        playinURL = url;
-        _audioPlayer.play(DeviceFileSource(url));
-      }
-      //context.read<IMlocal>().playNext(context);
-    });
-
     avtanimate = AnimationController(vsync: this, duration: Duration(seconds: 10)) ..repeat();
     super.initState();
   }
 
   @override
   void dispose() {
-    _audioPlayer.dispose(); 
     avtanimate.dispose();
     super.dispose();
   }
@@ -280,17 +248,13 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
     String? url = context.watch<IMlocal>().onListenURL;
     String? cover = context.read<IMlocal>().onListenCover;
     AudioMetadata? mdata = context.read<IMlocal>().onListenTrack;
+    Duration duration = context.watch<IMlocal>().duration;
+    Duration position = context.watch<IMlocal>().position;
 
     final String location = GoRouterState.of(context).uri.toString();
-    double progress = _duration.inMilliseconds > 0 ? _position.inMilliseconds / _duration.inMilliseconds : 0.0;
+    double progress = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;
 
     if (location != "/local_playing" && url != null) {      
-      if (url != playinURL) {
-        print("Play ${url}");
-        playinURL = url;
-        _audioPlayer.play(DeviceFileSource(url));
-      }
-
       return Container(
         width: MediaQuery.of(context).size.width,
         child: InkWell(
@@ -321,14 +285,14 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
                       ),
                       paused ?
                         Expanded(flex: 1, child: IconButton(icon: Icon(Icons.play_arrow), onPressed: () async {
-                          await _audioPlayer.resume();  
+                          await context.read<IMlocal>().resume();  
                           avtanimate.repeat();
                           setState(() {
                             paused = false;
                           });
                         }))
                       : Expanded(flex: 1, child: IconButton(icon: Icon(Icons.pause), onPressed: () async {
-                          await _audioPlayer.pause();  
+                          await context.read<IMlocal>().pause();
                           avtanimate.stop();
                           setState(() {
                             paused = true;
