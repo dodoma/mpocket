@@ -65,8 +65,9 @@ class IMlocal extends ChangeNotifier {
   String? onListenCover = null;
   AudioMetadata? onListenTrack = null;
   List<String> trackIDS = [];
+  List<String> listendTracks = [];
 
-  Future<void> playSingle(BuildContext context, String id) async {
+  Future<void> playSingle(BuildContext context, String id, bool addhistory) async {
     String url = libmoc.omusicLocation(Global.profile.msourceID, id);
     if (url.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -83,6 +84,10 @@ class IMlocal extends ChangeNotifier {
         )
       );
     } else {
+      if (addhistory && !listendTracks.contains(id)) listendTracks.add(id);
+
+      await _audioPlayer.stop();
+
       onListenURL = url;
       onListenCover = Global.profile.storeDir + "assets/cover/" + id;
       onListenTrack = await AudioMetadata.extract(File(url));
@@ -122,7 +127,7 @@ class IMlocal extends ChangeNotifier {
       if (shuffle) index = random.nextInt(trackIDS.length);
       String id = ids.removeAt(index);
       trackIDS = ids;
-      await playSingle(context, id);
+      await playSingle(context, id, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -141,7 +146,7 @@ class IMlocal extends ChangeNotifier {
       if (shuffle) index = random.nextInt(trackIDS.length);
       String id = ids.removeAt(index);
       trackIDS = ids;
-      await playSingle(context, id);
+      await playSingle(context, id, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -155,7 +160,7 @@ class IMlocal extends ChangeNotifier {
   Future<void> playLibrary(BuildContext context) async {
     String idxx = libmoc.omusicLibraryID(Global.profile.msourceID);
     if (idxx.isNotEmpty) {
-      await playSingle(context, idxx);
+      await playSingle(context, idxx, true);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -171,10 +176,17 @@ class IMlocal extends ChangeNotifier {
       int index = 0;  
       if (shuffle) index = random.nextInt(trackIDS.length);
       String id = trackIDS.removeAt(index);
-      await playSingle(context, id);
+      await playSingle(context, id, true);
     } else {
         // 播放完成后，默认会播放媒体库
         await playLibrary(context);
+    }
+  }
+
+  Future<void> playPrevious(BuildContext context) async {
+    if (listendTracks.length > 0) {
+      String previd = listendTracks.removeLast();
+      await playSingle(context, previd, false);
     }
   }
 

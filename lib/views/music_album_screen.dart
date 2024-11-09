@@ -6,6 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imlocal.dart';
+import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic_album.dart';
 import 'package:provider/provider.dart';
 
@@ -112,6 +113,7 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                                 libmoc.mnetSetShuffle(Global.profile.msourceID, 0);
                                 libmoc.mnetPlayAlbum(Global.profile.msourceID, widget.artist, widget.album);
                               }
+                              context.read<IMbanner>().turnOnBanner();
                             },
                             icon: Container(
                               decoration: BoxDecoration(
@@ -130,6 +132,7 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
                                 libmoc.mnetSetShuffle(Global.profile.msourceID, 1);
                                 libmoc.mnetPlayAlbum(Global.profile.msourceID, widget.artist, widget.album);
                               }
+                              context.read<IMbanner>().turnOnBanner();
                             },
                             icon: Container(
                               decoration: BoxDecoration(
@@ -254,8 +257,9 @@ class AlbumTile extends StatelessWidget {
       onTap: () async {
         //context.read<IMsource>().updateListenTrack(OmusicTrack('aabbccddee', title, cover, artist, 120, 0));
         //context.read<IMsource>().turnOnPlaying();
-        if (Global.profile.phonePlay) await context.read<IMlocal>().playSingle(context, id);
+        if (Global.profile.phonePlay) await context.read<IMlocal>().playSingle(context, id, true);
         else libmoc.mnetPlayID(Global.profile.msourceID, id);
+        context.read<IMbanner>().turnOnBanner();
       },
     );
   }

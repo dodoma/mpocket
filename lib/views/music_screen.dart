@@ -195,13 +195,15 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   void initState() {
-    context.read<IMsource>().bindPlayInfo();
+    print("xxxxxx INIT showMusicScreen");
+    //context.read<IMsource>().bindPlayInfo();
     _fetchData(); // 调用异步方法
     super.initState();
   }
 
   @override
   void dispose() {
+    print("xxxxxx DELETE showMusicScreen");
     _overlayEntry?.remove();
     super.dispose();
   }
@@ -274,13 +276,14 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print("xxxxxx BUILD showMusicScreen");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 检查当前的上下文是否依然有效（防止页面被销毁时仍然调用 Navigator）
       if (context.mounted) {
         context.read<IMbanner>().turnOnBanner();
       }
     });
-    //context.read<IMsource>().bindPlayInfo();
+    context.read<IMsource>().bindPlayInfo();
     int online = context.watch<IMonline>().online;
   if (_isLoading) {
   return CircularProgressIndicator();

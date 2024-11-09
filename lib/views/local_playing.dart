@@ -20,6 +20,7 @@ class LocalPlayingScreen extends StatefulWidget {
 class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
   final progress = StreamController<double>();
   bool paused = false;
+  bool _dragging = false;
 
   @override
   void initState() {
@@ -43,7 +44,7 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
     double volume = context.read<IMlocal>().volume;
 
     double fval = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;
-    progress.add(fval);
+    if (!_dragging) progress.add(fval);
 
     if (url == null) return Scaffold(body: Center(child: CircularProgressIndicator()));
     else {
@@ -120,10 +121,12 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
                                   max: 1.0,
                                   divisions: 100,
                                   onChanged: (value){
+                                    _dragging = true;
                                     print("drag to ${value}");
                                     progress.add(value);
                                   },
                                   onChangeEnd: (value) {
+                                    _dragging = false;
                                     print("draged to ${value}");
                                     progress.add(value);
                                     context.read<IMlocal>().dragTo(value);
@@ -148,7 +151,7 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
                           children: [
                             Icon(Icons.list, size: 32),
                             IconButton(icon: Icon(Icons.skip_previous, size: 32), onPressed: () {
-                              //libmoc.mnetPrevious(Global.profile.msourceID);
+                              context.read<IMlocal>().playPrevious(context);
                             },),
                             Container(
                               decoration: BoxDecoration(

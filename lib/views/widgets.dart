@@ -153,7 +153,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
               AnimatedBuilder(
                 animation: avtanimate,
                 builder: (context, child) {
-                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover!)), radius: 30,));
+                  return RotationTransition(turns: avtanimate, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover!)), radius: 32,));
                   //return RotationTransition(turns: Tween<double>(begin: 0.0, end: 0.2).animate(avtanimate), child: CircleAvatar(backgroundImage: AssetImage(onListenTrack.cover), radius: 30,));
                   //return Transform.rotate(angle: avtanimate.value * 2 * pi, child: CircleAvatar(backgroundImage: FileImage(File(onListenTrack.cover)), radius: 30,));
                 },
@@ -162,19 +162,28 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
               Expanded(
                 child: Column(
                   children: [
-                    StreamBuilder<double>(
-                      stream: progress.stream, 
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return LinearProgressIndicator(value: snapshot.data, minHeight: 2,);
-                        }
-                        return LinearProgressIndicator(valueColor: AlwaysStoppedAnimation(Color.fromRGBO(0x7a, 0x51, 0xe2, 100)));
-                      }
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          flex: 8,
+                          child: StreamBuilder<double>(
+                            stream: progress.stream, 
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData) {
+                                return LinearProgressIndicator(value: snapshot.data, minHeight: 2,);
+                              }
+                              return LinearProgressIndicator(valueColor: AlwaysStoppedAnimation(Color.fromRGBO(0x7a, 0x51, 0xe2, 100)));
+                            }
+                          ),
+                        ),
+                        Expanded(flex: 1, child: Container(child: IconButton(onPressed: () {context.read<IMbanner>().turnOffBanner();}, icon: Icon(Icons.close,)), height: 20,))
+                      ],
                     ),
                     const Gap(10),
                     Row(children: [
                       Expanded(
-                        flex: 7,
+                        flex: 6,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -202,7 +211,7 @@ class _NowPlayingState extends State<NowPlaying> with SingleTickerProviderStateM
                       const Gap(8),
                       Expanded(flex: 1, child: IconButton(icon: Icon(Icons.skip_next), onPressed: () {
                         libmoc.mnetNext(Global.profile.msourceID);
-                      },))
+                      },)),
                     ],)
                   ],
                 ),
@@ -270,7 +279,13 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
               Expanded(
                 child: Column(
                   children: [
-                    LinearProgressIndicator(value: progress),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(flex: 8, child: LinearProgressIndicator(value: progress)),
+                        Expanded(flex: 1, child: Container(child: IconButton(onPressed: () {context.read<IMbanner>().turnOffBanner();}, icon: Icon(Icons.close,)), height: 20,))
+                      ],
+                    ),
                     const Gap(10),
                     Row(children: [
                       Expanded(
@@ -301,7 +316,7 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
                       const Gap(8),
                       Expanded(flex: 1, child: IconButton(icon: Icon(Icons.skip_next), onPressed: () {
                         context.read<IMlocal>().playNext(context);
-                      },))
+                      },)),
                     ],),
                   ],
                 ),
