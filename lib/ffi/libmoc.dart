@@ -134,6 +134,7 @@ int omusicSyncArtist(String ID, String name) => _bindings.omusicSyncArtist(ID.to
 int omusicClearArtist(String ID, String name) => _bindings.omusicClearArtist(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicSyncAlbum(String ID, String name, String title) => _bindings.omusicSyncAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
 int omusicClearAlbum(String ID, String name, String title) => _bindings.omusicClearAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
+int omusicDeleteAlbum(String ID, String name, String title) => _bindings.omusicDeleteAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
 
 int mnetStoreSync(String ID, String Libname) => _bindings.mnetStoreSync(ID.toNativeUtf8(), Libname.toNativeUtf8());
 

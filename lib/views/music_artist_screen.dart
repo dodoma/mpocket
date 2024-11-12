@@ -238,7 +238,17 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
 
                                               const Gap(10),
                                               Row(children: [
-                                                IconButton(icon: Icon(Icons.delete_forever, size: 20,), onPressed: () {},),
+                                                IconButton(icon: Icon(Icons.delete_forever, size: 20,), onPressed: () async {
+                                                  bool confirm = await confirmDialog(context, '确认删除 ${meo.albums[index].name} 下所有的曲目？\n\n删除后不可恢复！！！');
+                                                  if (confirm) {
+                                                    int delnum = libmoc.omusicDeleteAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);  
+                                                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                      content: Text('成功删除 ${delnum} 个文件'),
+                                                      duration: Duration(seconds: 3)
+                                                    ));
+                                                    Navigator.pop(context);
+                                                  }
+                                                },),
                                                 const Gap(20),
                                                 Text('删除本地与音源')
                                               ],),
