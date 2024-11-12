@@ -183,6 +183,43 @@ class LibmocBindings {
       ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
       >();
 
+  int mnetOnReceiving(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
+    return _mnetOnReceiving(callback);
+  }
+  late final _mnetOnReceivingPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+    >>('mnetOnReceiving');
+  late final _mnetOnReceiving = _mnetOnReceivingPtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      >();
+
+  int mnetOnFileReceived(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>callback) {
+    return _mnetOnFileReceived(callback);
+  }
+  late final _mnetOnFileReceivedPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+    >>('mnetOnFileReceived');
+  late final _mnetOnFileReceived = _mnetOnFileReceivedPtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Pointer<Utf8>)>>)
+      >();
+
+  int mnetOnReceiveDone(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>callback) {
+    return _mnetOnReceiveDone(callback);
+  }
+  late final _mnetOnReceiveDonePtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+    >>('mnetOnReceiveDone');
+  late final _mnetOnReceiveDone = _mnetOnReceiveDonePtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
+      >();
+
+
 
   int mnetSetShuffle(ffi.Pointer<Utf8>ID, int shuffle) {return _mnetSetShuffle(ID, shuffle);}
   late final _mnetSetShufflePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Int8 shuffle)>>('mnetSetShuffle');
@@ -279,7 +316,19 @@ class LibmocBindings {
   late final omusicAlbumPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicAlbum');
   late final _omusicAlbum = omusicAlbumPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
 
+  int omusicSyncArtist(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicSyncArtist(ID, name);}
+  late final omusicSyncArtistPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicSyncArtist');
+  late final _omusicSyncArtist = omusicSyncArtistPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
+  int omusicClearArtist(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicClearArtist(ID, name);}
+  late final omusicClearArtistPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicClearArtist');
+  late final _omusicClearArtist = omusicClearArtistPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
   int omusicSyncAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicSyncAlbum(ID, name, title);}
   late final omusicSyncAlbumPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicSyncAlbum');
   late final _omusicSyncAlbum = omusicSyncAlbumPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
+
+  int omusicClearAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicClearAlbum(ID, name, title);}
+  late final omusicClearAlbumPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicClearAlbum');
+  late final _omusicClearAlbum = omusicClearAlbumPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
 }

@@ -119,6 +119,9 @@ class _MusicScreenState extends State<MusicScreen> {
             
                     context.read<IMonline>().onOnline(value.data!);
                     context.read<IMonline>().bindOffline();
+                    context.read<IMbanner>().bindReceiving();
+                    context.read<IMbanner>().bindFileReceived();
+                    context.read<IMbanner>().bindReceiveDone();
                     Global.profile.msourceID = value.data!;
                     Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
                     Global.saveProfile();
@@ -420,6 +423,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                         return ArtistTile(
                           name: meo.artists[index].name,
                           head: meo.artists[index].avt,
+                          cachePercent: meo.artists[index].cachePercent,
                         );
                       }
                     )
@@ -438,10 +442,14 @@ class _showMusicScreenState extends State<showMusicScreen> {
 class ArtistTile extends StatelessWidget {
   final String name;
   final String head;
-  const ArtistTile({super.key, required this.name, required this.head});
+  final double cachePercent;
+  const ArtistTile({super.key, required this.name, required this.head, required this.cachePercent});
 
   @override
   Widget build(BuildContext context) {
+    double bigd = cachePercent * 1000;
+    int bigi = bigd.toInt();
+    int num = bigi - bigi % 100;
     return InkWell(
       child: Column(
         children: [
@@ -450,14 +458,27 @@ class ArtistTile extends StatelessWidget {
             radius: 35,
           ),
           const Gap(5),
-          Container(
-            width: 100,
-            alignment: Alignment.center,
-            child: Text(
-              overflow: TextOverflow.ellipsis, // 溢出时显示省略号
-              maxLines: 1, // 限制文本行数为1
-              name
-            )
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                width: 100,
+                alignment: Alignment.center,
+                child: Text(
+                  overflow: TextOverflow.ellipsis, // 溢出时显示省略号
+                  maxLines: 1, // 限制文本行数为1
+                  name
+                )
+              ),
+              cachePercent > 0.0 ?
+                Positioned(left: 80, top: -18, 
+                  child: cachePercent == 1.0 ?
+                    Icon(Icons.download_done, color: Colors.green, size: 18)
+                  :
+                    Icon(Icons.download, color: Colors.green[num], size: 18)
+                )
+              : SizedBox.shrink()
+            ]
           ),
         ],
       ),

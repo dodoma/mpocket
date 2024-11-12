@@ -130,7 +130,10 @@ int mnetPrevious(String ID) => _bindings.mnetPrevious(ID.toNativeUtf8());
 int mnetDragTO(String ID, double percent) => _bindings.mnetDragTO(ID.toNativeUtf8(), percent);
 int mnetStoreList(String ID) => _bindings.mnetStoreList(ID.toNativeUtf8());
 
+int omusicSyncArtist(String ID, String name) => _bindings.omusicSyncArtist(ID.toNativeUtf8(), name.toNativeUtf8());
+int omusicClearArtist(String ID, String name) => _bindings.omusicClearArtist(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicSyncAlbum(String ID, String name, String title) => _bindings.omusicSyncAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
+int omusicClearAlbum(String ID, String name, String title) => _bindings.omusicClearAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
 
 int mnetStoreSync(String ID, String Libname) => _bindings.mnetStoreSync(ID.toNativeUtf8(), Libname.toNativeUtf8());
 
@@ -151,6 +154,9 @@ int mnetOnStep(String ID, Pointer<NativeFunction<Void Function(Pointer<Utf8>, In
 int mnetOnServerConnectted(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnServerConnectted(callback);
 int mnetOnServerClosed(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnServerClosed(callback);
 int mnetOnConnectionLost(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnConnectionLost(callback);
+int mnetOnReceiving(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>> callback) => _bindings.mnetOnReceiving(callback);
+int mnetOnFileReceived(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>> callback) => _bindings.mnetOnFileReceived(callback);
+int mnetOnReceiveDone(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnReceiveDone(callback);
 
 /// A longer lived native function, which occupies the thread calling it.
 ///

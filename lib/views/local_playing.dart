@@ -44,7 +44,7 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
     double volume = context.read<IMlocal>().volume;
 
     double fval = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;
-    if (!_dragging) progress.add(fval);
+    if (!_dragging && fval >= 0.0 && fval <= 1.0) progress.add(fval);
 
     if (url == null) return Scaffold(body: Center(child: CircularProgressIndicator()));
     else {

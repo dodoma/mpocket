@@ -9,11 +9,13 @@ part of 'omusic.dart';
 Omusic_artist _$Omusic_artistFromJson(Map<String, dynamic> json) =>
     Omusic_artist()
       ..name = json['name'] as String
+      ..cachePercent = json['cachePercent'] as double
       ..avt = json['avt'] as String;
 
 Map<String, dynamic> _$Omusic_artistToJson(Omusic_artist instance) =>
     <String, dynamic>{
       'name': instance.name,
+      'cachePercent': instance.cachePercent,
       'avt': instance.avt,
     };
 

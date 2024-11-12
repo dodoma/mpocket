@@ -58,6 +58,22 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
     super.dispose();
   }
 
+  Future<bool> confirmDialog(BuildContext context, String alertText) async {
+    return await showDialog<bool> (
+      context: context,
+       builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text(alertText),
+          actions: [
+            TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text('确定')),
+            TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
+          ]
+        );
+       }
+    ) ?? false;
+  }
+
   @override
   Widget build(BuildContext context) {
   double containerWidth = MediaQuery.of(context).size.width;
@@ -124,13 +140,25 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('${widget.artist}', textScaler: TextScaler.linear(1.6),),
-                          Text('${meo.countAlbum} 张专辑 ${meo.countTrack} 首歌曲'),
+                          Text('${meo.countAlbum} 张专辑 ${meo.countTrack} 首歌曲 缓存 ${meo.indisk} 首'),
                         ],
                       ),
                       Spacer(),
-                      IconButton(icon: Icon(Icons.sync), onPressed: () {},),
-                      IconButton(icon: Icon(Icons.delete_outline), onPressed: () {},),
-                      IconButton(icon: Icon(Icons.delete_forever), onPressed: () {},)
+                      IconButton(icon: Icon(Icons.sync), onPressed: () async {
+                        bool confirm = await confirmDialog(context, '确认同步 ${meo.artist} 下所有的曲目？');
+                        if (confirm) libmoc.omusicSyncArtist(Global.profile.msourceID, meo.artist);
+                      }),
+                      IconButton(icon: Icon(Icons.delete_outline), onPressed: () async {
+                        bool confirm = await confirmDialog(context, '确认删除手机上 ${meo.artist} 所有的曲目？');
+                        if (confirm) {
+                          int delnum = libmoc.omusicClearArtist(Global.profile.msourceID, meo.artist);
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text('成功删除 ${delnum} 个文件'),
+                            duration: Duration(seconds: 3)
+                          ));
+                        }
+                      }),
+                      //IconButton(icon: Icon(Icons.delete_forever), onPressed: () {})
                     ],
                   ),
                 ),
@@ -185,6 +213,7 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                                               Row(children: [
                                                 IconButton(icon: Icon(Icons.sync, size: 20,), onPressed: () {
                                                   libmoc.omusicSyncAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
+                                                  context.read<IMbanner>().turnOffBanner();
                                                   Navigator.pop(context);
                                                 },),
                                                 const Gap(20),
@@ -194,7 +223,14 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
 
                                               const Gap(10),
                                               Row(children: [
-                                                IconButton(icon: Icon(Icons.delete_outline, size: 20,), onPressed: () {},),
+                                                IconButton(icon: Icon(Icons.delete_outline, size: 20,), onPressed: () {
+                                                  int delnum = libmoc.omusicClearAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
+                                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                                    content: Text('成功删除 ${delnum} 个文件'),
+                                                    duration: Duration(seconds: 3)
+                                                  ));
+                                                  Navigator.pop(context);
+                                                },),
                                                 const Gap(20),
                                                 Text('清除本地缓存')
                                               ],),

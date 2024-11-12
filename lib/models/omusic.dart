@@ -8,6 +8,7 @@ class Omusic_artist {
 
   late String name;
   late String avt;
+  late double cachePercent;
 
   factory Omusic_artist.fromJson(Map<String, dynamic> json) => _$Omusic_artistFromJson(json);
   Map<String, dynamic> toJson() => _$Omusic_artistToJson(this);

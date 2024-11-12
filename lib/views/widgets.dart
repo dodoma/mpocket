@@ -64,6 +64,7 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
   Widget build(BuildContext context) {
     final int selectedIndex = _getSelectedIndex(context);
     bool visible = context.watch<IMbanner>().isVisible;
+    int busyvisible = context.watch<IMbanner>().busyVisible;
 
     return Scaffold(
       body: Stack(
@@ -78,10 +79,18 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
               right: 0,
               bottom: 0,
               child: Container(
-                padding: EdgeInsets.all(10.0),
+                //padding: EdgeInsets.all(5),
+                padding: EdgeInsets.only(left: 10, right: 15),
                 color: Colors.grey[400],
                 child: Global.profile.phonePlay ? NowPlayingLocal() : NowPlaying()
               )
+            ),
+          if (busyvisible != 0)
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Container(child: ImBusy(visible: busyvisible,), color: Colors.grey[100],)
             )
         ],
       ),
@@ -330,5 +339,69 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
         ),
       );
     } else return SizedBox.shrink();
+  }
+}
+
+class ImBusy extends StatefulWidget {
+  final int visible;
+
+  const ImBusy({super.key, required this.visible});
+
+  @override
+  State<ImBusy> createState() => _ImBusyState();
+}
+
+class _ImBusyState extends State<ImBusy> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: Duration(seconds: 2),
+      vsync: this,
+    )..repeat(reverse: false);
+
+    // 垂直向下平移的动画
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0, 0),
+      end: Offset(0, 1),
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //return LinearProgressIndicator(valueColor: AlwaysStoppedAnimation(Color.fromRGBO(0x7a, 0x51, 0xe2, 100)));
+    String filename = context.read<IMbanner>().receivingFile;
+    return Row(
+      children: [
+        Expanded(flex: 9, child: widget.visible == 1 || widget.visible == 2 ? Text(filename) : Text('完成 ${filename} 个文件缓存至本地')),
+        Expanded(
+          flex: 1, 
+          child: 
+          widget.visible == 1 ?
+            ClipRect(child: Container(
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: Icon(Icons.download, color: Colors.green,)
+              ),
+              width: 32,
+              height: 32,
+            ))
+          : widget.visible == 2 ?
+            Icon(Icons.check, color: Colors.green,)
+          : widget.visible == 3 ?
+            Icon(Icons.check, color: Colors.green,)
+          : SizedBox.shrink()
+        )
+      ],
+    );
   }
 }

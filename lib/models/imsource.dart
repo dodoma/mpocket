@@ -10,6 +10,8 @@ import 'package:mpocket/models/omusic_playing.dart';
 
 typedef NativePlayInfoCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>);
 typedef NativeServerClosedCallback = Void Function(Pointer<Utf8>, Int);
+typedef NativeReceivingCallback = Void Function(Pointer<Utf8>, Pointer<Utf8>);
+typedef NativeReceiveDoneCallback = Void Function(Pointer<Utf8>, Int);
 
 class IMsource extends ChangeNotifier {
   bool setting = false;
@@ -40,9 +42,12 @@ class IMsource extends ChangeNotifier {
 }
 
 class IMbanner extends ChangeNotifier {
-  bool _isVisible = true;
+  bool _isVisible = false;
+  int _busyVisible = 0;
+  String receivingFile = "";
 
   bool get isVisible => _isVisible;
+  int get busyVisible => _busyVisible;
 
   void turnOnBanner() {
     _isVisible = true;
@@ -52,6 +57,68 @@ class IMbanner extends ChangeNotifier {
   void turnOffBanner() {
     _isVisible = false;
     notifyListeners();  
+  }
+
+  void bindReceiving() {
+    print("bind RECEIVING");
+    late final  NativeCallable<NativeReceivingCallback> callback;
+
+    void onResponse(Pointer<Utf8> id, Pointer<Utf8> filename) {
+      String sid = id.cast<Utf8>().toDartString();
+      String sname = filename.cast<Utf8>().toDartString();
+      //print("${sid} receiving ${sname}");
+
+      _busyVisible = 1;
+      receivingFile = sname;
+      notifyListeners();
+    }
+
+    callback = NativeCallable<NativeReceivingCallback>.listener(onResponse);
+    libmoc.mnetOnReceiving(callback.nativeFunction);
+  }
+
+  void bindFileReceived() {
+    print("bind FILE RECEIVED");
+    late final  NativeCallable<NativeReceivingCallback> callback;
+
+    void onResponse(Pointer<Utf8> id, Pointer<Utf8> filename) {
+      String sid = id.cast<Utf8>().toDartString();
+      String sname = filename.cast<Utf8>().toDartString();
+      //print("${sid} received ${sname}");
+
+      _busyVisible = 2;
+      receivingFile = sname;
+      notifyListeners();
+    }
+
+    callback = NativeCallable<NativeReceivingCallback>.listener(onResponse);
+    libmoc.mnetOnFileReceived(callback.nativeFunction);
+  }
+
+  void bindReceiveDone() {
+    print("bind RECEIVE DONE");
+    late final  NativeCallable<NativeReceiveDoneCallback> callback;
+
+    void onResponse(Pointer<Utf8> id, int filecount) {
+      print("receive DONE");
+      _busyVisible = 3;
+      receivingFile = filecount.toString();
+      //callback.close();
+
+      setClose();      
+
+      notifyListeners();
+    }
+
+    callback = NativeCallable<NativeReceiveDoneCallback>.listener(onResponse);
+    libmoc.mnetOnReceiveDone(callback.nativeFunction);
+  }
+
+  Future<void> setClose() async {
+    await Future.delayed(Duration(seconds: 6), () {
+      _busyVisible = 0;
+      notifyListeners();
+    });
   }
 }
 

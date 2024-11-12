@@ -26,6 +26,7 @@ OmusicArtist _$OmusicArtistFromJson(Map<String, dynamic> json) => OmusicArtist()
   ..artist = json['artist'] as String
   ..countAlbum = json['countAlbum'] as num
   ..countTrack = json['countTrack'] as num
+  ..indisk = json['indisk'] as num
   ..avt = json['avt'] as String
   ..albums = (json['albums'] as List<dynamic>)
       .map((e) => Omusic_album.fromJson(e as Map<String, dynamic>))
@@ -36,6 +37,7 @@ Map<String, dynamic> _$OmusicArtistToJson(OmusicArtist instance) =>
       'artist': instance.artist,
       'countAlbum': instance.countAlbum,
       'countTrack': instance.countTrack,
+      'indisk': instance.indisk,
       'avt': instance.avt,
       'albums': instance.albums,
     };

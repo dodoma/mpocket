@@ -23,6 +23,7 @@ class OmusicArtist {
   late String artist;
   late num countAlbum;
   late num countTrack;
+  late num indisk;
   late String avt;
   late List<Omusic_album> albums;
 
