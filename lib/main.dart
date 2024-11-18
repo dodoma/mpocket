@@ -32,6 +32,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => IMsource()),
         ChangeNotifierProvider(create: (context) => IMlocal()),
         ChangeNotifierProvider(create: (context) => IMonline()),
+        ChangeNotifierProvider(create: (context) => IMnotify()),
         ChangeNotifierProvider(create: (context) => IMbanner())
       ],
       child: MaterialApp.router(

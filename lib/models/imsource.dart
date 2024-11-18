@@ -4,14 +4,17 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/omusic_playing.dart';
+
 
 typedef NativePlayInfoCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>);
 typedef NativeServerClosedCallback = Void Function(Pointer<Utf8>, Int);
 typedef NativeReceivingCallback = Void Function(Pointer<Utf8>, Pointer<Utf8>);
 typedef NativeReceiveDoneCallback = Void Function(Pointer<Utf8>, Int);
+typedef NativeUdiskMountCallback = Void Function(Pointer<Utf8>);
 
 class IMsource extends ChangeNotifier {
   bool setting = false;
@@ -120,6 +123,7 @@ class IMbanner extends ChangeNotifier {
       notifyListeners();
     });
   }
+
 }
 
 class IMonline extends ChangeNotifier {
@@ -167,5 +171,41 @@ class IMonline extends ChangeNotifier {
     }
     callback = NativeCallable<NativeServerClosedCallback>.listener(onResponse);
     libmoc.mnetOnServerConnectted(callback.nativeFunction);
+  }
+}
+
+class IMnotify extends ChangeNotifier {
+  BuildContext? _context;
+
+  void setContext(BuildContext context) {
+    _context = context;
+  }
+
+  void showUdiskMount() {
+    if (_context == null) return;
+    else showDialog(
+      context: _context!, 
+      builder: (context) {
+        return AlertDialog(
+          title: Text('U盘已连接'),
+          content: Text('现在去同步媒体文件？'),
+          actions: [
+            TextButton(onPressed: (){Navigator.of(context).pop(); context.go('/msource');}, child: Text('确定')),
+            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
+          ]
+        );
+      }
+    );
+  }
+
+  void bindUdiskMount() {
+    print("bind USB MOUNT");
+    late final NativeCallable<NativeUdiskMountCallback> callback;
+    void onResponse(Pointer<Utf8> id) {
+      print("usb mounted");
+      showUdiskMount();
+    }
+    callback = NativeCallable<NativeUdiskMountCallback>.listener(onResponse);
+    libmoc.mnetOnUdiskMount(callback.nativeFunction);
   }
 }

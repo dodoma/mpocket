@@ -62,6 +62,8 @@ class _BottomNavigationBarScaffoldState extends State<BottomNavigationBarScaffol
 
   @override
   Widget build(BuildContext context) {
+    context.read<IMnotify>().setContext(context);
+    
     final int selectedIndex = _getSelectedIndex(context);
     bool visible = context.watch<IMbanner>().isVisible;
     int busyvisible = context.watch<IMbanner>().busyVisible;

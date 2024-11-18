@@ -219,6 +219,16 @@ class LibmocBindings {
       ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>, ffi.Int)>>)
       >();
 
+  int mnetOnUdiskMount(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>callback) {return _mnetOnUdiskMount(callback);}
+  late final _mnetOnUdiskMountPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>)
+    >>('mnetOnUdiskMount');
+  late final _mnetOnUdiskMount = _mnetOnUdiskMountPtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>)
+      >();
+
 
 
   int mnetSetShuffle(ffi.Pointer<Utf8>ID, int shuffle) {return _mnetSetShuffle(ID, shuffle);}

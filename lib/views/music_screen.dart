@@ -122,6 +122,7 @@ class _MusicScreenState extends State<MusicScreen> {
                     context.read<IMbanner>().bindReceiving();
                     context.read<IMbanner>().bindFileReceived();
                     context.read<IMbanner>().bindReceiveDone();
+                    context.read<IMnotify>().bindUdiskMount();
                     Global.profile.msourceID = value.data!;
                     Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
                     Global.saveProfile();
@@ -198,7 +199,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   void initState() {
-    print("xxxxxx INIT showMusicScreen");
     //context.read<IMsource>().bindPlayInfo();
     _fetchData(); // 调用异步方法
     super.initState();
@@ -206,7 +206,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   void dispose() {
-    print("xxxxxx DELETE showMusicScreen");
     _overlayEntry?.remove();
     super.dispose();
   }
@@ -279,7 +278,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print("xxxxxx BUILD showMusicScreen");
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // 检查当前的上下文是否依然有效（防止页面被销毁时仍然调用 Navigator）
       if (context.mounted) {

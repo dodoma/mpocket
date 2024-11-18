@@ -30,8 +30,10 @@ class _MsourceScreenState extends State<MsourceScreen> {
   @override
   Widget build(BuildContext context) {
     if (context.read<IMonline>().online == 0) {
+      // 配置局域网内音源设备
       return ConfigDeviceScreen();
     } else {
+      // 展示已配置的音源设备
       return showDeviceScreen(deviceID: Global.profile.msourceID);
     }
   }
@@ -45,7 +47,7 @@ class ConfigDeviceScreen extends StatefulWidget {
 }
 
 class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
-
+  Timer? _timer;
   late FormController _formctl;
   late Future<String> sourceID = libmoc.mocDiscovery();
 
@@ -60,7 +62,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
     super.initState();
 
     scanWifiAP();
-    Timer(Duration(seconds: 5), () async {
+    _timer = Timer(Duration(seconds: 5), () async {
       await getScanResults();
       setState(() {
         searching = false;
@@ -71,8 +73,9 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
   }
 
   @override
-  void dispose() async {
-    //await _formctl.dispose();
+  void dispose() {
+     _formctl.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
