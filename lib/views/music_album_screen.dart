@@ -27,9 +27,9 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
   Future<void> _fetchData() async {
     //await Future.delayed(Duration(seconds: 1));  
     String emos = libmoc.omusicAlbum(Global.profile.msourceID, widget.artist, widget.album);
-    print(emos);
     setState(() {
-      meo = OmusicAlbum.fromJson(jsonDecode(emos));
+      if (emos.isEmpty) {meo = OmusicAlbum(); meo.title = "";}
+      else meo = OmusicAlbum.fromJson(jsonDecode(emos));
       _isLoading = false;
     });
   }
@@ -73,7 +73,8 @@ class _MusicAlbumScreenState extends State<MusicAlbumScreen> {
 
     if (_isLoading) return Scaffold(body: Center(child: CircularProgressIndicator()));
     else {
-    return Scaffold(
+    if (meo.title.isEmpty) return Scaffold(body: Center(child: Text('获取数据失败')));
+    else return Scaffold(
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

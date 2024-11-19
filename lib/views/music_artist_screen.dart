@@ -28,7 +28,8 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
     //await Future.delayed(Duration(seconds: 1));  
     String emos = libmoc.omusicArtist(Global.profile.msourceID, widget.artist);
     setState(() {
-      meo = OmusicArtist.fromJson(jsonDecode(emos));
+      if (emos.isEmpty) {meo = OmusicArtist(); meo.artist = "";}
+      else meo = OmusicArtist.fromJson(jsonDecode(emos));
       _isLoading = false;
     });
   }
@@ -81,7 +82,8 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
   if (_isLoading) {
     return Scaffold(body: Center(child: CircularProgressIndicator()));
   } else {
-    return Scaffold(
+    if (meo.artist.isEmpty) return Scaffold(body: Center(child: Text('获取数据失败')));
+    else return Scaffold(
       //appBar: AppBar(
       //  title: Text(widget.artist),
       //),  

@@ -345,4 +345,8 @@ class LibmocBindings {
   int omusicDeleteAlbum(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title) {return _omusicDeleteAlbum(ID, name, title);}
   late final omusicDeleteAlbumPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicDeleteAlbum');
   late final _omusicDeleteAlbum = omusicDeleteAlbumPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
+
+  ffi.Pointer<Utf8> msourceHome(ffi.Pointer<Utf8>ID) {return _msourceHome(ID);}
+  late final msourceHomePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('msourceHome');
+  late final _msourceHome = msourceHomePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
 }

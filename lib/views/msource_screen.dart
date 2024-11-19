@@ -337,7 +337,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
     "deviceID": "bd939vASIF",
     "deviceName": "默认音源",
     "capacity": "128G",
-    "useage": "73.2G",
+    "remain": "73.2G",
     "percent": 0.34,
     "usbON": false,
     "autoPlay": false,
@@ -358,9 +358,11 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
   }
 
   Future<void> _fetchData() async {
-    await Future.delayed(Duration(seconds: 2));  
+    //await Future.delayed(Duration(seconds: 2)); 
+    String emos = libmoc.msourceHome(Global.profile.msourceID); 
     setState(() {
-      meo = Msource.fromJson(jsonDecode(dummys));
+      if (emos.isEmpty) {meo = Msource(); meo.deviceID = "";}
+      else meo = Msource.fromJson(jsonDecode(emos));
       _isLoading = false;
     });
   }
@@ -439,7 +441,8 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
     if (_isLoading) {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     } else {
-      return Scaffold(
+      if (meo.deviceID.isEmpty) return Scaffold(body: Center(child: Text('获取数据失败')));
+      else return Scaffold(
         body: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -466,15 +469,6 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                             Icon(Icons.speaker),
                             Text('No. ' + meo.deviceName),
                             Spacer(),
-                            CircleAvatar(
-                              radius: 5,
-                              backgroundColor: const Color.fromARGB(255, 87, 241, 32),
-                            ),
-                            const Gap(3),
-                            Text(
-                              '本地在线',
-                              textScaler: TextScaler.linear(0.6),
-                            ),
                           ],
                         ),
                         const Gap(10),
@@ -484,10 +478,12 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                         ),
                         const Gap(10),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text(meo.useage),
+                            Text('${meo.useage} 已用 '),
+                            Text('${meo.remain} 可用', textScaler: TextScaler.linear(0.8)),
                             Spacer(),
-                            Text(meo.capacity),
+                            Text('总容量 ${meo.capacity}'),
                           ],
                         ),
                         const Gap(10),
@@ -523,10 +519,10 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                             Row(
                               children: [
                                 Text('共享路径：'),
-                                Text(meo.shareLocation),
+                                Text('\\\\${meo.shareLocation}'),
                                 Spacer(),
-                                Icon(Icons.usb),
-                                Text('U盘已连接')
+                                if (meo.usbON) 
+                                  Text('U盘已连接')
                               ],  
                             ),
                             Divider(
@@ -544,13 +540,13 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                         children: [
                                           Icon(Icons.folder),
                                           const Gap(10),
-                                          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(meo.libraries[index].name), Text('${meo.libraries[index].space} ${meo.libraries[index].countTrack} 首歌曲 已缓存 ${meo.libraries[index].countCached} 首', textScaler: TextScaler.linear(0.8),)],),
+                                          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(meo.libraries[index].name), Text('${meo.libraries[index].space} ${meo.libraries[index].countTrack} 首歌曲', textScaler: TextScaler.linear(0.8),)],),
                                           Spacer(),
                                           if (meo.libraries[index].dft) Icon(Icons.check),
                                           Icon(Icons.more_vert)
                                         ],
                                       ),
-                                      const Gap(5),
+                                      const Gap(10),
                                     ],
                                   );                        
                                 },

@@ -30,7 +30,7 @@ String omusicStoreList(String ID) {
 //String mnetOmusicHome(String ID) => _bindings.omusicHome(ID.toNativeUtf8()).cast<Utf8>().toDartString();
 String omusicHome(String ID) {
   final Pointer<Utf8> result = _bindings.omusicHome(ID.toNativeUtf8());
-  String outputs = "{}";
+  String outputs = "";
   if (result.address != nullptr.address) {
     outputs = result.cast<Utf8>().toDartString();
     calloc.free(result);
@@ -40,7 +40,7 @@ String omusicHome(String ID) {
 
 String omusicArtist(String ID, String name) {
   final Pointer<Utf8> result = _bindings.omusicArtist(ID.toNativeUtf8(), name.toNativeUtf8());
-  String outputs = "{}";
+  String outputs = "";
   if (result.address != nullptr.address) {
     outputs = result.cast<Utf8>().toDartString();
     calloc.free(result);
@@ -69,7 +69,7 @@ String omusicLibraryID(String ID) {
 
 String omusicAlbum(String ID, String name, String title) {
   final Pointer<Utf8> result = _bindings.omusicAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());
-  String outputs = "{}";
+  String outputs = "";
   if (result.address != nullptr.address) {
     outputs = result.cast<Utf8>().toDartString();
     calloc.free(result);
@@ -93,6 +93,15 @@ String omusicAlbumIDS(String ID, String name, String title) {
   if (result.address != nullptr.address) {
     outputs = result.cast<Utf8>().toDartString();
     calloc.free(result);
+  }
+  return outputs;
+}
+
+String msourceHome(String ID) {
+  final Pointer<Utf8> result = _bindings.msourceHome(ID.toNativeUtf8());
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
   }
   return outputs;
 }

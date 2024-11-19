@@ -190,7 +190,8 @@ class _showMusicScreenState extends State<showMusicScreen> {
       String emot = libmoc.omusicStoreList(Global.profile.msourceID);
       List<dynamic> jsonData = jsonDecode(emot);
       setState(() {
-        meo = Omusic.fromJson(jsonDecode(emos));
+        if (emos.isEmpty) {meo = Omusic(); meo.deviceID = "";}
+        else meo = Omusic.fromJson(jsonDecode(emos));
         storelist = jsonData.map((obj) => OmusicStore.fromJson(obj)).toList();
         _isLoading = false;
       });
@@ -289,7 +290,8 @@ class _showMusicScreenState extends State<showMusicScreen> {
   if (_isLoading) {
   return CircularProgressIndicator();
   } else {
-  return Container(
+  if (meo.deviceID.isEmpty) return Scaffold(body: Center(child: Text('获取数据失败')));
+  else return Container(
     // 页面一大框
     width: widget.maxWidth,
     margin: EdgeInsets.only(top:10, bottom: 10),

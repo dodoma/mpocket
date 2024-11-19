@@ -11,7 +11,6 @@ MsourceLibrary _$MsourceLibraryFromJson(Map<String, dynamic> json) =>
       ..name = json['name'] as String
       ..space = json['space'] as String
       ..countTrack = (json['countTrack'] as num).toInt()
-      ..countCached = (json['countCached'] as num).toInt()
       ..dft = json['dft'] as bool;
 
 Map<String, dynamic> _$MsourceLibraryToJson(MsourceLibrary instance) =>
@@ -19,7 +18,6 @@ Map<String, dynamic> _$MsourceLibraryToJson(MsourceLibrary instance) =>
       'name': instance.name,
       'space': instance.space,
       'countTrack': instance.countTrack,
-      'countCached': instance.countCached,
       'dft': instance.dft,
     };
 
@@ -28,6 +26,7 @@ Msource _$MsourceFromJson(Map<String, dynamic> json) => Msource()
   ..deviceName = json['deviceName'] as String
   ..capacity = json['capacity'] as String
   ..useage = json['useage'] as String
+  ..remain = json['remain'] as String
   ..percent = (json['percent'] as num).toDouble()
   ..usbON = json['usbON'] as bool
   ..autoPlay = json['autoPlay'] as bool
@@ -41,6 +40,7 @@ Map<String, dynamic> _$MsourceToJson(Msource instance) => <String, dynamic>{
       'deviceName': instance.deviceName,
       'capacity': instance.capacity,
       'useage': instance.useage,
+      'remain': instance.remain,
       'percent': instance.percent,
       'usbON': instance.usbON,
       'autoPlay': instance.autoPlay,

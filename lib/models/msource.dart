@@ -9,7 +9,6 @@ class MsourceLibrary {
   late String name;
   late String space;
   late int countTrack;
-  late int countCached;
   late bool dft;
 
   factory MsourceLibrary.fromJson(Map<String, dynamic> json) => _$MsourceLibraryFromJson(json);
@@ -24,6 +23,7 @@ class Msource {
   late String deviceName;
   late String capacity;
   late String useage;
+  late String remain;
   late double percent;
   late bool usbON;
   late bool autoPlay;
