@@ -4,11 +4,10 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:audio_metadata_extractor/audio_metadata_extractor.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
-
 
 class IMlocal extends ChangeNotifier {
   final AudioPlayer _audioPlayer = AudioPlayer();
@@ -20,36 +19,42 @@ class IMlocal extends ChangeNotifier {
 
   IMlocal() {
     _audioPlayer.setVolume(volume);
-
-    _audioPlayer.onDurationChanged.listen((Duration d) {
-      duration = d;
-      notifyListeners();
+    
+    _audioPlayer.durationStream.listen((Duration? d) {
+      if (d != null) {
+        duration = d;
+        notifyListeners();
+      }
     });
   
-    _audioPlayer.onPositionChanged.listen((Duration d) {
+    _audioPlayer.positionStream.listen((Duration d) {
       position = d;
       notifyListeners();
     });
-  
-    _audioPlayer.onPlayerComplete.listen((_) async {
-      print("play done. next");
 
-      String id = idNext();
-      String url = await getURLbyID(id);
-      if (url.isNotEmpty) {
-        print("Play ${url}");
-        await _audioPlayer.play(DeviceFileSource(url));
-      } else {
-        // 播放完成后，默认会播放媒体库
-        String idxx = libmoc.omusicLibraryID(Global.profile.msourceID);
-        if (idxx.isNotEmpty) {
-          url = await getURLbyID(idxx);
-          if (url.isNotEmpty) {
-            print("Play ${url}");
-            await _audioPlayer.play(DeviceFileSource(url));
-          }
+    _audioPlayer.processingStateStream.listen((state) async {
+      if (state == ProcessingState.completed) {
+        print("play done. next");
+
+        String id = idNext();
+        String url = await getURLbyID(id);
+        if (url.isNotEmpty) {
+          print("Play ${url}");
+          await _audioPlayer.setFilePath(url);
+          _audioPlayer.play();
         } else {
-          print("nothing to do");
+          // 播放完成后，默认会播放媒体库
+          String idxx = libmoc.omusicLibraryID(Global.profile.msourceID);
+          if (idxx.isNotEmpty) {
+            url = await getURLbyID(idxx);
+            if (url.isNotEmpty) {
+              print("Play ${url}");
+              await _audioPlayer.setFilePath(url);
+              _audioPlayer.play();
+            }
+          } else {
+            print("nothing to do");
+          }
         }
       }
     });
@@ -83,7 +88,7 @@ class IMlocal extends ChangeNotifier {
           duration: Duration(seconds: 3)
         )
       );
-    } else {
+    } else {      
       if (addhistory && !listendTracks.contains(id)) listendTracks.add(id);
 
       await _audioPlayer.stop();
@@ -92,7 +97,8 @@ class IMlocal extends ChangeNotifier {
       onListenCover = Global.profile.storeDir + "assets/cover/" + id;
       onListenTrack = await AudioMetadata.extract(File(url));
 
-      await _audioPlayer.play(DeviceFileSource(url));
+      await _audioPlayer.setFilePath(url);
+      _audioPlayer.play(); //不能等待play()完成, 否则会完成后再通知UI, 报错 "Looking up a deactivated widget's ancestor is unsafe."
 
       notifyListeners();
     }
@@ -195,7 +201,7 @@ class IMlocal extends ChangeNotifier {
   }
 
   Future<void> resume() async {
-    await _audioPlayer.resume();  
+    _audioPlayer.play();  
   }
 
   Future<void> setVolume(v) async {

@@ -159,7 +159,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
   late Omusic meo;
   late List<OmusicStore> storelist;
   bool phonePlay = Global.profile.phonePlay;
-  String _dftStore = '默认媒体库';
+  String _dftStore = '测试媒体库2';
   List<String> filteredItems = ['aa', 'bb', 'cc'];
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
@@ -185,7 +185,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
 
   Future<void> _fetchData() async {
     if (mounted) {
-      libmoc.omusicStoreSelect(Global.profile.msourceID, "默认媒体库");
+      libmoc.omusicStoreSelect(Global.profile.msourceID, "测试媒体库2");
       String emos = libmoc.omusicHome(Global.profile.msourceID);
       String emot = libmoc.omusicStoreList(Global.profile.msourceID);
       List<dynamic> jsonData = jsonDecode(emot);
