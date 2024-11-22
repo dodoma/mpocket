@@ -8,6 +8,7 @@ class Profile {
 
   late String appDir;
   late String msourceID;
+  late String defaultLibrary;
   late String storeDir;
   late String local;
   late bool phonePlay;

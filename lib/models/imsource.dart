@@ -134,7 +134,7 @@ class IMonline extends ChangeNotifier {
     online = 1;
 
     await libmoc.mnetStoreList(id);
-    await libmoc.mnetStoreSync(id, "默认媒体库");
+    await libmoc.mnetStoreSync(id, Global.profile.defaultLibrary.isEmpty ? "默认媒体库" : Global.profile.defaultLibrary);
   }
 
   void bindOffline() {

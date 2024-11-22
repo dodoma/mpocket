@@ -124,6 +124,15 @@ String msourceLibraryRename(String ID, String nameold, String namenew) {
   return outputs;
 }
 
+String msourceLibrarySetDefault(String ID, String name) {
+  final Pointer<Utf8> result = _bindings.msourceLibrarySetDefault(ID.toNativeUtf8(), name.toNativeUtf8());
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+  }
+  return outputs;
+}
+
 int mocInit(String dir) => _bindings.mnetStart(dir.toNativeUtf8());
 int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFunction<Void Function(Int)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
@@ -157,6 +166,8 @@ int mnetPrevious(String ID) => _bindings.mnetPrevious(ID.toNativeUtf8());
 int mnetDragTO(String ID, double percent) => _bindings.mnetDragTO(ID.toNativeUtf8(), percent);
 int mnetStoreList(String ID) => _bindings.mnetStoreList(ID.toNativeUtf8());
 
+int omusicSyncStore(String ID, String name) => _bindings.omusicSyncStore(ID.toNativeUtf8(), name.toNativeUtf8());
+int omusicClearStore(String ID, String name) => _bindings.omusicClearStore(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicSyncArtist(String ID, String name) => _bindings.omusicSyncArtist(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicClearArtist(String ID, String name) => _bindings.omusicClearArtist(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicSyncAlbum(String ID, String name, String title) => _bindings.omusicSyncAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());

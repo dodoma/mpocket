@@ -20,6 +20,7 @@ class Global {
       profile = Profile();
       profile.appDir = appdir;
       profile.msourceID = '';
+      profile.defaultLibrary = '';
       profile.storeDir = '';
       profile.local = 'en_US';
       profile.phonePlay = false;

@@ -326,6 +326,14 @@ class LibmocBindings {
   late final omusicAlbumPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>>('omusicAlbum');
   late final _omusicAlbum = omusicAlbumPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Pointer<Utf8>title)>();
 
+  int omusicSyncStore(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicSyncStore(ID, name);}
+  late final omusicSyncStorePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicSyncStore');
+  late final _omusicSyncStore = omusicSyncStorePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
+  int omusicClearStore(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicClearStore(ID, name);}
+  late final omusicClearStorePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicClearStore');
+  late final _omusicClearStore = omusicClearStorePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
   int omusicSyncArtist(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicSyncArtist(ID, name);}
   late final omusicSyncArtistPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicSyncArtist');
   late final _omusicSyncArtist = omusicSyncArtistPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
@@ -357,4 +365,8 @@ class LibmocBindings {
   ffi.Pointer<Utf8> msourceLibraryRename(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>nameold, ffi.Pointer<Utf8>namenew) {return _msourceLibraryRename(ID, nameold, namenew);}
   late final msourceLibraryRenamePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>nameold, ffi.Pointer<Utf8>namenew)>>('msourceLibraryRename');
   late final _msourceLibraryRename = msourceLibraryRenamePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>nameold, ffi.Pointer<Utf8>namenew)>();
+
+  ffi.Pointer<Utf8> msourceLibrarySetDefault(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _msourceLibrarySetDefault(ID, name);}
+  late final msourceLibrarySetDefaultPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('msourceLibrarySetDefault');
+  late final _msourceLibrarySetDefault = msourceLibrarySetDefaultPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
 }

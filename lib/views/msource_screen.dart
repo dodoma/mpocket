@@ -444,9 +444,26 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
     );
   }
 
+  Future<bool> confirmDialog(BuildContext context, String alertText) async {
+    return await showDialog<bool> (
+      context: context,
+       builder: (context) {
+        return AlertDialog(
+          title: Text('提示'),
+          content: Text(alertText),
+          actions: [
+            TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text('确定')),
+            TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
+          ]
+        );
+       }
+    ) ?? false;
+  }
+
   Future<void> ListAction(BuildContext context, int action, String libname) async {
     switch (action) {
       case 0:
+        //重命名
         final TextEditingController namectl = TextEditingController(text: libname);
         await showDialog(
           context: context,
@@ -497,7 +514,54 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         );
       break;
       case 1:
-        print('xxx 1');
+        // 设为默认
+        String res = libmoc.msourceLibrarySetDefault(Global.profile.msourceID, libname);
+        if (res.isEmpty) {
+          Global.profile.defaultLibrary = libname;
+          Global.saveProfile();
+          await libmoc.mnetStoreList(Global.profile.msourceID); //更新媒体库列表
+          setState(() {
+            meo.libraries.forEach((lib) {
+              if (lib.name == libname) lib.dft = true;
+              else lib.dft = false;
+            });
+          });
+          Navigator.of(context).pop();
+        } else {
+          await showDialog(
+            context: context, 
+            builder: (context) {
+              return AlertDialog(
+                title: Text('提示'),
+                content: Text(res),
+                actions:<Widget> [
+                  TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                ]
+              );
+            }
+          );
+        }
+      break;
+      case 2:
+        // 缓存媒体库
+        bool confirm = await confirmDialog(context, '确认同步 ${libname} 下所有的曲目？');
+        if (confirm) {
+          libmoc.omusicSyncStore(Global.profile.msourceID, libname);
+          Navigator.of(context).pop();
+        }
+      break;
+      case 3:
+        // 清除缓存
+        bool confirm = await confirmDialog(context, '清除媒体库 ${libname} 中本地缓存？');
+        if (confirm) {
+          Navigator.of(context).pop();
+
+          int delnum = libmoc.omusicClearStore(Global.profile.msourceID, libname);
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('成功删除 ${delnum} 个文件'),
+            duration: Duration(seconds: 3)
+          ));
+        }
       break;
       default:
         print('暂未实现');
