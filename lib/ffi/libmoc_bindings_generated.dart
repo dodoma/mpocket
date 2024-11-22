@@ -349,4 +349,12 @@ class LibmocBindings {
   ffi.Pointer<Utf8> msourceHome(ffi.Pointer<Utf8>ID) {return _msourceHome(ID);}
   late final msourceHomePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('msourceHome');
   late final _msourceHome = msourceHomePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
+
+  ffi.Pointer<Utf8> msourceLibraryCreate(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _msourceLibraryCreate(ID, name);}
+  late final msourceLibraryCreatePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('msourceLibraryCreate');
+  late final _msourceLibraryCreate = msourceLibraryCreatePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
+  ffi.Pointer<Utf8> msourceLibraryRename(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>nameold, ffi.Pointer<Utf8>namenew) {return _msourceLibraryRename(ID, nameold, namenew);}
+  late final msourceLibraryRenamePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>nameold, ffi.Pointer<Utf8>namenew)>>('msourceLibraryRename');
+  late final _msourceLibraryRename = msourceLibraryRenamePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>nameold, ffi.Pointer<Utf8>namenew)>();
 }

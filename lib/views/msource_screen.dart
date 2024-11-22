@@ -413,9 +413,25 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                   if (meo.libraries.any((lib) => lib.name == newItemName)) {
                     await _showTipDialog();
                   } else {
-                    setState(() {
-                      meo.libraries.add(MsourceLibrary.fromJson({'name': newItemName, 'space': '0MB', 'countTrack': 0, 'countCached': 0, 'dft': false}));
-                    });
+                    String res = libmoc.msourceLibraryCreate(Global.profile.msourceID, newItemName);
+                    await showDialog (
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('提示'),
+                          content: res.isEmpty ? Text('创建成功') : Text(res),
+                          actions:<Widget> [
+                            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                          ]
+                        );
+                      }
+                    );
+                    if (res.isEmpty) {
+                      await libmoc.mnetStoreList(Global.profile.msourceID); //更新媒体库列表
+                      setState(() {
+                        meo.libraries.add(MsourceLibrary.fromJson({'name': newItemName, 'space': '0MB', 'countTrack': 0, 'countCached': 0, 'dft': false}));
+                      });
+                    }
                     Navigator.of(context).pop(); // 关闭对话框
                   }
                 }
@@ -426,6 +442,67 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         );
       },
     );
+  }
+
+  Future<void> ListAction(BuildContext context, int action, String libname) async {
+    switch (action) {
+      case 0:
+        final TextEditingController namectl = TextEditingController(text: libname);
+        await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('媒体库改名'),
+              content: TextField(
+                controller: namectl,
+              ),
+              actions: [
+                TextButton(
+                  child: Text('确认'),
+                  onPressed: () async {
+                    String res = libmoc.msourceLibraryRename(Global.profile.msourceID, libname, namectl.text);
+                    await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('提示'),
+                          content: res.isEmpty ? Text('修改成功') : Text(res),
+                          actions:<Widget> [
+                            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                          ]
+                        );
+                      }
+                    );
+                    if (res.isEmpty) {
+                      await libmoc.mnetStoreList(Global.profile.msourceID); //更新媒体库列表
+                      int libindex = meo.libraries.indexWhere((lib) => lib.name == libname);
+                      if (libindex != -1) {
+                        setState(() {
+                          meo.libraries[libindex].name = namectl.text;
+                        });
+                      }
+                    }
+                    Navigator.of(context).pop(); // 关闭对话框
+                  },
+                ),
+                TextButton(
+                  child: Text('取消'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // 关闭对话框
+                  },
+                ),
+              ],
+            );
+          }
+        );
+      break;
+      case 1:
+        print('xxx 1');
+      break;
+      default:
+        print('暂未实现');
+      break;
+    }
   }
 
   @override
@@ -543,7 +620,54 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(meo.libraries[index].name), Text('${meo.libraries[index].space} ${meo.libraries[index].countTrack} 首歌曲', textScaler: TextScaler.linear(0.8),)],),
                                           Spacer(),
                                           if (meo.libraries[index].dft) Icon(Icons.check),
-                                          Icon(Icons.more_vert)
+                                          IconButton(icon: Icon(Icons.more_vert), onPressed: () {
+                                            showModalBottomSheet(
+                                              context: context, 
+                                              builder: (BuildContext context) {
+                                                final actions = [
+                                                  {'name': '重命名',         'val': 0, 'icon': Icon(Icons.edit)},
+                                                  {'name': '设为默认媒体库',  'val': 1, 'icon': Icon(Icons.check)},
+                                                  {'name': '全部缓存至本地',  'val': 2, 'icon': Icon(Icons.sync)},
+                                                  {'name': '清除本地缓存',    'val': 3, 'icon': Icon(Icons.delete_outline)},
+                                                  {'name': '删除媒体库',      'val': 4, 'icon': Icon(Icons.delete_forever)},
+                                                  {'name': '添加U盘媒体文件', 'val': 5, 'icon': Icon(Icons.usb)},
+                                                ];
+                                                return Padding(
+                                                  padding: const EdgeInsets.all(20),
+                                                  child: Column(
+                                                    children: [
+                                                      Container(
+                                                        width: containerWidth * 0.8,
+                                                        child: Text(meo.libraries[index].name, style: TextStyle(fontWeight: FontWeight.w700), overflow: TextOverflow.ellipsis, maxLines: 1,)
+                                                      ),
+                                                      const Gap(20),
+                                                      Expanded(
+                                                        child: ListView.builder(
+                                                          itemCount: actions.length,
+                                                          itemBuilder: (context, indexj) {
+                                                            final act = actions[indexj];
+                                                            return ListTile(
+                                                              leading: act['icon'] as Icon,
+                                                              title: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(act['name'] as String),
+                                                                  Divider( height: 1, color: Colors.grey,)
+                                                                ],
+                                                              ),
+                                                              onTap: () async {
+                                                                await ListAction(context, act['val'] as int, meo.libraries[index].name);
+                                                              },
+                                                            );
+                                                          }
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              }
+                                            );
+                                          },)
                                         ],
                                       ),
                                       const Gap(10),
