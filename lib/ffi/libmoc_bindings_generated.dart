@@ -369,4 +369,12 @@ class LibmocBindings {
   ffi.Pointer<Utf8> msourceLibrarySetDefault(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _msourceLibrarySetDefault(ID, name);}
   late final msourceLibrarySetDefaultPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('msourceLibrarySetDefault');
   late final _msourceLibrarySetDefault = msourceLibrarySetDefaultPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+
+  ffi.Pointer<Utf8> msourceLibraryDelete(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, bool force) {return _msourceLibraryDelete(ID, name, force);}
+  late final msourceLibraryDeletePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Bool force)>>('msourceLibraryDelete');
+  late final _msourceLibraryDelete = msourceLibraryDeletePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, bool force)>();
+
+  ffi.Pointer<Utf8> msourceLibraryMerge(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst) {return _msourceLibraryMerge(ID, libsrc, libdst);}
+  late final msourceLibraryMergePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst)>>('msourceLibraryMerge');
+  late final _msourceLibraryMerge = msourceLibraryMergePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst)>();
 }

@@ -460,6 +460,45 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
     ) ?? false;
   }
 
+  Future<String?> confirmMerge(BuildContext context, String libname) async {
+    String destStore = meo.libraries.firstWhere((lib) => lib.name != libname).name;
+    return await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setDialogState) {
+            return AlertDialog(
+              title: Text('合并 ${libname}'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('请选择目标媒体库'),
+                  DropdownButton(
+                    items: meo.libraries.where((lib) => lib.name != libname).map((MsourceLibrary store) {
+                        return DropdownMenuItem(child: Text(store.name), value: store.name);
+                    }).toList(),
+                    value: destStore,
+                    onChanged: (String? val) async {
+                      if (val is String) {
+                        setDialogState(() {
+                          destStore = val;
+                        });  
+                      }
+                    }
+                  )
+                ],
+              ),
+              actions: [
+                TextButton(onPressed: (){Navigator.of(context).pop(destStore);}, child: Text('确定')),
+                TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
+              ]
+            );
+          }
+        );
+      }
+    );
+  }
+
   Future<void> ListAction(BuildContext context, int action, String libname) async {
     switch (action) {
       case 0:
@@ -562,6 +601,97 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
             duration: Duration(seconds: 3)
           ));
         }
+      break;
+      case 4:
+        // 删除媒体库
+        int libindex = meo.libraries.indexWhere((lib) => lib.name == libname);
+        bool containMedia = false;
+        if (libindex != -1) {
+          if (meo.libraries[libindex].countTrack > 0) containMedia = true;
+        }
+        if (containMedia) {
+          bool confirm = await confirmDialog(context, '确认删除媒体库 ${libname} 中所有文件？\n\n 删除后不可恢复');
+          if (confirm) {
+            libmoc.omusicClearStore(Global.profile.msourceID, libname);
+            String res = libmoc.msourceLibraryDelete(Global.profile.msourceID, libname, true);
+            if (res.isEmpty) {
+              await libmoc.mnetStoreList(Global.profile.msourceID);
+              setState(() {
+                meo.libraries.removeAt(libindex);
+              });
+              Navigator.of(context).pop();
+            } else {
+              await showDialog(
+                context: context, 
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('提示'),
+                    content: Text(res),
+                    actions:<Widget> [
+                      TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                    ]
+                  );
+                }
+              );
+            }
+          }
+        } else {
+          // 空的媒体库，直接删掉
+          String res = libmoc.msourceLibraryDelete(Global.profile.msourceID, libname, false);
+          if (res.isEmpty) {
+            await libmoc.mnetStoreList(Global.profile.msourceID);
+            setState(() {
+              meo.libraries.removeAt(libindex);
+            });
+            Navigator.of(context).pop();
+          } else {
+            await showDialog(
+              context: context, 
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('提示'),
+                  content: Text(res),
+                  actions:<Widget> [
+                    TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                  ]
+                );
+              }
+            );
+          }
+        }
+      break;
+      case 5:
+        // 合并媒体库
+        int libindex = meo.libraries.indexWhere((lib) => lib.name == libname);
+        String? destStore = await confirmMerge(context, libname);
+        print("xxx ${libname} ${destStore}");
+        if (destStore != null) {
+          //libmoc.omusicClearStore(Global.profile.msourceID, libname);
+          String res = libmoc.msourceLibraryMerge(Global.profile.msourceID, libname, destStore);
+          if (res.isEmpty) {
+            await libmoc.mnetStoreList(Global.profile.msourceID);
+            setState(() {
+              meo.libraries.removeAt(libindex);
+            });
+            Navigator.of(context).pop();
+          } else {
+            await showDialog(
+              context: context, 
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('提示'),
+                  content: Text(res),
+                  actions:<Widget> [
+                    TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                  ]
+                );
+              }
+            );
+          }
+        }
+      break;
+      case 6:
+        // 添加 u 盘媒体文件
       break;
       default:
         print('暂未实现');
@@ -689,12 +819,13 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                               context: context, 
                                               builder: (BuildContext context) {
                                                 final actions = [
-                                                  {'name': '重命名',         'val': 0, 'icon': Icon(Icons.edit)},
                                                   {'name': '设为默认媒体库',  'val': 1, 'icon': Icon(Icons.check)},
+                                                  {'name': '重命名',         'val': 0, 'icon': Icon(Icons.edit)},
                                                   {'name': '全部缓存至本地',  'val': 2, 'icon': Icon(Icons.sync)},
                                                   {'name': '清除本地缓存',    'val': 3, 'icon': Icon(Icons.delete_outline)},
+                                                  {'name': '合并媒体库',      'val': 5, 'icon': Icon(Icons.merge)},
                                                   {'name': '删除媒体库',      'val': 4, 'icon': Icon(Icons.delete_forever)},
-                                                  {'name': '添加U盘媒体文件', 'val': 5, 'icon': Icon(Icons.usb)},
+                                                  {'name': '添加U盘媒体文件', 'val': 6, 'icon': Icon(Icons.usb)},
                                                 ];
                                                 return Padding(
                                                   padding: const EdgeInsets.all(20),

@@ -133,6 +133,24 @@ String msourceLibrarySetDefault(String ID, String name) {
   return outputs;
 }
 
+String msourceLibraryDelete(String ID, String name, bool force) {
+  final Pointer<Utf8> result = _bindings.msourceLibraryDelete(ID.toNativeUtf8(), name.toNativeUtf8(), force);
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+  }
+  return outputs;
+}
+
+String msourceLibraryMerge(String ID, String libsrc, String libdst) {
+  final Pointer<Utf8> result = _bindings.msourceLibraryMerge(ID.toNativeUtf8(), libsrc.toNativeUtf8(), libdst.toNativeUtf8());
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+  }
+  return outputs;
+}
+
 int mocInit(String dir) => _bindings.mnetStart(dir.toNativeUtf8());
 int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFunction<Void Function(Int)>> callback) {
   final Pointer<Utf8> c_id = ID.toNativeUtf8();
