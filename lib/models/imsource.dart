@@ -4,10 +4,10 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/omusic_playing.dart';
+import 'package:mpocket/views/index_usb.dart';
 
 
 typedef NativePlayInfoCallback = Void Function(Pointer<Utf8>, Int, Pointer<Utf8>, Pointer<Utf8>);
@@ -190,7 +190,7 @@ class IMnotify extends ChangeNotifier {
           title: Text('U盘已连接'),
           content: Text('现在去同步媒体文件？'),
           actions: [
-            TextButton(onPressed: (){Navigator.of(context).pop(); context.go('/msource');}, child: Text('确定')),
+            TextButton(onPressed: (){Navigator.of(context).pop(); pickUSBFolder(context);}, child: Text('确定')),
             TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
           ]
         );
