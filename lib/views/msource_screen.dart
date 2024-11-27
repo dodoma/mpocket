@@ -398,12 +398,6 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // 关闭对话框
-              },
-              child: Text('取消'),
-            ),
-            TextButton(
               onPressed: () async {
                 if (newItemName.isNotEmpty) {
                   //bool exist = false;  
@@ -437,6 +431,13 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                 }
               },
               child: Text('确认'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 关闭对话框
+              },
+              child: Text('取消'),
+              style: TextButton.styleFrom(foregroundColor: Colors.grey),              
             ),
           ],
         );
@@ -514,7 +515,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
               ),
               actions: [
                 TextButton(
-                  child: Text('确认'),
+                  child: Text('确定'),
                   onPressed: () async {
                     String res = libmoc.msourceLibraryRename(Global.profile.msourceID, libname, namectl.text);
                     await showDialog(
@@ -543,6 +544,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                 ),
                 TextButton(
                   child: Text('取消'),
+                  style: TextButton.styleFrom(foregroundColor: Colors.grey),
                   onPressed: () {
                     Navigator.of(context).pop(); // 关闭对话框
                   },
@@ -595,7 +597,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         if (confirm) {
           Navigator.of(context).pop();
 
-          int delnum = libmoc.omusicClearStore(Global.profile.msourceID, libname);
+          int delnum = libmoc.omusicClearStore(Global.profile.msourceID, libname, false);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('成功删除 ${delnum} 个文件'),
             duration: Duration(seconds: 3)
@@ -612,7 +614,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         if (containMedia) {
           bool confirm = await confirmDialog(context, '确认删除媒体库 ${libname} 中所有文件？\n\n 删除后不可恢复');
           if (confirm) {
-            libmoc.omusicClearStore(Global.profile.msourceID, libname);
+            libmoc.omusicClearStore(Global.profile.msourceID, libname, true);
             String res = libmoc.msourceLibraryDelete(Global.profile.msourceID, libname, true);
             if (res.isEmpty) {
               await libmoc.mnetStoreList(Global.profile.msourceID);
@@ -637,6 +639,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
           }
         } else {
           // 空的媒体库，直接删掉
+          libmoc.omusicClearStore(Global.profile.msourceID, libname, true);
           String res = libmoc.msourceLibraryDelete(Global.profile.msourceID, libname, false);
           if (res.isEmpty) {
             await libmoc.mnetStoreList(Global.profile.msourceID);
@@ -666,7 +669,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         String? destStore = await confirmMerge(context, libname);
         print("xxx ${libname} ${destStore}");
         if (destStore != null) {
-          //libmoc.omusicClearStore(Global.profile.msourceID, libname);
+          libmoc.omusicClearStore(Global.profile.msourceID, libname, true);
           String res = libmoc.msourceLibraryMerge(Global.profile.msourceID, libname, destStore);
           if (res.isEmpty) {
             await libmoc.mnetStoreList(Global.profile.msourceID);
@@ -823,8 +826,8 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                                   {'name': '重命名',         'val': 0, 'icon': Icon(Icons.edit)},
                                                   {'name': '全部缓存至本地',  'val': 2, 'icon': Icon(Icons.sync)},
                                                   {'name': '清除本地缓存',    'val': 3, 'icon': Icon(Icons.delete_outline)},
-                                                  {'name': '合并媒体库',      'val': 5, 'icon': Icon(Icons.merge)},
                                                   {'name': '删除媒体库',      'val': 4, 'icon': Icon(Icons.delete_forever)},
+                                                  {'name': '合并媒体库',      'val': 5, 'icon': Icon(Icons.merge)},
                                                   {'name': '添加U盘媒体文件', 'val': 6, 'icon': Icon(Icons.usb)},
                                                 ];
                                                 return Padding(

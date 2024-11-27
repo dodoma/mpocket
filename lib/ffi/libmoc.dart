@@ -185,7 +185,7 @@ int mnetDragTO(String ID, double percent) => _bindings.mnetDragTO(ID.toNativeUtf
 int mnetStoreList(String ID) => _bindings.mnetStoreList(ID.toNativeUtf8());
 
 int omusicSyncStore(String ID, String name) => _bindings.omusicSyncStore(ID.toNativeUtf8(), name.toNativeUtf8());
-int omusicClearStore(String ID, String name) => _bindings.omusicClearStore(ID.toNativeUtf8(), name.toNativeUtf8());
+int omusicClearStore(String ID, String name, bool rmdir) => _bindings.omusicClearStore(ID.toNativeUtf8(), name.toNativeUtf8(), rmdir);
 int omusicSyncArtist(String ID, String name) => _bindings.omusicSyncArtist(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicClearArtist(String ID, String name) => _bindings.omusicClearArtist(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicSyncAlbum(String ID, String name, String title) => _bindings.omusicSyncAlbum(ID.toNativeUtf8(), name.toNativeUtf8(), title.toNativeUtf8());

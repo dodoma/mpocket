@@ -330,9 +330,9 @@ class LibmocBindings {
   late final omusicSyncStorePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicSyncStore');
   late final _omusicSyncStore = omusicSyncStorePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
 
-  int omusicClearStore(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicClearStore(ID, name);}
-  late final omusicClearStorePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicClearStore');
-  late final _omusicClearStore = omusicClearStorePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
+  int omusicClearStore(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, bool rmdir) {return _omusicClearStore(ID, name, rmdir);}
+  late final omusicClearStorePtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, ffi.Bool rmdir)>>('omusicClearStore');
+  late final _omusicClearStore = omusicClearStorePtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name, bool rmdir)>();
 
   int omusicSyncArtist(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicSyncArtist(ID, name);}
   late final omusicSyncArtistPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicSyncArtist');
