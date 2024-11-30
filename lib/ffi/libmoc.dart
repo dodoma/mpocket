@@ -106,6 +106,14 @@ String msourceHome(String ID) {
   return outputs;
 }
 
+String msourceDirectoryInfo(String ID, String pathname) {
+  final Pointer<Utf8> result = _bindings.msourceDirectoryInfo(ID.toNativeUtf8(), pathname.toNativeUtf8());
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+  }
+  return outputs;
+}
 String msourceLibraryCreate(String ID, String name) {
   final Pointer<Utf8> result = _bindings.msourceLibraryCreate(ID.toNativeUtf8(), name.toNativeUtf8());
   String outputs = "";
@@ -150,6 +158,8 @@ String msourceLibraryMerge(String ID, String libsrc, String libdst) {
   }
   return outputs;
 }
+
+int msourceMediaCopy(String ID, String mediapath, String storename, bool recursive) => _bindings.msourceMediaCopy(ID.toNativeUtf8(), mediapath.toNativeUtf8(), storename.toNativeUtf8(), recursive);
 
 int mocInit(String dir) => _bindings.mnetStart(dir.toNativeUtf8());
 int wifiSet(String ID, String ap, String pass, String name, Pointer<NativeFunction<Void Function(Int)>> callback) {

@@ -358,6 +358,10 @@ class LibmocBindings {
   late final msourceHomePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('msourceHome');
   late final _msourceHome = msourceHomePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
 
+  ffi.Pointer<Utf8> msourceDirectoryInfo(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>path) {return _msourceDirectoryInfo(ID, path);}
+  late final msourceDirectoryInfoPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>path)>>('msourceDirectoryInfo');
+  late final _msourceDirectoryInfo = msourceDirectoryInfoPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>path)>();
+
   ffi.Pointer<Utf8> msourceLibraryCreate(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _msourceLibraryCreate(ID, name);}
   late final msourceLibraryCreatePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('msourceLibraryCreate');
   late final _msourceLibraryCreate = msourceLibraryCreatePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();
@@ -377,4 +381,8 @@ class LibmocBindings {
   ffi.Pointer<Utf8> msourceLibraryMerge(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst) {return _msourceLibraryMerge(ID, libsrc, libdst);}
   late final msourceLibraryMergePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst)>>('msourceLibraryMerge');
   late final _msourceLibraryMerge = msourceLibraryMergePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst)>();
+
+  int msourceMediaCopy(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>mediapath, ffi.Pointer<Utf8>storename, bool recursive) {return _msourceMediaCopy(ID, mediapath, storename, recursive);}
+  late final _msourceMediaCopyPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>mediapath, ffi.Pointer<Utf8>storename, ffi.Bool recursive)>>('msourceMediaCopy');
+  late final _msourceMediaCopy = _msourceMediaCopyPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>mediapath, ffi.Pointer<Utf8>storename, bool recursive)>();
 }

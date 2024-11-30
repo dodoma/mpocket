@@ -11,6 +11,7 @@ import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/msource.dart';
+import 'package:mpocket/views/index_usb.dart';
 import 'package:provider/provider.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
@@ -796,7 +797,12 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                 Text('\\\\${meo.shareLocation}'),
                                 Spacer(),
                                 if (meo.usbON) 
-                                  Text('U盘已连接')
+                                  GestureDetector(
+                                    child: Text('导入U盘文件', style: TextStyle(color: Colors.green), overflow: TextOverflow.ellipsis, maxLines: 1,),
+                                    onTap: () async {
+                                      pickUSBFolder(context);
+                                    },
+                                  ),
                               ],  
                             ),
                             Divider(

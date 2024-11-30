@@ -390,8 +390,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                   _showSnackBar(context);
                 },),
                 IconButton(icon: Icon(Icons.shuffle, size: 32), onPressed: () {
-                  //sleep(Duration(seconds: 2));
-                  //context.read<IMsource>().bindPlayInfo();
+                  //pickUSBFolder(context);
                   if (Global.profile.phonePlay) context.read<IMlocal>().playLibrary(context);
                   else libmoc.mnetPlay(Global.profile.msourceID);
                 },),
@@ -456,11 +455,20 @@ class ArtistTile extends StatelessWidget {
     double bigd = cachePercent * 1000;
     int bigi = bigd.toInt();
     int num = bigi - bigi % 100;
+    ImageProvider headimg = AssetImage('assets/image/artist_cover.jpg');
+    try {
+      File file = File(head);
+      if (file.existsSync()) {
+        headimg = FileImage(file);
+      }
+    } catch (e) {
+      //
+    }
     return InkWell(
       child: Column(
         children: [
           CircleAvatar(
-            backgroundImage: FileImage(File(head)),
+            backgroundImage: headimg,
             radius: 35,
           ),
           const Gap(5),
