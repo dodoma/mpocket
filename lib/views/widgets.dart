@@ -274,7 +274,7 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
     final String location = GoRouterState.of(context).uri.toString();
     double progress = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;
 
-    if (location != "/local_playing" && url != null) {      
+    if (location != "/local_playing" && url != null && mdata != null) {      
       return Container(
         width: MediaQuery.of(context).size.width,
         child: InkWell(

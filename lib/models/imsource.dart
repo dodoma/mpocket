@@ -27,8 +27,12 @@ class IMsource extends ChangeNotifier {
       if (responsePtr != nullptr) {
         String response = responsePtr.cast<Utf8>().toDartString();
         print('on play INFO response ${response}');
-        if (response != "null") {
-          updateListenTrack(OmusicPlaying.fromJson(jsonDecode(response)));  
+        try {
+          if (response != "null") {
+            updateListenTrack(OmusicPlaying.fromJson(jsonDecode(response)));  
+          }
+        } catch (e) {
+          //
         }
       }
       //callback.close();
@@ -67,13 +71,14 @@ class IMbanner extends ChangeNotifier {
     late final  NativeCallable<NativeReceivingCallback> callback;
 
     void onResponse(Pointer<Utf8> id, Pointer<Utf8> filename) {
-      String sid = id.cast<Utf8>().toDartString();
-      String sname = filename.cast<Utf8>().toDartString();
-      //print("${sid} receiving ${sname}");
-
-      _busyVisible = 1;
-      receivingFile = sname;
-      notifyListeners();
+      try {
+        String sname = filename.cast<Utf8>().toDartString();
+        _busyVisible = 1;
+        receivingFile = sname;
+        notifyListeners();
+      } catch (e) {
+        print('xxxxxx FileReceiving filename decode failure');
+      }
     }
 
     callback = NativeCallable<NativeReceivingCallback>.listener(onResponse);
@@ -85,13 +90,15 @@ class IMbanner extends ChangeNotifier {
     late final  NativeCallable<NativeReceivingCallback> callback;
 
     void onResponse(Pointer<Utf8> id, Pointer<Utf8> filename) {
-      String sid = id.cast<Utf8>().toDartString();
-      String sname = filename.cast<Utf8>().toDartString();
-      //print("${sid} received ${sname}");
+      try {
+        String sname = filename.cast<Utf8>().toDartString();
 
-      _busyVisible = 2;
-      receivingFile = sname;
-      notifyListeners();
+        _busyVisible = 2;
+        receivingFile = sname;
+        notifyListeners();
+      } catch (e) {
+        print('xxxxxx FileReceived filename decode failure');
+      }
     }
 
     callback = NativeCallable<NativeReceivingCallback>.listener(onResponse);

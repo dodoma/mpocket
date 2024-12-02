@@ -359,10 +359,14 @@ class _showMusicScreenState extends State<showMusicScreen> {
                               libmoc.mnetStoreSwitch(Global.profile.msourceID, val);
                               await libmoc.mnetStoreSync(Global.profile.msourceID, val);
                               String emos = libmoc.omusicHome(Global.profile.msourceID);
+                              try {
                               setState(() {
                                 meo = Omusic.fromJson(jsonDecode(emos));
                                 _dftStore = val;
                               });  
+                              } catch (e) {
+                                print("xxxxxx emos decode error");
+                              }
                             }
                           }
                         )
