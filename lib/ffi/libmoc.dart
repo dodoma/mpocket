@@ -225,6 +225,8 @@ int mnetOnReceiving(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<
 int mnetOnFileReceived(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Pointer<Utf8>)>> callback) => _bindings.mnetOnFileReceived(callback);
 int mnetOnReceiveDone(Pointer<NativeFunction<Void Function(Pointer<Utf8>, Int)>> callback) => _bindings.mnetOnReceiveDone(callback);
 int mnetOnUdiskMount(Pointer<NativeFunction<Void Function(Pointer<Utf8>)>> callback) => _bindings.mnetOnUdiskMount(callback);
+int mnetOnFree(Pointer<NativeFunction<Void Function(Pointer<Utf8>)>> callback) => _bindings.mnetOnFree(callback);
+int mnetOnBusyIndexing(Pointer<NativeFunction<Void Function(Pointer<Utf8>)>> callback) => _bindings.mnetOnBusyIndexing(callback);
 
 /// A longer lived native function, which occupies the thread calling it.
 ///

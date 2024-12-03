@@ -229,6 +229,26 @@ class LibmocBindings {
       ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>)
       >();
 
+  int mnetOnFree(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>callback) {return _mnetOnFree(callback);}
+  late final _mnetOnFreePtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>)
+    >>('mnetOnFree');
+  late final _mnetOnFree = _mnetOnFreePtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>)
+      >();
+
+  int mnetOnBusyIndexing(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>callback) {return _mnetOnBusyIndexing(callback);}
+  late final _mnetOnBusyIndexingPtr = _lookup<
+    ffi.NativeFunction<ffi.Int 
+      Function(ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>)
+    >>('mnetOnBusyIndexing');
+  late final _mnetOnBusyIndexing = _mnetOnBusyIndexingPtr.asFunction<
+    int Function(
+      ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Utf8>)>>)
+      >();
+
 
 
   int mnetSetShuffle(ffi.Pointer<Utf8>ID, int shuffle) {return _mnetSetShuffle(ID, shuffle);}

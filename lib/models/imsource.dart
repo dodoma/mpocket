@@ -15,6 +15,8 @@ typedef NativeServerClosedCallback = Void Function(Pointer<Utf8>, Int);
 typedef NativeReceivingCallback = Void Function(Pointer<Utf8>, Pointer<Utf8>);
 typedef NativeReceiveDoneCallback = Void Function(Pointer<Utf8>, Int);
 typedef NativeUdiskMountCallback = Void Function(Pointer<Utf8>);
+typedef NativeFreeCallback = Void Function(Pointer<Utf8>);
+typedef NativeBusyIndexingCallback = Void Function(Pointer<Utf8>);
 
 class IMsource extends ChangeNotifier {
   bool setting = false;
@@ -25,14 +27,14 @@ class IMsource extends ChangeNotifier {
     print("bind PLAYINFO");
     void onResponse(Pointer<Utf8> client, int ok, Pointer<Utf8> errmsgPtr, Pointer<Utf8> responsePtr) {
       if (responsePtr != nullptr) {
-        String response = responsePtr.cast<Utf8>().toDartString();
-        print('on play INFO response ${response}');
         try {
+          String response = responsePtr.cast<Utf8>().toDartString();
+          print('on play INFO response ${response}');
           if (response != "null") {
             updateListenTrack(OmusicPlaying.fromJson(jsonDecode(response)));  
           }
         } catch (e) {
-          //
+          print("xxxxxx PLAYINFO response decode failure");
         }
       }
       //callback.close();
@@ -131,6 +133,30 @@ class IMbanner extends ChangeNotifier {
     });
   }
 
+  void bindFree() {
+    print("bind Free");
+    late final NativeCallable<NativeFreeCallback> callback;
+    void onResponse(Pointer<Utf8> id) {
+      print("msource free");
+      _busyVisible = 0;
+      notifyListeners();
+    }
+    callback = NativeCallable<NativeFreeCallback>.listener(onResponse);
+    libmoc.mnetOnFree(callback.nativeFunction);
+  }
+
+  void bindBusyIndexing() {
+    print("bind BusyIndexing");
+    late final NativeCallable<NativeBusyIndexingCallback> callback;
+    void onResponse(Pointer<Utf8> id) {
+      print("msource busyIndexing");
+      receivingFile = '正在更新媒体库索引';
+      _busyVisible = 4;
+      notifyListeners();
+    }
+    callback = NativeCallable<NativeBusyIndexingCallback>.listener(onResponse);
+    libmoc.mnetOnBusyIndexing(callback.nativeFunction);
+  }
 }
 
 class IMonline extends ChangeNotifier {

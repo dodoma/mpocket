@@ -834,7 +834,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                                   {'name': '清除本地缓存',    'val': 3, 'icon': Icon(Icons.delete_outline)},
                                                   {'name': '删除媒体库',      'val': 4, 'icon': Icon(Icons.delete_forever)},
                                                   {'name': '合并媒体库',      'val': 5, 'icon': Icon(Icons.merge)},
-                                                  {'name': '添加U盘媒体文件', 'val': 6, 'icon': Icon(Icons.usb)},
+                                                  //{'name': '添加U盘媒体文件', 'val': 6, 'icon': Icon(Icons.usb)},
                                                 ];
                                                 return Padding(
                                                   padding: const EdgeInsets.all(20),

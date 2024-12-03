@@ -274,7 +274,7 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
     final String location = GoRouterState.of(context).uri.toString();
     double progress = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;
 
-    if (location != "/local_playing" && url != null && mdata != null) {      
+    if (location != "/local_playing" && url != null) {      
       return Container(
         width: MediaQuery.of(context).size.width,
         child: InkWell(
@@ -304,8 +304,8 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(mdata!.trackName!, textScaler: TextScaler.linear(1.2), overflow: TextOverflow.ellipsis,),
-                            Text(mdata.firstArtists!)
+                            Text((mdata == null || mdata.trackName == null) ? '未知曲目' : mdata.trackName!, textScaler: TextScaler.linear(1.2), overflow: TextOverflow.ellipsis,),
+                            Text((mdata == null || mdata.firstArtists == null) ? '未知艺术家' : mdata.firstArtists!)
                           ],
                         ),
                       ),
@@ -365,6 +365,7 @@ class _ImBusyState extends State<ImBusy> with SingleTickerProviderStateMixin {
       vsync: this,
     )..repeat(reverse: false);
 
+
     // 垂直向下平移的动画
     _slideAnimation = Tween<Offset>(
       begin: Offset(0, 0),
@@ -384,23 +385,36 @@ class _ImBusyState extends State<ImBusy> with SingleTickerProviderStateMixin {
     String filename = context.read<IMbanner>().receivingFile;
     return Row(
       children: [
-        Expanded(flex: 9, child: widget.visible == 1 || widget.visible == 2 ? Text(filename) : Text('完成 ${filename} 个文件缓存至本地')),
+        Expanded(
+          flex: 9,
+          child: (widget.visible == 1 || widget.visible == 2 || widget.visible == 4) 
+            ? Text(filename) 
+            : Text('完成 ${filename} 个文件缓存至本地')
+        ),
         Expanded(
           flex: 1, 
           child: 
-          widget.visible == 1 ?
-            ClipRect(child: Container(
-              child: SlideTransition(
-                position: _slideAnimation,
-                child: Icon(Icons.download, color: Colors.green,)
-              ),
-              width: 32,
-              height: 32,
-            ))
+          widget.visible == 1
+            ? ClipRect(child: Container(
+                child: SlideTransition(
+                  position: _slideAnimation,
+                  child: Icon(Icons.download, color: Colors.green,)
+                ),
+                width: 32,
+                height: 32,
+              ))
           : widget.visible == 2 ?
             Icon(Icons.check, color: Colors.green,)
           : widget.visible == 3 ?
             Icon(Icons.check, color: Colors.green,)
+          : widget.visible == 4 ?
+              AnimatedBuilder(
+                animation: _controller,
+                builder: (context, child) {
+                  //return RotationTransition(turns: _controller, child: CircleAvatar(backgroundImage: AssetImage('assets/image/artist_cover.jpg'), radius: 32,));
+                  return RotationTransition(turns: _controller, child: Icon(Icons.refresh, color: Colors.green,));
+                },
+              )
           : SizedBox.shrink()
         )
       ],

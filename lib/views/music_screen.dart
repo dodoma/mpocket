@@ -122,6 +122,8 @@ class _MusicScreenState extends State<MusicScreen> {
                     context.read<IMbanner>().bindReceiving();
                     context.read<IMbanner>().bindFileReceived();
                     context.read<IMbanner>().bindReceiveDone();
+                    context.read<IMbanner>().bindFree();
+                    context.read<IMbanner>().bindBusyIndexing();
                     context.read<IMnotify>().bindUdiskMount();
                     Global.profile.msourceID = value.data!;
                     Global.profile.storeDir = Global.profile.appDir + "/${value.data}/";
@@ -191,7 +193,12 @@ class _showMusicScreenState extends State<showMusicScreen> {
       List<dynamic> jsonData = jsonDecode(emot);
       setState(() {
         if (emos.isEmpty) {meo = Omusic(); meo.deviceID = "";}
-        else meo = Omusic.fromJson(jsonDecode(emos));
+        else {
+          meo = Omusic.fromJson(jsonDecode(emos));
+          meo.artists.sort((a, b) {
+            return a.name.compareTo(b.name);
+          });
+        }
         storelist = jsonData.map((obj) => OmusicStore.fromJson(obj)).toList();
         _dftStore = storelist.firstWhere((store) => store.moren == true).name;
         _isLoading = false;
@@ -373,7 +380,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                       ],
                     ),
                     const Gap(2),
-                    Text('${meo.countAlbum} 位艺术家  ${meo.countAlbum} 张专辑  ${meo.countTrack} 首歌曲', textScaler: TextScaler.linear(0.6))
+                    Text('${meo.countArtist} 位艺术家  ${meo.countAlbum} 张专辑  ${meo.countTrack} 首歌曲', textScaler: TextScaler.linear(0.6))
                   ],
                 ),
                 Spacer(),

@@ -42,6 +42,9 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
     Duration duration = context.watch<IMlocal>().duration;
     Duration position = context.watch<IMlocal>().position;
     double volume = context.read<IMlocal>().volume;
+    String trackName = (mdata == null || mdata.trackName == null) ? '未知曲目': mdata.trackName!;
+    String artistName = (mdata == null || mdata.firstArtists == null) ? '未知艺术家' : mdata.firstArtists!;
+    String albumName = (mdata == null || mdata.album == null) ? '未知专辑' : mdata.album!;
 
     double fval = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;
     if (!_dragging && fval >= 0.0 && fval <= 1.0) progress.add(fval);
@@ -76,23 +79,23 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,  
                       children: [
-                        Text(mdata!.trackName!, textScaler: TextScaler.linear(1.6), overflow: TextOverflow.ellipsis, maxLines: 3,),  
+                        Text(trackName, textScaler: TextScaler.linear(1.6), overflow: TextOverflow.ellipsis, maxLines: 3,),  
                         Row(
                           children: [
                             GestureDetector(
-                              child: Text(mdata.firstArtists!, style: TextStyle(color: Colors.green)),
+                              child: Text(artistName, style: TextStyle(color: Colors.green)),
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => MusicArtistScreen(artist: mdata.firstArtists!)
+                                  builder: (context) => MusicArtistScreen(artist: artistName)
                                 ));
                               },
                             ),
                             Text('   ·   '),
                             GestureDetector(
-                              child: SizedBox(child: Text(mdata.album!, style: TextStyle(color: Colors.green), overflow: TextOverflow.ellipsis, maxLines: 1,), width: 180,),
+                              child: SizedBox(child: Text(albumName, style: TextStyle(color: Colors.green), overflow: TextOverflow.ellipsis, maxLines: 1,), width: 180,),
                               onTap: (){
                                 Navigator.push(context, MaterialPageRoute(
-                                  builder: (context) => MusicAlbumScreen(artist: mdata.firstArtists!, album: mdata.album!,)
+                                  builder: (context) => MusicAlbumScreen(artist: artistName, album: albumName,)
                                 ));
                               },
                             ),
