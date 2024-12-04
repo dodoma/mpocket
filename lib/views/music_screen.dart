@@ -14,6 +14,7 @@ import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/omusic.dart';
 import 'package:mpocket/models/omusicstore.dart';
 import 'package:mpocket/views/music_artist_screen.dart';
+import 'package:mpocket/views/search.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -162,7 +163,6 @@ class _showMusicScreenState extends State<showMusicScreen> {
   late List<OmusicStore> storelist;
   bool phonePlay = Global.profile.phonePlay;
   String _dftStore = Global.profile.defaultLibrary.isEmpty ? "默认媒体库" : Global.profile.defaultLibrary;
-  List<String> filteredItems = ['aa', 'bb', 'cc'];
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
 
@@ -224,7 +224,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
     super.dispose();
   }
 
-  void showOverlay(BuildContext context) {
+  void showOverlay(BuildContext context, String query) {
     if (_overlayEntry != null) _overlayEntry!.remove();
 
     _overlayEntry = OverlayEntry(
@@ -243,25 +243,14 @@ class _showMusicScreenState extends State<showMusicScreen> {
                 //minChildSize: 0.2,
                 //maxChildSize: 1.0,
                 builder: (context, scrollController) {
-                  return ListView.builder(
-                    //shrinkWrap: true,  
-                    //physics: ClampingScrollPhysics(),
-                    controller: scrollController,
-                    itemCount: filteredItems.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(filteredItems[index]),
-                        onTap: (){
-                          print('select item ${filteredItems[index]}');
-                          _overlayEntry?.remove();
-                          _overlayEntry = null;
-                        },
-                      );
-                    }
+                  return MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    child: SearchTab(query: query)
                   );
                 }
               )
-            ),
+            )
           )
         );
       }
@@ -271,13 +260,9 @@ class _showMusicScreenState extends State<showMusicScreen> {
   }
 
   void searchMusic(value) {
-    filteredItems.add(value);
-    filteredItems.add('Santana');
-    filteredItems.add('Black Pink');
-    
-    if (filteredItems.isNotEmpty) {
-      showOverlay(context);
-    } else {
+    if (value.isNotEmpty) {
+      showOverlay(context, value);
+    } else {  
       _overlayEntry?.remove();
       _overlayEntry = null;  
     }
@@ -307,7 +292,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
   else return Container(
     // 页面一大框
     width: widget.maxWidth,
-    margin: EdgeInsets.only(top:10, bottom: 10),
+    margin: EdgeInsets.only(top:50, bottom: 10),
     child: Column(
       //mainAxisSize: MainAxisSize.min,
       children: [
@@ -326,7 +311,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
               ),
             ),
           ),
-          const Gap(20),
+          const Gap(10),
           Container(
             // 第二坨
             padding: EdgeInsets.all(10),

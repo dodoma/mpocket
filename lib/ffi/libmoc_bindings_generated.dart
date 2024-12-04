@@ -322,6 +322,10 @@ class LibmocBindings {
   late final omusicHomePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>>('omusicHome');
   late final _omusicHome = omusicHomePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID)>();
 
+  ffi.Pointer<Utf8> omusicSearch(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>query) {return _omusicSearch(ID, query);}
+  late final omusicSearchPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>query)>>('omusicSearch');
+  late final _omusicSearch = omusicSearchPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>query)>();
+
   ffi.Pointer<Utf8> omusicArtist(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name) {return _omusicArtist(ID, name);}
   late final omusicArtistPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>>('omusicArtist');
   late final _omusicArtist = omusicArtistPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>name)>();

@@ -38,6 +38,16 @@ String omusicHome(String ID) {
   return outputs;
 }
 
+String omusicSearch(String ID, String query) {
+  final Pointer<Utf8> result = _bindings.omusicSearch(ID.toNativeUtf8(), query.toNativeUtf8());
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+    calloc.free(result);
+  }
+  return outputs;
+}
+
 String omusicArtist(String ID, String name) {
   final Pointer<Utf8> result = _bindings.omusicArtist(ID.toNativeUtf8(), name.toNativeUtf8());
   String outputs = "";
