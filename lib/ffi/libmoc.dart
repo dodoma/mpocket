@@ -169,6 +169,15 @@ String msourceLibraryMerge(String ID, String libsrc, String libdst) {
   return outputs;
 }
 
+String msourceSetAutoPlay(String ID, bool autoplay) {
+  final Pointer<Utf8> result = _bindings.msourceSetAutoPlay(ID.toNativeUtf8(), autoplay);
+  String outputs = "";
+  if (result.address != nullptr.address) {
+    outputs = result.cast<Utf8>().toDartString();
+  }
+  return outputs;
+}
+
 int msourceMediaCopy(String ID, String mediapath, String storename, bool recursive) => _bindings.msourceMediaCopy(ID.toNativeUtf8(), mediapath.toNativeUtf8(), storename.toNativeUtf8(), recursive);
 
 int mocInit(String dir) => _bindings.mnetStart(dir.toNativeUtf8());

@@ -143,7 +143,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                   future: sourceID,
                   builder: (BuildContext context, AsyncSnapshot<String> value) {
                 if (value.hasData && searching == false) {
-                  if (value.data![0] == 'b') {
+                  if (value.data![0] == 'a') {
                     // 确保导航操作是在 build 结束后进行
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       // 检查当前的上下文是否依然有效（防止页面被销毁时仍然调用 Navigator）
@@ -182,7 +182,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                     items: [
                                       //...accessPoints.map((ap){return ap.ssid;}).toList(),
                                       ...accessPoints
-                                          .where((ap) => ap.ssid.isNotEmpty)
+                                          .where((ap) => ap.ssid.isNotEmpty && ap.ssid != 'AVM')
                                           .map((ap) {
                                         return ap.ssid;
                                       }).toList(),
@@ -261,13 +261,15 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                   }
 
                                   late final NativeCallable<NativeWifisetCallback> callback;
-                                  void onResponse(int succcess) {
+                                  void onResponse(int succcess) async {
                                     // Remember to close the NativeCallable once the native API is
                                     // finished with it, otherwise this isolate will stay alive
                                     // indefinitely.
                                     callback.close();
-                                    context.read<IMsource>().setting = true;
-                                    context.go('/music');
+                                    await Future.delayed(Duration(seconds: 3), () { //等待 close 事件回调后，再切换页面
+                                      context.read<IMsource>().setting = true;
+                                      context.go('/music');
+                                    });
                                   }
 
                                   callback = NativeCallable<NativeWifisetCallback>.listener(onResponse);
@@ -767,7 +769,20 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                             Text('开机自动播放'),
                             Spacer(),
                             Switch(
-                              onChanged : (bool value) {print('checked + ${value}');},
+                              onChanged : (bool value) {
+                                print('checked + ${value}');
+                                String res = libmoc.msourceSetAutoPlay(Global.profile.msourceID, !meo.autoPlay);
+                                if (res.isEmpty) {
+                                  setState(() {
+                                    meo.autoPlay = !meo.autoPlay;
+                                  });
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                    content: Text('设置自动播放失败 ${res}'),
+                                    duration: Duration(seconds: 3)
+                                  ));
+                                }
+                              },
                               value: meo.autoPlay
                             )
                           ],

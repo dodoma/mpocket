@@ -190,19 +190,23 @@ class _showMusicScreenState extends State<showMusicScreen> {
       libmoc.omusicStoreSelect(Global.profile.msourceID, Global.profile.defaultLibrary.isEmpty ? "默认媒体库" : Global.profile.defaultLibrary);
       String emos = libmoc.omusicHome(Global.profile.msourceID);
       String emot = libmoc.omusicStoreList(Global.profile.msourceID);
-      List<dynamic> jsonData = jsonDecode(emot);
-      setState(() {
-        if (emos.isEmpty) {meo = Omusic(); meo.deviceID = "";}
-        else {
-          meo = Omusic.fromJson(jsonDecode(emos));
-          meo.artists.sort((a, b) {
-            return a.name.compareTo(b.name);
-          });
-        }
-        storelist = jsonData.map((obj) => OmusicStore.fromJson(obj)).toList();
-        _dftStore = storelist.firstWhere((store) => store.moren == true).name;
-        _isLoading = false;
-      });
+      try {
+        List<dynamic> jsonData = jsonDecode(emot);
+        setState(() {
+          if (emos.isEmpty) {meo = Omusic(); meo.deviceID = "";}
+          else {
+            meo = Omusic.fromJson(jsonDecode(emos));
+            meo.artists.sort((a, b) {
+              return a.name.compareTo(b.name);
+            });
+          }
+          storelist = jsonData.map((obj) => OmusicStore.fromJson(obj)).toList();
+          _dftStore = storelist.firstWhere((store) => store.moren == true).name;
+          _isLoading = false;
+        });
+      } catch (e) {
+        print("store list failure");
+      }
       if (Global.profile.defaultLibrary != _dftStore) {
         print("GLOBAL set default library from ${Global.profile.defaultLibrary} to ${_dftStore}");
         Global.profile.defaultLibrary = _dftStore;

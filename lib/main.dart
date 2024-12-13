@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_service/flutter_foreground_service.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
@@ -17,10 +18,27 @@ void main() async {
   await Language.initialize(language: LanguageData(code: Global.profile.local, name: '', country: ''));
 
   runApp(const MainApp());
+  //startForegroundService();
 }
 
-class MainApp extends StatelessWidget {
+void startForegroundService() async {
+  ForegroundService().start();
+  debugPrint("Started FOREGROUND service");
+}
+
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
+
+  @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
+  void dispose() {
+    //ForegroundService().stop();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

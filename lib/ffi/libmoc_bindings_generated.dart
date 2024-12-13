@@ -406,6 +406,10 @@ class LibmocBindings {
   late final msourceLibraryMergePtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst)>>('msourceLibraryMerge');
   late final _msourceLibraryMerge = msourceLibraryMergePtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>libsrc, ffi.Pointer<Utf8>libdst)>();
 
+  ffi.Pointer<Utf8> msourceSetAutoPlay(ffi.Pointer<Utf8>ID, bool autoplay) {return _msourceSetAutoPlay(ID, autoplay);}
+  late final msourceSetAutoPlayPtr = _lookup<ffi.NativeFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, ffi.Bool autoplay)>>('msourceSetAutoPlay');
+  late final _msourceSetAutoPlay = msourceSetAutoPlayPtr.asFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<Utf8>ID, bool autoplay)>();
+
   int msourceMediaCopy(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>mediapath, ffi.Pointer<Utf8>storename, bool recursive) {return _msourceMediaCopy(ID, mediapath, storename, recursive);}
   late final _msourceMediaCopyPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>mediapath, ffi.Pointer<Utf8>storename, ffi.Bool recursive)>>('msourceMediaCopy');
   late final _msourceMediaCopy = _msourceMediaCopyPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>mediapath, ffi.Pointer<Utf8>storename, bool recursive)>();
