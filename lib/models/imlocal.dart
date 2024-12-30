@@ -14,7 +14,7 @@ class IMlocal extends ChangeNotifier {
   final random = Random();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
-  bool shuffle = false;
+  bool shuffle = true;
   double volume = 0.6;
 
   IMlocal() {

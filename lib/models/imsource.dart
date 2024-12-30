@@ -4,6 +4,7 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_foreground_service/flutter_foreground_service.dart';
 import 'package:mpocket/common/global.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/omusic_playing.dart';
@@ -54,6 +55,7 @@ class IMbanner extends ChangeNotifier {
   bool _isVisible = false;
   int _busyVisible = 0;
   String receivingFile = "";
+  bool foregroundServiceStarted = false;
 
   bool get isVisible => _isVisible;
   int get busyVisible => _busyVisible;
@@ -68,12 +70,21 @@ class IMbanner extends ChangeNotifier {
     notifyListeners();  
   }
 
+  void startForegroundService() async {
+    if (foregroundServiceStarted == false) {
+      foregroundServiceStarted = true;
+      ForegroundService().start();
+      debugPrint("Started FOREGROUND service");
+    }
+  }
+  
   void bindReceiving() {
     print("bind RECEIVING");
     late final  NativeCallable<NativeReceivingCallback> callback;
 
     void onResponse(Pointer<Utf8> id, Pointer<Utf8> filename) {
       try {
+        startForegroundService();  
         String sname = filename.cast<Utf8>().toDartString();
         _busyVisible = 1;
         receivingFile = sname;
@@ -162,12 +173,12 @@ class IMbanner extends ChangeNotifier {
 class IMonline extends ChangeNotifier {
   int online = 0;
 
-  void onOnline(id) async {
+  void onOnline(id, syncStore) async {
     print("device ${id} ONLINE");
     online = 1;
 
     await libmoc.mnetStoreList(id);
-    await libmoc.mnetStoreSync(id, Global.profile.defaultLibrary.isEmpty ? "默认媒体库" : Global.profile.defaultLibrary);
+    if (syncStore) await libmoc.mnetStoreSync(id, Global.profile.defaultLibrary.isEmpty ? "默认媒体库" : Global.profile.defaultLibrary);
   }
 
   void bindOffline() {
@@ -198,7 +209,7 @@ class IMonline extends ChangeNotifier {
       callback.close();
       bindOffline();
 
-      onOnline(sid);
+      onOnline(sid, true);
       online = 1;
       notifyListeners();
     }
@@ -223,7 +234,7 @@ class IMnotify extends ChangeNotifier {
           title: Text('U盘已连接'),
           content: Text('现在去同步媒体文件？'),
           actions: [
-            TextButton(onPressed: (){pickUSBFolder(context);}, child: Text('确定')),
+            TextButton(onPressed: (){pickUSBFolder(context); Navigator.of(context).pop();}, child: Text('确定')),
             TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
           ]
         );

@@ -308,6 +308,10 @@ class LibmocBindings {
   late final _mnetStoreSyncPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>>('mnetStoreSync');
   late final _mnetStoreSync = _mnetStoreSyncPtr.asFunction<int Function(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname)>();
 
+  int mnetCancelSync(ffi.Pointer<Utf8>ID) {return _mnetCancelSync(ID);}
+  late final _mnetCancelSyncPtr = _lookup<ffi.NativeFunction<ffi.Int Function(ffi.Pointer<Utf8>ID)>>('mnetCancelSync');
+  late final _mnetCancelSync = _mnetCancelSyncPtr.asFunction<int Function(ffi.Pointer<Utf8>ID)>();
+
 
 
   void omusicStoreSelect(ffi.Pointer<Utf8>ID, ffi.Pointer<Utf8>Libname) {return _omusicStoreSelect(ID, Libname);}

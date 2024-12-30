@@ -118,7 +118,8 @@ class _MusicScreenState extends State<MusicScreen> {
                       return Container();
                     }
             
-                    context.read<IMonline>().onOnline(value.data!);
+                    if (context.read<IMbanner>().busyVisible == 0) context.read<IMonline>().onOnline(value.data!, true);
+                    else context.read<IMonline>().onOnline(value.data!, false);
                     context.read<IMonline>().bindOffline();
                     context.read<IMbanner>().bindReceiving();
                     context.read<IMbanner>().bindFileReceived();
@@ -165,6 +166,8 @@ class _showMusicScreenState extends State<showMusicScreen> {
   String _dftStore = Global.profile.defaultLibrary.isEmpty ? "默认媒体库" : Global.profile.defaultLibrary;
   final LayerLink _layerLink = LayerLink();
   OverlayEntry? _overlayEntry;
+  final FocusNode _searchFocusNode = FocusNode();
+  bool _isFocused = false;
 
   String dummys = '''
 {
@@ -218,6 +221,11 @@ class _showMusicScreenState extends State<showMusicScreen> {
   @override
   void initState() {
     //context.read<IMsource>().bindPlayInfo();
+    _searchFocusNode.addListener(() {
+      setState(() {
+        _isFocused = _searchFocusNode.hasFocus;
+      });
+    });
     _fetchData(); // 调用异步方法
     super.initState();
   }
@@ -225,6 +233,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
   @override
   void dispose() {
     _overlayEntry?.remove();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -303,12 +312,22 @@ class _showMusicScreenState extends State<showMusicScreen> {
           //搜索
           CompositedTransformTarget(
             link: _layerLink,  
-            child: TextField( 
+            child: TextField(
+              focusNode: _searchFocusNode,
               onChanged: (value) {searchMusic(value);},
               decoration: InputDecoration(
                 labelText: '搜索媒体库',
                 hintText: '搜索 曲名 · 专辑 · 艺术家',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: GestureDetector(
+                  onTap: () {
+                    if (_isFocused) {
+                      _overlayEntry?.remove();
+                      _overlayEntry = null;  
+                      _searchFocusNode.unfocus();
+                    }
+                  },  
+                  child: Icon(_isFocused ? Icons.arrow_back : Icons.search)
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8)
                 )
@@ -401,7 +420,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
             const Gap(60),
             Text('无媒体文件', textScaler: TextScaler.linear(1.8),),
             const Gap(20),
-            Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库 \n 3. 添加本地曲目路径，同步至音源', style: TextStyle(fontWeight: FontWeight.w700)),
+            Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库', style: TextStyle(fontWeight: FontWeight.w700)),
           ] else ...[
             const Gap(10),
             Expanded(

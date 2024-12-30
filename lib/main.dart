@@ -36,7 +36,7 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   @override
   void dispose() {
-    //ForegroundService().stop();
+    ForegroundService().stop();
     super.dispose();
   }
 

@@ -261,15 +261,26 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                   }
 
                                   late final NativeCallable<NativeWifisetCallback> callback;
-                                  void onResponse(int succcess) async {
+                                  void onResponse(int success) async {
                                     // Remember to close the NativeCallable once the native API is
                                     // finished with it, otherwise this isolate will stay alive
                                     // indefinitely.
                                     callback.close();
-                                    await Future.delayed(Duration(seconds: 3), () { //等待 close 事件回调后，再切换页面
-                                      context.read<IMsource>().setting = true;
-                                      context.go('/music');
-                                    });
+                                    if (success == 1) {
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text('设置成功，请等待音源重启。'),
+                                        duration: Duration(seconds: 2)
+                                      ));
+                                      await Future.delayed(Duration(seconds: 3), () { //等待 close 事件回调后，再切换页面
+                                        context.read<IMsource>().setting = true;
+                                        context.go('/music');
+                                      });
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                        content: Text('设置失败，请重连AVM热点进行设置。'),
+                                        duration: Duration(seconds: 2)
+                                      ));
+                                    }
                                   }
 
                                   callback = NativeCallable<NativeWifisetCallback>.listener(onResponse);

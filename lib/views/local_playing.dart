@@ -43,7 +43,8 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
     Duration position = context.watch<IMlocal>().position;
     double volume = context.read<IMlocal>().volume;
     String trackName = (mdata == null || mdata.trackName == null) ? '未知曲目': mdata.trackName!;
-    String artistName = (mdata == null || mdata.firstArtists == null) ? '未知艺术家' : mdata.firstArtists!;
+    String artistName = mdata == null ? '未知艺术家' : mdata.firstArtists != null ? mdata.firstArtists! : mdata.secondArtists != null ? mdata.secondArtists! : '未知艺术家';
+    //String artistName = (mdata == null || mdata.firstArtists == null) ? '未知艺术家' : mdata.firstArtists!;
     String albumName = (mdata == null || mdata.album == null) ? '未知专辑' : mdata.album!;
 
     double fval = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;

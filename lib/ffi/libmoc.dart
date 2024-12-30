@@ -212,6 +212,7 @@ int mnetNext(String ID) => _bindings.mnetNext(ID.toNativeUtf8());
 int mnetPrevious(String ID) => _bindings.mnetPrevious(ID.toNativeUtf8());
 int mnetDragTO(String ID, double percent) => _bindings.mnetDragTO(ID.toNativeUtf8(), percent);
 int mnetStoreList(String ID) => _bindings.mnetStoreList(ID.toNativeUtf8());
+int mnetCancelSync(String ID) => _bindings.mnetCancelSync(ID.toNativeUtf8());
 
 int omusicSyncStore(String ID, String name) => _bindings.omusicSyncStore(ID.toNativeUtf8(), name.toNativeUtf8());
 int omusicClearStore(String ID, String name, bool rmdir) => _bindings.omusicClearStore(ID.toNativeUtf8(), name.toNativeUtf8(), rmdir);

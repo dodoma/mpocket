@@ -305,7 +305,7 @@ class _NowPlayingLocalState extends State<NowPlayingLocal> with SingleTickerProv
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text((mdata == null || mdata.trackName == null) ? '未知曲目' : mdata.trackName!, textScaler: TextScaler.linear(1.2), overflow: TextOverflow.ellipsis,),
-                            Text((mdata == null || mdata.firstArtists == null) ? '未知艺术家' : mdata.firstArtists!)
+                            Text(mdata == null ? '未知艺术家' : mdata.firstArtists != null ? mdata.firstArtists! : mdata.secondArtists != null ? mdata.secondArtists! : '未知艺术家')
                           ],
                         ),
                       ),
@@ -356,6 +356,7 @@ class ImBusy extends StatefulWidget {
 class _ImBusyState extends State<ImBusy> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _slideAnimation;
+  final regExp = RegExp(r'^[0-9]+/[0-9]+ assets/cover/');
 
   @override
   void initState() {
@@ -391,6 +392,9 @@ class _ImBusyState extends State<ImBusy> with SingleTickerProviderStateMixin {
             ? Text(filename) 
             : Text('完成 ${filename} 个文件缓存至本地')
         ),
+        if (widget.visible == 1 && !regExp.hasMatch(filename)) IconButton(onPressed: () {
+          libmoc.mnetCancelSync(Global.profile.msourceID);
+        }, icon: Icon(Icons.stop)),
         Expanded(
           flex: 1, 
           child: 
