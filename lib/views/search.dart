@@ -165,6 +165,13 @@ class TrackTile extends StatelessWidget {
         leading: headimg,
         title: Text(title, overflow: TextOverflow.ellipsis, maxLines: 1),
         contentPadding: EdgeInsets.all(0),
+        trailing: IconButton(onPressed: (){
+          context.read<IMlocal>().addToPlayList(id);            
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('下一首播放'),
+            duration: Duration(seconds: 2)
+          ));
+        }, icon: Icon(size: 24, Icons.add)), 
       ),     
       onTap: () async {
         if (Global.profile.phonePlay) await context.read<IMlocal>().playSingle(context, id, true);

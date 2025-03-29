@@ -244,8 +244,14 @@ class AlbumTile extends StatelessWidget {
                       ],
                     ),
                     Spacer(),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.add)),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.more_vert)),
+                    IconButton(onPressed: (){
+                      context.read<IMlocal>().addToPlayList(id);
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('下一首播放'),
+                        duration: Duration(seconds: 2)
+                      ));
+                    }, icon: Icon(Icons.add))
+                    //IconButton(onPressed: (){}, icon: Icon(Icons.more_vert)),
                   ],
                 ),
                 Divider(color: Colors.grey, thickness: 1.0,),

@@ -234,7 +234,7 @@ class IMnotify extends ChangeNotifier {
           title: Text('U盘已连接'),
           content: Text('现在去同步媒体文件？'),
           actions: [
-            TextButton(onPressed: (){pickUSBFolder(context); Navigator.of(context).pop();}, child: Text('确定')),
+            TextButton(onPressed: (){Navigator.of(context).pop(); pickUSBFolder(context);}, child: Text('确定')),
             TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
           ]
         );

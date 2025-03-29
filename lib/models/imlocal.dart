@@ -14,8 +14,11 @@ class IMlocal extends ChangeNotifier {
   final random = Random();
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+  Duration positionStart = Duration.zero;
+  Duration positionEnd = Duration.zero;
   bool shuffle = true;
   double volume = 0.6;
+  double speed = 1.0;
 
   IMlocal() {
     _audioPlayer.setVolume(volume);
@@ -28,6 +31,12 @@ class IMlocal extends ChangeNotifier {
     });
   
     _audioPlayer.positionStream.listen((Duration d) {
+      if (positionEnd != Duration.zero) {
+        if (d > positionEnd) {
+          _audioPlayer.seek(positionStart);
+          d = positionStart;
+        }
+      }
       position = d;
       notifyListeners();
     });
@@ -66,6 +75,7 @@ class IMlocal extends ChangeNotifier {
     super.dispose();
   }
 
+  String? onListenID = null;
   String? onListenURL = null;
   String? onListenCover = null;
   AudioMetadata? onListenTrack = null;
@@ -93,6 +103,7 @@ class IMlocal extends ChangeNotifier {
 
       await _audioPlayer.stop();
 
+      onListenID = id;
       onListenURL = url;
       onListenCover = Global.profile.storeDir + "assets/cover/" + id;
       onListenTrack = await AudioMetadata.extract(File(url));
@@ -113,6 +124,7 @@ class IMlocal extends ChangeNotifier {
     } else if (url == "ENOENT") {
       print("url empty");
     } else {
+      onListenID = id;
       onListenURL = url;
       onListenCover = Global.profile.storeDir + "assets/cover/" + id;
       onListenTrack = await AudioMetadata.extract(File(url));
@@ -215,12 +227,63 @@ class IMlocal extends ChangeNotifier {
     shuffle = v;  
   }
 
+  void addToPlayList(id) {
+     if (!trackIDS.contains(id)) trackIDS.insert(0, id);
+  }
+
+  void setStartPoint() {
+    positionStart = position;
+    notifyListeners();
+  }
+
+  void setEndPoint() {
+    positionEnd = position;
+    notifyListeners();
+  }
+
+  void resetStartPoint(sec) {
+    positionStart = Duration(seconds: sec);
+    notifyListeners();
+  }
+
+  void resetEndPoint(sec) {
+    positionEnd = Duration(seconds: sec);
+    notifyListeners();
+  }
+
+  void unsetStartPoint() {
+    positionStart = Duration.zero;
+    notifyListeners();
+  }
+
+  void unsetEndPoint() {
+    positionEnd = Duration.zero;
+    notifyListeners();
+  }
+
+  void speedDown() {
+    if (speed > 0.2) speed = speed - 0.05;
+    _audioPlayer.setSpeed(speed);
+    notifyListeners();
+  }
+
+  void speedNormal() {
+    speed = 1.0;
+    _audioPlayer.setSpeed(speed);
+    notifyListeners();
+  }
+
   Future<void> dragTo(v) async {
     if (v > 0.0 && v < 1.0) {
       num seconds = duration.inSeconds * v;
       position = Duration(seconds: seconds.toInt());
       await _audioPlayer.seek(position);
     }
+  }
+
+  Future<void> seekTo(sec) async {
+    position = Duration(seconds: sec);
+    await _audioPlayer.seek(position);
   }
 
   String idNext() {
