@@ -22,4 +22,4 @@ Music PI released under MIT License.
 
 #### Dependence
 
-mdesk depends on [libreef](https://github.com/dodoma/libreef), and [libpocket](https://github.com/dodoma/libpocket)
+mpocket depends on [libreef](https://github.com/dodoma/libreef), and [libpocket](https://github.com/dodoma/libpocket)
