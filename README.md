@@ -1,26 +1,20 @@
-# mpocket
-
-A new Flutter project.
+### Music PI
 
 
-### command
 
-> flutter pub add xxx
-> flutter packages pub run json_model  OR flutter pub run build_runner build
-> flutter pub run build_runner build
+#### Have many audio files, But no convenient management and playback software?
 
-> flutter build apk --release (对于依赖库，需要先 cd example/)
-> 将生成的库文件拷贝至 C:\Users\DELL\Desktop\avm\mpocket\build\app\intermediates\stripped_native_libs\release\out\lib\ (三种架构都需要拷贝)
-> 最后再 xxxfluxxxtter inxxxstall --rexxxleasexxx （默认删除旧版及内容后，重新安装）
+Music PI is prepared for this.
 
-### 更新常用版本
-将 android/app/build.gradle applicationId 改为 com.example.mpocket022 ，编译生成的 app-release.apk 便是自用的 apk，
-再用 adb install -r build/app/outputs/flutter-apk/app-release.apk 安装，即可保留原有数据，不用重新同步。
-同时，为保持同步，请注意将 pubsec.yaml version 改为 0.2.2
+I offered a [raspberry pi image](https://github.com/dodoma/mdesk) and an [Andorid app](https://github.com/dodoma/mpocket).
 
-> adb logcat
+Burn the image into raspberry pi, Install the app to your phone, and setting the network to use it.
 
-### TODO
+Music Pi support FLAC、MP3、WAV format audio file currently. Before use it, make sure read the [useage](https://avm.mbox.net.cn/readme.html) first.
 
-1. 默认媒体库在 music_screen 中体现作用
-2. 媒体库更新时，界面提示（现在需要等待29秒后，来回切换两次）
+Not like [volumio](https://volumio.com/)，Music PI can cache audio file into your phone, and play it by phone.
+
+This is a [use demo1](https://avm.mbox.net.cn/avm-phone.mp4)  [use demo2](https://avm.mbox.net.cn/avm-all.mp4)
+
+Music PI released under MIT License.
+
