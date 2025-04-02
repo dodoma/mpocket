@@ -18,3 +18,6 @@ This is a [use demo1](https://avm.mbox.net.cn/avm-phone.mp4)  [use demo2](https:
 
 Music PI released under MIT License.
 
+#### Dependence
+
+mdesk depends on [libreef](https://github.com/dodoma/libreef), and [libpocket](https://github.com/dodoma/libpocket)
