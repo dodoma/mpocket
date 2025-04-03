@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:mpocket/common/global.dart';
+import 'package:mpocket/config/language.dart';
 import 'package:path_provider/path_provider.dart';
 
 class UserScreen extends StatefulWidget {
@@ -15,6 +17,7 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   List<String> sourceList = [];
+  late Set<LanguageData> languages;
   bool _isLoading = true;
 
   Future<void> listSources() async {
@@ -37,6 +40,9 @@ class _UserScreenState extends State<UserScreen> {
         }
       }
     }
+
+    languages = await Language.instance.available;
+
     setState(() {
       _isLoading = false;
     });
@@ -60,7 +66,7 @@ class _UserScreenState extends State<UserScreen> {
       body: Center(
         child: Column(
           children: [
-            Text('xxx'),
+            Text('Music Source List'),
             DropdownButton(
               items: sourceList.map((String sourceID) {
                 return DropdownMenuItem(child: Text(sourceID), value: sourceID);
@@ -73,7 +79,27 @@ class _UserScreenState extends State<UserScreen> {
                   Global.saveProfile();
                 }
               }
-            )
+            ),
+            const Gap(20),
+            Text('Language'),
+            DropdownButton(
+              items: languages.map((lang) {
+                return DropdownMenuItem(child: Text(lang.name), value: lang.code);
+              }).toList(),
+              value: Global.profile.language.code,
+              onChanged: (String? val) async {
+                if (val is String) {
+                  LanguageData langa = languages.firstWhere(
+                    (lang) => lang.code == val,
+                    orElse: () => LanguageData(code: 'en_US', name: 'English', country: 'United States'),
+                  );
+
+                  Global.profile.language = langa;
+                  Global.saveProfile();
+                  Language.instance.set(value: langa);
+                }
+              }
+            ),
           ],
         )
       ),

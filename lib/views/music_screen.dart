@@ -208,7 +208,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
           _isLoading = false;
         });
       } catch (e) {
-        print("store list failure");
+        print("store list failure ${emot}");
       }
       if (Global.profile.defaultLibrary != _dftStore) {
         print("GLOBAL set default library from ${Global.profile.defaultLibrary} to ${_dftStore}");

@@ -5,8 +5,8 @@
       "country":"United States"
     },
     {
-      "code":"zh_CN",
-      "name":"中文",
+      "code":"zh_Hans_CN",
+      "name":"简体中文",
       "country":"中国"
     }
   ]

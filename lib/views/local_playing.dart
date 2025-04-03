@@ -37,8 +37,7 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
   bool paused = false;
   bool _dragging = false;
 
-  bool _isloading = true;
-  late List<TeachNote> notes; // 所有教学列表
+  // late List<TeachNote> notes; // 所有教学列表
   late TeachNote trackNote;   // 当前播放文件的教学列表
   int noteIndex = 0;          // 当前显示的教学点
   bool noteSetted = false;    // 当前教学点编辑指示
@@ -59,15 +58,14 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
 
   Future<void> _fetchData() async {
     List<dynamic> rawList = jsonDecode(dummys);
-    notes = rawList.map((e) => TeachNote.fromJson(e)).toList();
-    _isloading = false;
+    //notes = rawList.map((e) => TeachNote.fromJson(e)).toList();
   }
 
 
   @override
   void initState() {
     super.initState();
-    _fetchData();
+    //_fetchData();
   }
 
   @override
@@ -238,8 +236,7 @@ class _LocalPlayingScreenState extends State<LocalPlayingScreen> {
     double fval = duration.inMilliseconds > 0 ? position.inMilliseconds / duration.inMilliseconds : 0.0;
     if (!_dragging && fval >= 0.0 && fval <= 1.0) progress.add(fval);
 
-    if (_isloading) return Scaffold(body: Center(child: CircularProgressIndicator()));
-    else if (url == null) return Scaffold(body: Center(child: CircularProgressIndicator()));
+    if (url == null) return Scaffold(body: Center(child: CircularProgressIndicator()));
     else {
       int nindex = Global.tnotes.indexWhere((note) => note.id == id);
       //int nindex = 1;

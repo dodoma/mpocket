@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:ui';
 
+import 'package:mpocket/config/language.dart';
 import 'package:mpocket/models/index.dart';
 import 'package:mpocket/models/teachnote.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,13 +20,19 @@ class Global {
       print('profile gotted');
       print(profile.toJson());
     } else {
-      print('default profile loaded');
+      // lookup system default language, or, en_US when no such language file
+      Set<LanguageData> languages = await Language.instance.available;
+      LanguageData lang = languages.firstWhere(
+        (lang) => lang.code == PlatformDispatcher.instance.locale.toString(),
+        orElse: () => LanguageData(code: 'en_US', name: 'English', country: 'United States'),
+      );
+  
       profile = Profile();
       profile.appDir = appdir;
       profile.msourceID = '';
       profile.defaultLibrary = '';
       profile.storeDir = '';
-      profile.local = 'en_US';
+      profile.language = lang;
       profile.phonePlay = false;
       print(profile.toJson());
       saveProfile();

@@ -11,7 +11,7 @@ Profile _$ProfileFromJson(Map<String, dynamic> json) => Profile()
   ..msourceID = json['msourceID'] as String
   ..defaultLibrary = json['defaultLibrary'] as String
   ..storeDir = json['storeDir'] as String
-  ..local = json['local'] as String
+  ..language = LanguageData.fromJson(json['language'] as Map<String, dynamic>)
   ..phonePlay = json['phonePlay'] as bool
   ..lastLogin = json['lastLogin'] as String?;
 
@@ -20,7 +20,7 @@ Map<String, dynamic> _$ProfileToJson(Profile instance) => <String, dynamic>{
       'msourceID': instance.msourceID,
       'defaultLibrary': instance.defaultLibrary,
       'storeDir': instance.storeDir,
-      'local': instance.local,
+      'language': instance.language.toJson(),
       'phonePlay': instance.phonePlay,
       'lastLogin': instance.lastLogin,
     };
