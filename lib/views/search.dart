@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:mpocket/common/global.dart';
+import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imlocal.dart';
 import 'package:mpocket/models/imsource.dart';
@@ -168,7 +169,7 @@ class TrackTile extends StatelessWidget {
         trailing: IconButton(onPressed: (){
           context.read<IMlocal>().addToPlayList(id);            
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('下一首播放'),
+            content: Text(Language.instance.NEXT_PLAY),
             duration: Duration(seconds: 2)
           ));
         }, icon: Icon(size: 24, Icons.add)), 
@@ -258,7 +259,7 @@ class _SearchTabState extends State<SearchTab> {
                         children: [
                           Container(
                             alignment: Alignment.centerLeft,
-                            child: Text('艺术家', style: TextStyle(fontWeight: FontWeight.w700))
+                            child: Text(Language.instance.ARTIST, style: TextStyle(fontWeight: FontWeight.w700))
                           )
                         ]
                       ),
@@ -286,7 +287,7 @@ class _SearchTabState extends State<SearchTab> {
                         children: [
                           Container(
                             alignment: Alignment.centerLeft,
-                            child: Text('专辑', style: TextStyle(fontWeight: FontWeight.w700))
+                            child: Text(Language.instance.ALBUM, style: TextStyle(fontWeight: FontWeight.w700))
                           )
                         ]
                       ),
@@ -314,7 +315,7 @@ class _SearchTabState extends State<SearchTab> {
                         children: [
                           Container(
                             alignment: Alignment.centerLeft,
-                            child: Text('曲目', style: TextStyle(fontWeight: FontWeight.w700))
+                            child: Text(Language.instance.TRACK, style: TextStyle(fontWeight: FontWeight.w700))
                           )
                         ]
                       ),
@@ -334,7 +335,7 @@ class _SearchTabState extends State<SearchTab> {
               ],
             )
             : Center(
-              child: Text('搜索结果为空，尝试切换媒体库？'),
+              child: Text(Language.instance.NO_RESULT),
             )         
         );
   }

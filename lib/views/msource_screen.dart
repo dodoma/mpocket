@@ -8,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:list_picker/list_picker.dart';
 import 'package:mpocket/common/global.dart';
+import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imsource.dart';
 import 'package:mpocket/models/msource.dart';
@@ -109,10 +110,10 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
       context: context,
        builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
-          content: Text('请选择常用的热点名称'),
+          title: Text(Language.instance.HINT),
+          content: Text(Language.instance.SELECT_AP),
           actions:<Widget> [
-            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
           ]
         );
        }
@@ -160,7 +161,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        Text('配置音源  + ${value.data}',
+                        Text('${Language.instance.CONFIG_MSOURCE}  + ${value.data}',
                             textAlign: TextAlign.left,
                             textScaler: TextScaler.linear(1.2),
                             style: TextStyle(fontWeight: FontWeight.w700)),
@@ -178,7 +179,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                               SizedBox(
                                   width: 260,
                                   child: ListPickerField(
-                                    label: '热点名称',
+                                    label: Language.instance.AP_NAME,
                                     items: [
                                       //...accessPoints.map((ap){return ap.ssid;}).toList(),
                                       ...accessPoints
@@ -209,7 +210,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                             const Gap(20),
                             Row(
                               children: [
-                                const Text('热点密码'),
+                                Text(Language.instance.AP_PASSWD),
                                 const Gap(20),
                                 SizedBox(
                                     width: 200,
@@ -218,7 +219,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                       validator: (v) {
                                         return v!.trim().isNotEmpty
                                             ? null
-                                            : '密码不能为空';
+                                            : Language.instance.PASSWD_NOT_EMPTY;
                                       },
                                       focusNode: focusNode2,
                                     )),
@@ -227,14 +228,14 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                             const Gap(20),
                             Row(
                               children: [
-                                const Text('音源命名'),
+                                Text(Language.instance.MSOURCE_NAME),
                                 const Gap(20),
                                 SizedBox(
                                     width: 200,
                                     child: TextFormField(
                                       controller: _formctl.controller(
                                           'deviceName',
-                                          initialText: '默认音源'),
+                                          initialText: Language.instance.DEFAULT_SOURCE_NAME),
                                       focusNode: focusNode3,
                                     )),
                               ],
@@ -268,7 +269,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                     callback.close();
                                     if (success == 1) {
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: Text('设置成功，请等待音源重启。'),
+                                        content: Text(Language.instance.WIFI_OK),
                                         duration: Duration(seconds: 2)
                                       ));
                                       await Future.delayed(Duration(seconds: 3), () { //等待 close 事件回调后，再切换页面
@@ -277,7 +278,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                       });
                                     } else {
                                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                        content: Text('设置失败，请重连AVM热点进行设置。'),
+                                        content: Text(Language.instance.WIFI_NOK),
                                         duration: Duration(seconds: 2)
                                       ));
                                     }
@@ -294,7 +295,7 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                                       callback.nativeFunction);
                                 }
                               },
-                              child: Text('确认',
+                              child: Text(Language.instance.CONFIRM,
                                   style: TextStyle(color: Colors.white)))
                         ]),
                           ],
@@ -305,12 +306,12 @@ class _ConfigDeviceScreenState extends State<ConfigDeviceScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        '正在搜寻音源设备',
+                        Language.instance.SEARCHING_MSOURCE,
                         textScaler: TextScaler.linear(1.8),
                       ),
                       const Gap(20),
                       Text(
-                        '请连接至音源 wifi 进行配置',
+                        Language.instance.CONNECT_WIFI_TO_SET,
                         style: TextStyle(fontWeight: FontWeight.w700),
                       ),
                       const Gap(10),
@@ -386,10 +387,10 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
       context: context,
        builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
-          content: Text('该媒体库已存在'),
+          title: Text(Language.instance.HINT),
+          content: Text(Language.instance.LIBRARY_EXIST),
           actions:<Widget> [
-            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
           ]
         );
        }
@@ -403,12 +404,12 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('增加媒体库'),
+          title: Text(Language.instance.LIBRARY_ADD),
           content: TextField(
             onChanged: (value) {
               newItemName = value; // 获取输入的文本
             },
-            decoration: InputDecoration(hintText: "输入媒体库名称"),
+            decoration: InputDecoration(hintText: Language.instance.GIVE_LIBRARY_NAME),
           ),
           actions: <Widget>[
             TextButton(
@@ -426,10 +427,10 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text('提示'),
-                          content: res.isEmpty ? Text('创建成功') : Text(res),
+                          title: Text(Language.instance.HINT),
+                          content: res.isEmpty ? Text(Language.instance.CREATE_OK) : Text(res),
                           actions:<Widget> [
-                            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
                           ]
                         );
                       }
@@ -444,13 +445,13 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                   }
                 }
               },
-              child: Text('确认'),
+              child: Text(Language.instance.CONFIRM),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(); // 关闭对话框
               },
-              child: Text('取消'),
+              child: Text(Language.instance.CANCLE),
               style: TextButton.styleFrom(foregroundColor: Colors.grey),              
             ),
           ],
@@ -464,11 +465,11 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
       context: context,
        builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text(Language.instance.HINT),
           content: Text(alertText),
           actions: [
-            TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text('确定')),
-            TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
+            TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text(Language.instance.CONFIRM)),
+            TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text(Language.instance.CANCLE), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
           ]
         );
        }
@@ -483,11 +484,11 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         return StatefulBuilder(
           builder: (BuildContext context, StateSetter setDialogState) {
             return AlertDialog(
-              title: Text('合并 ${libname}'),
+              title: Text('${Language.instance.MERGE} ${libname}'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('请选择目标媒体库'),
+                  Text(Language.instance.CHOSE_DEST_LIBRARY),
                   DropdownButton(
                     items: meo.libraries.where((lib) => lib.name != libname).map((MsourceLibrary store) {
                         return DropdownMenuItem(child: Text(store.name), value: store.name);
@@ -504,8 +505,8 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                 ],
               ),
               actions: [
-                TextButton(onPressed: (){Navigator.of(context).pop(destStore);}, child: Text('确定')),
-                TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
+                TextButton(onPressed: (){Navigator.of(context).pop(destStore);}, child: Text(Language.instance.CONFIRM)),
+                TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.CANCLE), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
               ]
             );
           }
@@ -523,23 +524,23 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('媒体库改名'),
+              title: Text(Language.instance.RENAME_LIBRARY),
               content: TextField(
                 controller: namectl,
               ),
               actions: [
                 TextButton(
-                  child: Text('确定'),
+                  child: Text(Language.instance.CONFIRM),
                   onPressed: () async {
                     String res = libmoc.msourceLibraryRename(Global.profile.msourceID, libname, namectl.text);
                     await showDialog(
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: Text('提示'),
-                          content: res.isEmpty ? Text('修改成功') : Text(res),
+                          title: Text(Language.instance.HINT),
+                          content: res.isEmpty ? Text(Language.instance.MODIFY_OK) : Text(res),
                           actions:<Widget> [
-                            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                            TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
                           ]
                         );
                       }
@@ -557,7 +558,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                   },
                 ),
                 TextButton(
-                  child: Text('取消'),
+                  child: Text(Language.instance.CANCLE),
                   style: TextButton.styleFrom(foregroundColor: Colors.grey),
                   onPressed: () {
                     Navigator.of(context).pop(); // 关闭对话框
@@ -587,10 +588,10 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
             context: context, 
             builder: (context) {
               return AlertDialog(
-                title: Text('提示'),
+                title: Text(Language.instance.HINT),
                 content: Text(res),
                 actions:<Widget> [
-                  TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                  TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
                 ]
               );
             }
@@ -599,7 +600,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
       break;
       case 2:
         // 缓存媒体库
-        bool confirm = await confirmDialog(context, '确认同步 ${libname} 下所有的曲目？');
+        bool confirm = await confirmDialog(context, '${Language.instance.LIBRARY_SYNC_A} ${libname} ${Language.instance.LIBRARY_SYNC_B}');
         if (confirm) {
           libmoc.omusicSyncStore(Global.profile.msourceID, libname);
           Navigator.of(context).pop();
@@ -607,13 +608,13 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
       break;
       case 3:
         // 清除缓存
-        bool confirm = await confirmDialog(context, '清除媒体库 ${libname} 中本地缓存？');
+        bool confirm = await confirmDialog(context, '${Language.instance.LIBRARY_CLEAR_A} ${libname} ${Language.instance.LIBRARY_CLEAR_B}');
         if (confirm) {
           Navigator.of(context).pop();
 
           int delnum = libmoc.omusicClearStore(Global.profile.msourceID, libname, false);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('成功删除 ${delnum} 个文件'),
+            content: Text('${Language.instance.CLEAR_OK_A} ${delnum} ${Language.instance.CLEAR_OK_B}'),
             duration: Duration(seconds: 3)
           ));
         }
@@ -626,7 +627,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
           if (meo.libraries[libindex].countTrack > 0) containMedia = true;
         }
         if (containMedia) {
-          bool confirm = await confirmDialog(context, '确认删除媒体库 ${libname} 中所有文件？\n\n 删除后不可恢复');
+          bool confirm = await confirmDialog(context, '${Language.instance.LIBRARY_DELTE_A} ${libname} ${Language.instance.LIBRARY_DELTE_B}');
           if (confirm) {
             libmoc.omusicClearStore(Global.profile.msourceID, libname, true);
             String res = libmoc.msourceLibraryDelete(Global.profile.msourceID, libname, true);
@@ -641,10 +642,10 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                 context: context, 
                 builder: (context) {
                   return AlertDialog(
-                    title: Text('提示'),
+                    title: Text(Language.instance.HINT),
                     content: Text(res),
                     actions:<Widget> [
-                      TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                      TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
                     ]
                   );
                 }
@@ -666,10 +667,10 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
               context: context, 
               builder: (context) {
                 return AlertDialog(
-                  title: Text('提示'),
+                  title: Text(Language.instance.HINT),
                   content: Text(res),
                   actions:<Widget> [
-                    TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                    TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
                   ]
                 );
               }
@@ -696,10 +697,10 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
               context: context, 
               builder: (context) {
                 return AlertDialog(
-                  title: Text('提示'),
+                  title: Text(Language.instance.HINT),
                   content: Text(res),
                   actions:<Widget> [
-                    TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('知道了'))
+                    TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text(Language.instance.I_KNOW))
                   ]
                 );
               }
@@ -711,7 +712,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         // 添加 u 盘媒体文件
       break;
       default:
-        print('暂未实现');
+        print(Language.instance.BUILDING);
       break;
     }
   }
@@ -729,7 +730,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
     if (_isLoading) {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     } else {
-      if (meo.deviceID.isEmpty) return Scaffold(body: Center(child: Text('获取数据失败')));
+      if (meo.deviceID.isEmpty) return Scaffold(body: Center(child: Text(Language.instance.GET_DATA_FAILURE)));
       else return Scaffold(
         body: Center(
           child: Row(
@@ -768,16 +769,16 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text('${meo.useage} 已用 '),
-                            Text('${meo.remain} 可用', textScaler: TextScaler.linear(0.8)),
+                            Text('${meo.useage} ${Language.instance.CAP_USED} '),
+                            Text('${meo.remain} ${Language.instance.CAP_AVAILABLE}', textScaler: TextScaler.linear(0.8)),
                             Spacer(),
-                            Text('总容量 ${meo.capacity}'),
+                            Text('${Language.instance.CAP_TOTAL} ${meo.capacity}'),
                           ],
                         ),
                         const Gap(10),
                         Row(
                           children: [
-                            Text('开机自动播放'),
+                            Text(Language.instance.AUTO_PLAY),
                             Spacer(),
                             Switch(
                               onChanged : (bool value) {
@@ -789,7 +790,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                   });
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                    content: Text('设置自动播放失败 ${res}'),
+                                    content: Text('${Language.instance.SET_FAILURE} ${res}'),
                                     duration: Duration(seconds: 3)
                                   ));
                                 }
@@ -819,12 +820,12 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                           children: [
                             Row(
                               children: [
-                                Text('共享路径：'),
+                                Text(Language.instance.SHARE_URL),
                                 Text('\\\\${meo.shareLocation}'),
                                 Spacer(),
                                 if (meo.usbON) 
                                   GestureDetector(
-                                    child: Text('导入U盘文件', style: TextStyle(color: Colors.green), overflow: TextOverflow.ellipsis, maxLines: 1,),
+                                    child: Text(Language.instance.COPY_UDISK, style: TextStyle(color: Colors.green), overflow: TextOverflow.ellipsis, maxLines: 1,),
                                     onTap: () async {
                                       pickUSBFolder(context);
                                     },
@@ -854,12 +855,12 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
                                               context: context, 
                                               builder: (BuildContext context) {
                                                 final actions = [
-                                                  {'name': '设为默认媒体库',  'val': 1, 'icon': Icon(Icons.check)},
-                                                  {'name': '重命名',         'val': 0, 'icon': Icon(Icons.edit)},
-                                                  {'name': '全部缓存至本地',  'val': 2, 'icon': Icon(Icons.sync)},
-                                                  {'name': '清除本地缓存',    'val': 3, 'icon': Icon(Icons.delete_outline)},
-                                                  {'name': '删除媒体库',      'val': 4, 'icon': Icon(Icons.delete_forever)},
-                                                  {'name': '合并媒体库',      'val': 5, 'icon': Icon(Icons.merge)},
+                                                  {'name': Language.instance.LIBRARY_DEFAULT,'val': 1, 'icon': Icon(Icons.check)},
+                                                  {'name': Language.instance.LIBRARY_RENAME, 'val': 0, 'icon': Icon(Icons.edit)},
+                                                  {'name': Language.instance.LIBRARY_CACHE,  'val': 2, 'icon': Icon(Icons.sync)},
+                                                  {'name': Language.instance.LIBRARY_CLEAR,  'val': 3, 'icon': Icon(Icons.delete_outline)},
+                                                  {'name': Language.instance.LIBRARY_DELETE, 'val': 4, 'icon': Icon(Icons.delete_forever)},
+                                                  {'name': Language.instance.LIBRARY_MERGE,  'val': 5, 'icon': Icon(Icons.merge)},
                                                   //{'name': '添加U盘媒体文件', 'val': 6, 'icon': Icon(Icons.usb)},
                                                 ];
                                                 return Padding(
@@ -920,7 +921,7 @@ class _showDeviceScreenState extends State<showDeviceScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: _showAddItemDialog,
           child: Icon(Icons.add),
-          tooltip: '创建媒体库',
+          tooltip: Language.instance.LIBRARY_CREATE,
         ),
       );
     }

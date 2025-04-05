@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mpocket/common/global.dart';
+import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imlocal.dart';
 import 'package:mpocket/models/imsource.dart';
@@ -85,7 +86,7 @@ class _MusicScreenState extends State<MusicScreen> {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text('正在连接音源设备', textScaler: TextScaler.linear(1.6)),
+                        Text(Language.instance.SOURCE_CONNECTING, textScaler: TextScaler.linear(1.6)),
                         const Gap(10),
                         SizedBox(
                           height: 5,
@@ -282,8 +283,8 @@ class _showMusicScreenState extends State<showMusicScreen> {
   }
 
   void _showSnackBar(BuildContext context) {
-    String message = '音频将在音源播放';
-    if (phonePlay) message = '音频将在手机播放';
+    String message = Language.instance.PLAY_ON_SOURCE;
+    if (phonePlay) message = Language.instance.PLAY_ON_PHONE;
     final snackBar = SnackBar(content: Text(message), duration: Duration(seconds: 3),);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -301,7 +302,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
   if (_isLoading) {
   return CircularProgressIndicator();
   } else {
-  if (meo.deviceID.isEmpty) return Scaffold(body: Center(child: Text('获取数据失败')));
+  if (meo.deviceID.isEmpty) return Scaffold(body: Center(child: Text(Language.instance.GET_DATA_FAILURE)));
   else return Container(
     // 页面一大框
     width: widget.maxWidth,
@@ -316,8 +317,8 @@ class _showMusicScreenState extends State<showMusicScreen> {
               focusNode: _searchFocusNode,
               onChanged: (value) {searchMusic(value);},
               decoration: InputDecoration(
-                labelText: '搜索媒体库',
-                hintText: '搜索 曲名 · 专辑 · 艺术家',
+                labelText: Language.instance.SEARCH_LIBRARY,
+                hintText: Language.instance.SEARCH_TRACK,
                 prefixIcon: GestureDetector(
                   onTap: () {
                     if (_isFocused) {
@@ -388,7 +389,7 @@ class _showMusicScreenState extends State<showMusicScreen> {
                       ],
                     ),
                     const Gap(2),
-                    Text('${meo.countArtist} 位艺术家  ${meo.countAlbum} 张专辑  ${meo.countTrack} 首歌曲', textScaler: TextScaler.linear(0.6))
+                    Text('${meo.countArtist} ${Language.instance.E_ARTISTS}  ${meo.countAlbum} ${Language.instance.E_ALBUMS} ${meo.countTrack} ${Language.instance.E_TRACKS}', textScaler: TextScaler.linear(0.6))
                   ],
                 ),
                 Spacer(),
@@ -418,9 +419,9 @@ class _showMusicScreenState extends State<showMusicScreen> {
           ),
           if (meo.countTrack <= 0) ...[
             const Gap(60),
-            Text('无媒体文件', textScaler: TextScaler.linear(1.8),),
+            Text(Language.instance.LIBRARY_EMPTY, textScaler: TextScaler.linear(1.8),),
             const Gap(20),
-            Text('可通过以下三种方式导入媒体文件：\n 1. 将媒体文件拷贝至音源媒体库共享路径\n 2. 将U盘中的文件导入媒体库', style: TextStyle(fontWeight: FontWeight.w700)),
+            Text(Language.instance.HOWTO_ADD_MEDIA, style: TextStyle(fontWeight: FontWeight.w700)),
           ] else ...[
             const Gap(10),
             Expanded(

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mpocket/common/global.dart';
+import 'package:mpocket/config/language.dart';
 import 'package:mpocket/ffi/libmoc.dart' as libmoc;
 import 'package:mpocket/models/imlocal.dart';
 import 'package:mpocket/models/imsource.dart';
@@ -64,11 +65,11 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
       context: context,
        builder: (context) {
         return AlertDialog(
-          title: Text('提示'),
+          title: Text(Language.instance.HINT),
           content: Text(alertText),
           actions: [
-            TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text('确定')),
-            TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text('取消'), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
+            TextButton(onPressed: (){Navigator.of(context).pop(true);}, child: Text(Language.instance.CONFIRM)),
+            TextButton(onPressed: (){Navigator.of(context).pop(false);}, child: Text(Language.instance.CANCLE), style: TextButton.styleFrom(foregroundColor: Colors.grey),)
           ]
         );
        }
@@ -82,7 +83,7 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
   if (_isLoading) {
     return Scaffold(body: Center(child: CircularProgressIndicator()));
   } else {
-    if (meo.artist.isEmpty) return Scaffold(body: Center(child: Text('获取数据失败')));
+    if (meo.artist.isEmpty) return Scaffold(body: Center(child: Text(Language.instance.GET_DATA_FAILURE)));
     else return Scaffold(
       //appBar: AppBar(
       //  title: Text(widget.artist),
@@ -142,20 +143,20 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('${widget.artist}', textScaler: TextScaler.linear(1.6),),
-                          Text('${meo.countAlbum} 张专辑 ${meo.countTrack} 首歌曲 缓存 ${meo.indisk} 首'),
+                          Text('${meo.countAlbum} ${Language.instance.E_ALBUMS} ${meo.countTrack} ${Language.instance.E_TRACKS} ${Language.instance.CACHED} ${meo.indisk} ${Language.instance.TRACK_NUM}'),
                         ],
                       ),
                       Spacer(),
                       IconButton(icon: Icon(Icons.sync), onPressed: () async {
-                        bool confirm = await confirmDialog(context, '确认同步 ${meo.artist} 下所有的曲目？');
+                        bool confirm = await confirmDialog(context, '${Language.instance.LIBRARY_SYNC_A} ${meo.artist} ${Language.instance.LIBRARY_SYNC_B}');
                         if (confirm) libmoc.omusicSyncArtist(Global.profile.msourceID, meo.artist);
                       }),
                       IconButton(icon: Icon(Icons.delete_outline), onPressed: () async {
-                        bool confirm = await confirmDialog(context, '确认删除手机上 ${meo.artist} 所有的曲目？');
+                        bool confirm = await confirmDialog(context, '${Language.instance.LIBRARY_CLEAR_A} ${meo.artist} ${Language.instance.LIBRARY_CLEAR_B}');
                         if (confirm) {
                           int delnum = libmoc.omusicClearArtist(Global.profile.msourceID, meo.artist);
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('成功删除 ${delnum} 个文件'),
+                            content: Text('${Language.instance.CLEAR_OK_A} ${delnum} ${Language.instance.CLEAR_OK_B}'),
                             duration: Duration(seconds: 3)
                           ));
                         }
@@ -189,7 +190,7 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  if (meo.albums[index].cached) Text('已缓存'),
+                                  if (meo.albums[index].cached) Text(Language.instance.CACHED),
                                   IconButton(
                                     onPressed: () async {
                                       if (Global.profile.phonePlay) await context.read<IMlocal>().playAlbum(context, meo.artist, meo.albums[index].name);
@@ -219,7 +220,7 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                                                   Navigator.pop(context);
                                                 },),
                                                 const Gap(20),
-                                                Text('缓存至本地')
+                                                Text(Language.instance.LIBRARY_CACHE)
                                               ],),
                                               Divider(color: Colors.grey,),
 
@@ -228,31 +229,31 @@ class _MusicArtistScreenState extends State<MusicArtistScreen> {
                                                 IconButton(icon: Icon(Icons.delete_outline, size: 20,), onPressed: () {
                                                   int delnum = libmoc.omusicClearAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);
                                                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                    content: Text('成功删除 ${delnum} 个文件'),
+                                                    content: Text('${Language.instance.CLEAR_OK_A} ${delnum} ${Language.instance.CLEAR_OK_B}'),
                                                     duration: Duration(seconds: 3)
                                                   ));
                                                   Navigator.pop(context);
                                                 },),
                                                 const Gap(20),
-                                                Text('清除本地缓存')
+                                                Text(Language.instance.LIBRARY_CLEAR)
                                               ],),
                                               Divider(color: Colors.grey,),
 
                                               const Gap(10),
                                               Row(children: [
                                                 IconButton(icon: Icon(Icons.delete_forever, size: 20,), onPressed: () async {
-                                                  bool confirm = await confirmDialog(context, '确认删除 ${meo.albums[index].name} 下所有的曲目？\n\n删除后不可恢复！！！');
+                                                  bool confirm = await confirmDialog(context, '${Language.instance.LIBRARY_DELTE_A} ${meo.albums[index].name} ${Language.instance.LIBRARY_DELTE_B}');
                                                   if (confirm) {
                                                     int delnum = libmoc.omusicDeleteAlbum(Global.profile.msourceID, meo.artist, meo.albums[index].name);  
                                                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                                      content: Text('成功删除 ${delnum} 个文件'),
+                                                      content: Text('${Language.instance.CLEAR_OK_A} ${delnum} ${Language.instance.CLEAR_OK_B}'),
                                                       duration: Duration(seconds: 3)
                                                     ));
                                                     Navigator.pop(context);
                                                   }
                                                 },),
                                                 const Gap(20),
-                                                Text('删除本地与音源')
+                                                Text(Language.instance.ARTIST_DELETE)
                                               ],),
                                               Divider(color: Colors.grey,),
                                             ],
